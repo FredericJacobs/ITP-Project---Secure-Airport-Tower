@@ -1,6 +1,4 @@
 .metadata/
-.DS
-.DS_Store
 /bin
 .project
 .classpath
