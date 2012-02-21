@@ -4,9 +4,8 @@ import java.math.BigInteger;
 
 public final class KeyPair
 {
-	private final int N;
 	private final BigInteger n, e, d;
-
+	private final int N;
 	//Building the constructor that stores n,e,d and the length of the key in a single KeyPair object.
 	public KeyPair(BigInteger n, BigInteger e, BigInteger d, int N)
 	{
@@ -21,6 +20,8 @@ public final class KeyPair
 		this.d = d;
 	}
 
+
+
 	public BigInteger encrypt(BigInteger message)
 	{
 		return message.modPow(e, n);
@@ -30,4 +31,29 @@ public final class KeyPair
 	{
 		return cryptedMessage.modPow(d, n);
 	}
+
+
+
+	public void setPrivateKey() {
+	}
+
+
+
+	public int getKeySize() {
+		return N;
+	}
+
+
+
+	public BigInteger getPublicKey() {
+		return n;
+	}
+
+
+
+	public BigInteger getModulus() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 }

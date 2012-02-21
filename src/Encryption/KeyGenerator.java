@@ -37,8 +37,7 @@ public final class KeyGenerator
 
 				if (n.bitLength() == N)
 				{
-					phi = p.subtract(BigInteger.ONE).multiply(
-					        q.subtract(BigInteger.ONE));
+					phi = p.subtract(BigInteger.ONE).multiply(q.subtract(BigInteger.ONE));
 					
 					if (e.gcd(phi).equals(BigInteger.ONE))
 					{
@@ -56,9 +55,10 @@ public final class KeyGenerator
 						BigInteger message = randomBigInteger(N);
 						BigInteger cryptedMessage = key.encrypt(message);
 						BigInteger decryptedMessage = key.decrypt(cryptedMessage);
-						if (decryptedMessage.equals(message))
-						
+						//Avoiding Invalid Keys by checking the whole encryption decryption process
+						if (decryptedMessage.equals(message)){
 							return key;
+						}
 					}
 				}
 			}
