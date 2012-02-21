@@ -32,7 +32,7 @@ public final class KeyGenerator
 			if (!p.equals(q))
 			{
 
-				//Doing some dirty operations on the numbers to compute the keys
+				//Doing some dirty maths operations on the numbers to compute the keys
 				n = p.multiply(q);
 
 				if (n.bitLength() == N)
@@ -65,21 +65,13 @@ public final class KeyGenerator
 		}
 	}
 
+	//Method generates a randomBigInteger
 	private static BigInteger randomBigInteger(int N)
-	{
-		
+	{	
 		byte[] buffer = new byte[N / 8];
 		random.nextBytes(buffer);
 		return new BigInteger(buffer);
 	}
 
-	public static byte[] generateSymmetricKey(int keyLength)
-	{
-		if (keyLength <= 0)
-			throw new IllegalArgumentException("Key length must be positive.");
-		
-		byte[] key = new byte[keyLength];
-		random.nextBytes(key);
-		return key;
-	}
+
 }

@@ -80,6 +80,9 @@ public class KeyPairTest {
      * Test of hidePrivateKey method, of class KeyPair.
      */
     @Test
+    
+    // WTF is THIS ?
+    
     public void testHidePrivateKey() {
         System.out.println("hidePrivateKey");
         KeyPair instance = KeyGenerator.generateRSAKeyPair(128);
