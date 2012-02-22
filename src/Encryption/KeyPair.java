@@ -62,8 +62,7 @@ public final class KeyPair
 	}
 
 	public void hidePrivateKey() {
-		assert false;
-		// MISSING IMPLEMENTATION 
+		d=null;
 	}
 	
 }
