@@ -1,7 +1,6 @@
 package Encryption;
 import java.math.BigInteger;
 
-
 public final class KeyPair
 {
 	private  BigInteger n, e, d;
