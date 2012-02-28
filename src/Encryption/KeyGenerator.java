@@ -3,6 +3,7 @@ import java.math.BigInteger;
 import java.security.SecureRandom;
 
 /** Description of KeyGenerator 
+ * KeyGenerator generates keys and stores them in a KeyPair object. This is not the safest way to implement RSA encryption.
  * @author Frederic Jacobs
  * @author Hantao Zhao 
  * @version 1.0
@@ -19,7 +20,11 @@ public final class KeyGenerator
 	private static final SecureRandom random = new SecureRandom();
 	private static final BigInteger e = BigInteger.valueOf(65537);
 	
-	// generateRSAKeyPair does generate
+	/** 
+	* This is the method used to generate a KeyPair of length N. 
+	* @param N The length of the keys in bits.
+	* @return A Keypair object containing both public and private keys of length N.
+	**/
 	
 	public static KeyPair generateRSAKeyPair(int N)
 	{
@@ -71,7 +76,11 @@ public final class KeyGenerator
 		}
 	}
 
-	//Method generates a randomBigInteger
+	/** 
+	* This method is required to generate a randomBigInteger for testing purposes
+	* @param N The size of the key in bits
+	* @return A random message within the capabilities of our RSA encryption method
+	**/
 	private static BigInteger randomBigInteger(int N)
 	{	
 		byte[] buffer = new byte[N / 8];
