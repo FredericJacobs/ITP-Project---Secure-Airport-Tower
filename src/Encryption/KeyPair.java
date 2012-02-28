@@ -14,8 +14,9 @@ public final class KeyPair
 	
 	/** 
 	* KeyPair Constructer builds a pair of keys based on 4 parameters.  
-	* @param n
-	* 
+	* @param n The Modulus used for RSA encryption
+	* @param e Exponent used for RSA Encryption
+	* @param 
 	**/
 	
 	public KeyPair(BigInteger n, BigInteger e, BigInteger d, int N)
