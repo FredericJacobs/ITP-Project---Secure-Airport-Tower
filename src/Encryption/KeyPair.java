@@ -1,12 +1,22 @@
 package Encryption;
 import java.math.BigInteger;
 
+/** Description of KeyPair 
+ * @author Frederic Jacobs
+ * @author Hantao Zhao 
+ * @version 1.0
+ */
+
 public final class KeyPair
 {
 	private  BigInteger n, e, d;
 	private int N;
 	
-	//Building the constructor that stores n,e,d and the length of the key in a single KeyPair object.
+	/** 
+	* KeyPair Constructer builds a pair of keys based on 4 parameters.  
+	* @param n
+	* 
+	**/
 	
 	public KeyPair(BigInteger n, BigInteger e, BigInteger d, int N)
 	{

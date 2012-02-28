@@ -2,7 +2,12 @@ package Encryption;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 
-//Test of adding 
+/** Description of KeyGenerator 
+ * @author Frederic Jacobs
+ * @author Hantao Zhao 
+ * @version 1.0
+ */
+
 public final class KeyGenerator
 {
 	/* Initializing the objects that will help us 
