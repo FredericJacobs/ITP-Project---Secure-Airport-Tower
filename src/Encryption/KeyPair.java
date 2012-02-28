@@ -55,9 +55,16 @@ public final class KeyPair
 	* @param cyptedMessage This BigInteger is the number to be decrypted
 	* @return The decrypted message
 	**/
-	public BigInteger decrypt(BigInteger cryptedMessage)
+	public BigInteger decrypt(BigInteger cryptedMessage) throws DecryptWithoutPrivateKeyException
 	{
+		if (d == null){
+			throw new DecryptWithoutPrivateKeyException();
+		}
+		else{
+			
 		return cryptedMessage.modPow(d, n);
+		
+		}
 	}
 	/** 
 	* Required in the project documentation, using this method is not the safest way to check the keysize. It is NOT advised to use this method but it is required for the JUnit to work.

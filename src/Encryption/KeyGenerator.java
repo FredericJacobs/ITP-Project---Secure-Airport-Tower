@@ -65,16 +65,22 @@ public final class KeyGenerator
 					
 						BigInteger message = randomBigInteger(N);
 						BigInteger cryptedMessage = key.encrypt(message);
-						BigInteger decryptedMessage = key.decrypt(cryptedMessage);
-						//Avoiding Invalid Keys by checking the whole encryption decryption process
-						if (decryptedMessage.equals(message)){
-							return key;
+						try {
+							BigInteger decryptedMessage = key.decrypt(cryptedMessage);
+								if (decryptedMessage.equals(message)){
+								return key;
+								}
+						}
+						catch (DecryptWithoutPrivateKeyException e){
+							System.out.println("Decoding failed. No Private Key is given.");
+						}
+
 						}
 					}
 				}
 			}
 		}
-	}
+
 
 	/** 
 	* This method is required to generate a randomBigInteger for testing purposes
