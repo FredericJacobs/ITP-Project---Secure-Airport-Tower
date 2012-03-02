@@ -57,9 +57,10 @@ abstract public class Messages {
 	public void sendMessage() throws IOException {
 		PrintWriter outStream;
 		outStream = new PrintWriter(new FileWriter("OutFile.txt", true));
+		String planeid = new String(planeID);
 		outStream.println("**********************************************************");
 		outStream.println("This is a < " + type + " >Message of Flight: "
-				+ this.planeID[0] + ", located @ " + this.posx + " , "
+				+ planeid + ", located @ " + this.posx + " , "
 				+ this.posy + ", length : " + this.length);
 		outStream.close();
 		System.out.println(priority+ "          " + type +  "         " +  " Plane     "  +   "Tour    " +   Datetime.getDatetime_String1() );
