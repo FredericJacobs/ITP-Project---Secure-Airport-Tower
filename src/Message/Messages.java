@@ -7,6 +7,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.lang.Enum;
+import java.io.ByteArrayOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -65,6 +66,11 @@ abstract public class Messages {
 		outStream.close();
 		System.out.println(priority+ "          " + type +  "         " +  " Plane     "  +   "Tour    " +   Datetime.getDatetime_String1() );
 
+	}
+
+	public void writeMessage(ByteArrayOutputStream os) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
