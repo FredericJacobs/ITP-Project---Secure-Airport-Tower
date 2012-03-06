@@ -76,12 +76,12 @@ abstract public class Messages {
 }
 
 class Hello extends Messages {
-	private boolean crypted = false; // The conversation is crypted or not
+	private byte crypted; // The conversation is crypted or not
 
 	// TODO Auto-generated constructor stub
 
-	public Hello(byte[] planeID, int length, int posx, int posy, boolean crypte) {
-		super(planeID, length, 1, posx, posy, MessageType.HELLO);
+	public Hello(byte[] planeID, int posx, int posy, byte crypted) {
+		super(planeID, 0, 1, posx, posy, MessageType.HELLO);
 		this.crypted = crypted;
 	}
 	// Override of the sendMessage, to add the additional information of each type of Messages
@@ -219,8 +219,8 @@ class Unchoke extends Messages {
 
 class Bye extends Messages {
 
-	public Bye(byte[] planeID, int length, int posx, int posy) {
-		super(planeID, length, 4, posx, posy, MessageType.BYE);
+	public Bye(byte[] planeID) {
+		super(planeID, 0, 4, 0, 0, MessageType.BYE);
 		// TODO Auto-generated constructor stub
 	}
 
