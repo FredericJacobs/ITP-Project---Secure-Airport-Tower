@@ -8,7 +8,9 @@ import java.io.RandomAccessFile;
 
 public class DataFile extends File {
 
-	Byte[] hash = new Byte[10000];
+	protected static int sizOfLastpack; 
+
+	protected boolean finished = false;
 
 	public DataFile(URI uri) {
 		super(uri);
@@ -20,26 +22,33 @@ public class DataFile extends File {
 	 */
 
 	public static void main(String args[]) throws Exception {
-		// RandomAccessFile s = new
-		// RandomAccessFile("F://Java//Project//ITP-Project---Secure-Airport-Tower//OutFile.txt",
-		// "rw");
-		// System.out.println(s.getFilePointer());// 0
+		
 		String directory = "F:\\Java\\Project\\ITP-Project---Secure-Airport-Tower";
-		String name = "OutFile.txt";
+		String name = "README.md";
 		File f = new File(directory, name);
 		RandomAccessFile file = null;
+		Byte[] hash = new Byte[1024];
+	//	Byte[][] received = new Byte[1000000][1024];
+		int sizOfLastpack; 
+
 		try {
 			file = new RandomAccessFile(f, "rw");
 			byte[] b = new byte[4];
+			sizOfLastpack = (int) (file.length()%1024);
 			try {
 				long len = file.length();
-				file.read(b); // 设置要读取的字节位置
-				file.seek(1);
-				System.out.println(file.readByte() + ">>FilePointer>>"+ file.getFilePointer());
-				for (int i = 0; i < b.length; i++) {
-					System.out.println(file.readLine());
+				//file.read(b); 
+			//	file.seek(1);
+				//for (int n = 0; n < file.length()/1024;n++){
+				System.out.println(len);
+				for (int i = 0; i < 1024; i++) {
+					hash[i] = file.readByte();
+					System.out.println(hash[i]);
 				}
-			} catch (IOException e) {
+			//	received[n] = hash;
+				hash =null;
+			//	}
+			 }catch (IOException e) {
 				e.printStackTrace();
 			}
 		} catch (FileNotFoundException e) {
