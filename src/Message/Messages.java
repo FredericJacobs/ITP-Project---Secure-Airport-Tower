@@ -1,38 +1,60 @@
 package Message;
 
-import java.util.*;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
-import java.lang.Enum;
+import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-/** Description of Message
- * Message is the file which contains the main class Messages. By using the abstract class Messages we build all the type
- * of messages we will use between Tour and planes.
- * So far the biggest issues we have is that how to print and transfer the PlaneID , which are in the form of Byte[]
- * @author Hantao Zhao
- * @author Frederic Jacobs
- * @version 1.0
- */
+
+// Enumeration of the different Message types
+
 enum MessageType {
 	HELLO, DATA, MAYDAY, SENDRSA, CHOKE, UNCHOKE, BYE, ROUTING, KEEPALIVE, LANDINGREQUEST;
 	// MessageType.DATA.ordinal(); To obtain the order number of MessageType
 }
 
+/**
+ * Description of Message Message is the file which contains the main class
+ * Messages. By using the abstract class Messages we build all the type of
+ * messages we'll send between planes and the control tower. All the sub-classes
+ * are kept in a single Java file for clarity
+ * 
+ * @author Hantao Zhao
+ * @author Frederic Jacobs
+ * @version 1.0
+ */
+
 abstract public class Messages {
 
-	protected byte[] planeID; // 8 octets (8 bytes)
-	protected int length; // 0 sauf pour Data, MayDay et Routing Message
+	protected byte[] planeID;
+	protected int length;
 	protected int priority;
 	protected int posx;
 	protected int posy;
-	protected MessageType type; // On envoie un int, MessageType est un nom
-								// possible pour l¡¯Enum
+	protected MessageType type;
+
+	/**
+	 * Messages is an abstract constructor. It defines what Messages will have
+	 * to implement.
+	 * 
+	 * @param planeID
+	 *            An Array of Bytes storing the unique identifier of a plane
+	 * @param length
+	 *            Defines the length of Data, MayDay and the routing messages.
+	 *            Should be zero for the rest of the Messages.
+	 * @param priority
+	 *            Defines the priority of a given message to be put in the
+	 *            PriorityQueue
+	 * @param posx
+	 *            Gives the position of the plane on the x axis
+	 * @param posy
+	 *            Gives the position of the plane on the y axis
+	 * @param type
+	 *            Defines the type of the message
+	 **/
 
 	public Messages(byte[] planeID, int length, int priority, int posx,
 			int posy, MessageType type) {
@@ -44,33 +66,58 @@ abstract public class Messages {
 		this.type = type;
 	}
 
+	/**
+	 * GetPriory is a getter method for the priority
+	 * 
+	 * @return Priority to be added in the PriorityQueue
+	 */
 	public int getPriority() {
 		return this.priority;
 	}
-	// Show the date and time in the journal
-	static class Datetime {
-		public static String getDatetime_String1(){
-			  String datetime=new Date().toString();
-			  return datetime;
-			 }
-	}
-	// Send the message 
-	public void sendMessage() throws IOException {
-		PrintWriter outStream;
-		outStream = new PrintWriter(new FileWriter("OutFile.txt", true));
-		String planeid = new String(planeID);
-		outStream.println("**********************************************************");
-		outStream.println("This is a < " + type + " >Message of Flight: "
-				+ planeid + ", located @ " + this.posx + " , "
-				+ this.posy + ", length : " + this.length);
-		outStream.close();
-		System.out.println(priority+ "          " + type +  "         " +  " Plane     "  +   "Tour    " +   Datetime.getDatetime_String1() );
 
+	/**
+	 * Adding a time stamp to the Messages
+	 * 
+	 */
+	static class Datetime {
+		public static String getDatetime_String1() {
+			String datetime = new Date().toString();
+			return datetime;
+		}
+	}
+
+	/**
+	 * Method to a message
+	 * 
+	 * @throws IOException
+	 *             Exception thrown if PrintWriter can't write to file
+	 */
+	public void sendMessage() throws IOException {
+		// FileOutputStream outStream new FileOutputStream("OutFile.txt");
+		String planeid = new String(planeID);
+		/*
+		 * outStream.println(
+		 * "**********************************************************");
+		 * outStream.println("This is a < " + type + " >Message of Flight: " +
+		 * planeid + ", located @ " + this.posx + " , " + this.posy +
+		 * ", length : " + this.length); outStream.close();
+		 * System.out.println(priority+ "          " + type + "         " +
+		 * " Plane     " + "Tour    " + Datetime.getDatetime_String1() );
+		 */
+		
+		DataOutputStream out = new DataOutputStream(new BufferedOutputStream(
+				new FileOutputStream("OutFile.dat")));
+		out.write(planeID);
+		out.write(length);
+		out.write(priority);
+		out.write(posx);
+		out.write(posy);
+		out.write(type.ordinal());
 	}
 
 	public void writeMessage(ByteArrayOutputStream os) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }
@@ -84,7 +131,9 @@ class Hello extends Messages {
 		super(planeID, 0, 1, posx, posy, MessageType.HELLO);
 		this.crypted = crypted;
 	}
-	// Override of the sendMessage, to add the additional information of each type of Messages
+
+	// Override of the sendMessage, to add the additional information of each
+	// type of Messages
 	public void sendMessage() throws IOException {
 		super.sendMessage();
 		PrintWriter outStream;
@@ -92,7 +141,7 @@ class Hello extends Messages {
 		outStream.println("Crypted: " + crypted);
 		outStream.close();
 	}
-	
+
 }
 
 class SendRSAKey extends Messages {
@@ -129,6 +178,7 @@ class RoutingMessage extends Messages {
 	enum routingMessageType {
 		NEWFIRST, LAST, REPLACEALL
 	}
+
 	enum moveType {
 		STRAIGHT, CIRCULAR, LANDING, NONE, DESTRUCTION
 	}
@@ -144,14 +194,15 @@ class RoutingMessage extends Messages {
 		TypeM = typeM;
 		this.payload = payload;
 	}
+
 	public void sendMessage() throws IOException {
 		super.sendMessage();
 		PrintWriter outStream;
 		outStream = new PrintWriter(new FileWriter("OutFile.txt", true));
-		outStream.println("RoutingMessageType : "  + TypeR + "MoveType : " + TypeM + "Payload : " + payload);
+		outStream.println("RoutingMessageType : " + TypeR + "MoveType : "
+				+ TypeM + "Payload : " + payload);
 		outStream.close();
 	}
-	
 
 }
 
@@ -162,14 +213,14 @@ class Mayday extends Messages {
 		super(planeID, length, 0, posx, posy, MessageType.MAYDAY);
 		this.cause = cause;
 	}
+
 	public void sendMessage() throws IOException {
 		super.sendMessage();
 		PrintWriter outStream;
 		outStream = new PrintWriter(new FileWriter("OutFile.txt", true));
-		outStream.println("Cause : " + cause) ;
+		outStream.println("Cause : " + cause);
 		outStream.close();
 	}
-	
 
 }
 
@@ -189,11 +240,14 @@ class Data extends Messages {
 		this.fileSize = fileSize;
 		this.payload = payload;
 	}
+
 	public void sendMessage() throws IOException {
 		super.sendMessage();
 		PrintWriter outStream;
 		outStream = new PrintWriter(new FileWriter("OutFile.txt", true));
-		outStream.println("Hash : "  + hash + " Continuatuin : " + continuation + "Format : " + format + "FileSize : "+ fileSize + "Payload : " + payload);
+		outStream.println("Hash : " + hash + " Continuatuin : " + continuation
+				+ "Format : " + format + "FileSize : " + fileSize
+				+ "Payload : " + payload);
 		outStream.close();
 	}
 

@@ -1,7 +1,11 @@
 package Message;
 
+import java.io.BufferedOutputStream;
 import java.io.BufferedWriter;
+import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Comparator;
@@ -49,6 +53,7 @@ public class Tour
 					return 0;
 			}
 		});
+
 		System.out.println("This is written for debugging purposes");
 		System.out.println("Journal created"); // Print journal in the Console
 		System.out.println("Priority      Type         Source       Destination         Date   ");
@@ -64,9 +69,6 @@ public class Tour
 		receiveMessage(mayday);
 		receiveMessage(bye);
 		// Use java.util.PriorityQueue to put the messages in order 
-		
-		// Send the messages to priorityQueue
-
 
 	}
 
@@ -87,6 +89,11 @@ public class Tour
 		for (int i = 0; i < queueSize; i++) {
 			priorityQueue.poll().sendMessage(); // Send the messages to Outfile.txt
 		}
+	}
+	public static void readThedata() throws FileNotFoundException{
+		DataOutputStream out = new DataOutputStream(new BufferedOutputStream(
+				new FileOutputStream("OutFile.dat")));
+		
 	}
 
 }
