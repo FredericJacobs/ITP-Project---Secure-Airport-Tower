@@ -113,6 +113,7 @@ abstract public class Messages {
 		out.write(posx);
 		out.write(posy);
 		out.write(type.ordinal());
+		out.close();
 	}
 
 	public void writeMessage(ByteArrayOutputStream os) {
@@ -136,10 +137,10 @@ class Hello extends Messages {
 	// type of Messages
 	public void sendMessage() throws IOException {
 		super.sendMessage();
-		PrintWriter outStream;
-		outStream = new PrintWriter(new FileWriter("OutFile.txt", true));
-		outStream.println("Crypted: " + crypted);
-		outStream.close();
+		DataOutputStream out = new DataOutputStream(new BufferedOutputStream(
+				new FileOutputStream("OutFile.dat")));
+		out.write(crypted);
+		out.close();
 	}
 
 }
@@ -165,11 +166,12 @@ class SendRSAKey extends Messages {
 
 	public void sendMessage() throws IOException {
 		super.sendMessage();
-		PrintWriter outStream;
-		outStream = new PrintWriter(new FileWriter("OutFile.txt", true));
-		outStream.println("SendRSAKey:" + this.keySize + " modulusLength :"
-				+ this.modulusLength + " Length : " + this.length);
-		outStream.close();
+		DataOutputStream out = new DataOutputStream(new BufferedOutputStream(
+				new FileOutputStream("OutFile.dat")));
+		out.write(keySize);
+		out.write(modulusLength);
+		out.write(length);
+		out.close();
 	}
 
 }
@@ -193,15 +195,18 @@ class RoutingMessage extends Messages {
 		TypeR = typeR;
 		TypeM = typeM;
 		this.payload = payload;
+		
 	}
 
 	public void sendMessage() throws IOException {
 		super.sendMessage();
-		PrintWriter outStream;
-		outStream = new PrintWriter(new FileWriter("OutFile.txt", true));
-		outStream.println("RoutingMessageType : " + TypeR + "MoveType : "
-				+ TypeM + "Payload : " + payload);
-		outStream.close();
+
+		DataOutputStream out = new DataOutputStream(new BufferedOutputStream(
+				new FileOutputStream("OutFile.dat")));
+		out.write(TypeR.ordinal());
+		out.write(TypeM.ordinal());
+		out.write(payload);
+		out.close();
 	}
 
 }
@@ -216,10 +221,10 @@ class Mayday extends Messages {
 
 	public void sendMessage() throws IOException {
 		super.sendMessage();
-		PrintWriter outStream;
-		outStream = new PrintWriter(new FileWriter("OutFile.txt", true));
-		outStream.println("Cause : " + cause);
-		outStream.close();
+		DataOutputStream out = new DataOutputStream(new BufferedOutputStream(
+				new FileOutputStream("OutFile.dat")));
+		out.write(cause.getBytes());
+		out.close();
 	}
 
 }
@@ -230,6 +235,8 @@ class Data extends Messages {
 	byte[] format; // 4 octets (4 bytes)
 	int fileSize;
 	byte[] payload;
+
+
 
 	public Data(byte[] planeID, int length, int posx, int posy, byte[] hash,
 			int continuation, byte[] format, int fileSize, byte[] payload) {
@@ -244,13 +251,18 @@ class Data extends Messages {
 	public void sendMessage() throws IOException {
 		super.sendMessage();
 		PrintWriter outStream;
-		outStream = new PrintWriter(new FileWriter("OutFile.txt", true));
-		outStream.println("Hash : " + hash + " Continuatuin : " + continuation
-				+ "Format : " + format + "FileSize : " + fileSize
-				+ "Payload : " + payload);
-		outStream.close();
+		DataOutputStream out = new DataOutputStream(new BufferedOutputStream(
+				new FileOutputStream("OutFile.dat")));
+		out.write(hash);
+		out.write(continuation);
+		out.write(format);
+		out.write(fileSize);
+		out.write(payload);
+		out.close();
 	}
-
+	public byte[] getHash() {
+		return hash;
+	}
 }
 
 class Choke extends Messages {
