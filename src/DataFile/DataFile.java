@@ -1,12 +1,9 @@
 package DataFile;
 
-import java.io.BufferedOutputStream;
 import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URI;
 import java.security.MessageDigest;
@@ -27,14 +24,7 @@ public class DataFile extends File {
 		super(uri);
 		// TODO Auto-generated constructor stub
 	}
-
-	/**
-	 * @param args
-	 * @throws IOException 
-	 */
-	public static void main (String args[]) throws IOException{
-		divideFile(); // try to divide the file
-	}
+	
 
 	// the method to divide the file, always not succeed.....
 	//save the all the hashes into the table,shall we save the divided Byte[] into a 

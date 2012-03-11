@@ -5,9 +5,7 @@ import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 
 // Enumeration of the different Message types
 
@@ -17,9 +15,9 @@ enum MessageType {
 }
 
 /**
- * Description of Message Message is the file which contains the main class
- * Messages. By using the abstract class Messages we build all the type of
- * messages we'll send between planes and the control tower. All the sub-classes
+ * Message is the file which contains the main class
+ * Message. By using the abstract class Message we build all the type of
+ * Message we'll send between planes and the control tower. All the sub-classes
  * are kept in a single Java file for clarity
  * 
  * @author Hantao Zhao
@@ -27,7 +25,7 @@ enum MessageType {
  * @version 1.0
  */
 
-abstract public class Messages {
+abstract public class Message {
 
 	protected byte[] planeID;
 	protected int length;
@@ -37,14 +35,14 @@ abstract public class Messages {
 	protected MessageType type;
 
 	/**
-	 * Messages is an abstract constructor. It defines what Messages will have
+	 * Message is an abstract constructor. It defines what Message will have
 	 * to implement.
 	 * 
 	 * @param planeID
 	 *            An Array of Bytes storing the unique identifier of a plane
 	 * @param length
-	 *            Defines the length of Data, MayDay and the routing messages.
-	 *            Should be zero for the rest of the Messages.
+	 *            Defines the length of Data, MayDay and the routing Message.
+	 *            Should be zero for the rest of the Message.
 	 * @param priority
 	 *            Defines the priority of a given message to be put in the
 	 *            PriorityQueue
@@ -56,7 +54,7 @@ abstract public class Messages {
 	 *            Defines the type of the message
 	 **/
 
-	public Messages(byte[] planeID, int length, int priority, int posx,
+	public Message(byte[] planeID, int length, int priority, int posx,
 			int posy, MessageType type) {
 		this.planeID = planeID;
 		this.length = length;
@@ -76,7 +74,7 @@ abstract public class Messages {
 	}
 
 	/**
-	 * Adding a time stamp to the Messages
+	 * Adding a time stamp to the Message
 	 * 
 	 */
 	static class Datetime {
@@ -93,18 +91,6 @@ abstract public class Messages {
 	 *             Exception thrown if PrintWriter can't write to file
 	 */
 	public void sendMessage() throws IOException {
-		// FileOutputStream outStream new FileOutputStream("OutFile.txt");
-		String planeid = new String(planeID);
-		/*
-		 * outStream.println(
-		 * "**********************************************************");
-		 * outStream.println("This is a < " + type + " >Message of Flight: " +
-		 * planeid + ", located @ " + this.posx + " , " + this.posy +
-		 * ", length : " + this.length); outStream.close();
-		 * System.out.println(priority+ "          " + type + "         " +
-		 * " Plane     " + "Tour    " + Datetime.getDatetime_String1() );
-		 */
-		
 		DataOutputStream out = new DataOutputStream(new BufferedOutputStream(
 				new FileOutputStream("OutFile.dat")));
 		out.write(planeID);
@@ -123,29 +109,28 @@ abstract public class Messages {
 
 }
 
-class Hello extends Messages {
-	private byte crypted; // The conversation is crypted or not
-
+class Hello extends Message {
+	private byte reserved; 
 	// TODO Auto-generated constructor stub
 
 	public Hello(byte[] planeID, int posx, int posy, byte crypted) {
 		super(planeID, 0, 1, posx, posy, MessageType.HELLO);
-		this.crypted = crypted;
+		this.reserved = crypted;
 	}
 
 	// Override of the sendMessage, to add the additional information of each
-	// type of Messages
+	// type of Message
 	public void sendMessage() throws IOException {
 		super.sendMessage();
 		DataOutputStream out = new DataOutputStream(new BufferedOutputStream(
 				new FileOutputStream("OutFile.dat")));
-		out.write(crypted);
+		out.write(reserved);
 		out.close();
 	}
 
 }
 
-class SendRSAKey extends Messages {
+class SendRSAKey extends Message {
 
 	int keySize;
 	int modulusLength;
@@ -176,7 +161,7 @@ class SendRSAKey extends Messages {
 
 }
 
-class RoutingMessage extends Messages {
+class RoutingMessage extends Message {
 	enum routingMessageType {
 		NEWFIRST, LAST, REPLACEALL
 	}
@@ -211,7 +196,7 @@ class RoutingMessage extends Messages {
 
 }
 
-class Mayday extends Messages {
+class Mayday extends Message {
 	String cause;
 
 	public Mayday(byte[] planeID, int length, int posx, int posy, String cause) {
@@ -229,10 +214,10 @@ class Mayday extends Messages {
 
 }
 
-class Data extends Messages {
-	byte[] hash; // 20 octets (20 bytes)
+class Data extends Message {
+	byte[] hash;
 	int continuation;
-	byte[] format; // 4 octets (4 bytes)
+	byte[] format;
 	int fileSize;
 	byte[] payload;
 
@@ -250,7 +235,6 @@ class Data extends Messages {
 
 	public void sendMessage() throws IOException {
 		super.sendMessage();
-		PrintWriter outStream;
 		DataOutputStream out = new DataOutputStream(new BufferedOutputStream(
 				new FileOutputStream("OutFile.dat")));
 		out.write(hash);
@@ -265,7 +249,7 @@ class Data extends Messages {
 	}
 }
 
-class Choke extends Messages {
+class Choke extends Message {
 
 	public Choke(byte[] planeID, int length, int posx, int posy) {
 		super(planeID, length, 1, posx, posy, MessageType.CHOKE);
@@ -274,7 +258,7 @@ class Choke extends Messages {
 
 }
 
-class Unchoke extends Messages {
+class Unchoke extends Message {
 
 	public Unchoke(byte[] planeID, int length, int posx, int posy) {
 		super(planeID, length, 4, posx, posy, MessageType.UNCHOKE);
@@ -283,7 +267,7 @@ class Unchoke extends Messages {
 
 }
 
-class Bye extends Messages {
+class Bye extends Message {
 
 	public Bye(byte[] planeID) {
 		super(planeID, 0, 4, 0, 0, MessageType.BYE);
@@ -292,7 +276,7 @@ class Bye extends Messages {
 
 }
 
-class Keepalive extends Messages {
+class Keepalive extends Message {
 
 	public Keepalive(byte[] planeID, int length, int posx, int posy) {
 		super(planeID, length, 3, posx, posy, MessageType.KEEPALIVE);
@@ -300,7 +284,7 @@ class Keepalive extends Messages {
 	}
 }
 
-class Landingrequest extends Messages {
+class Landingrequest extends Message {
 
 	public Landingrequest(byte[] planeID, int length, int posx, int posy) {
 		super(planeID, length, 2, posx, posy, MessageType.LANDINGREQUEST);
