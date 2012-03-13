@@ -1,4 +1,4 @@
-package Encryption;
+package encryption;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 
@@ -65,21 +65,17 @@ public final class KeyGenerator
 					
 						BigInteger message = randomBigInteger(N);
 						BigInteger cryptedMessage = key.encrypt(message);
-						try {
-							BigInteger decryptedMessage = key.decrypt(cryptedMessage);
-								if (decryptedMessage.equals(message)){
-								return key;
-								}
-						}
-						catch (DecryptWithoutPrivateKeyException e){
-							System.out.println("Decoding failed. No Private Key is given.");
-						}
-
+						
+						BigInteger decryptedMessage = key.decrypt(cryptedMessage);
+						if (decryptedMessage.equals(message)){
+							return key;
+							
 						}
 					}
 				}
 			}
 		}
+	}
 
 
 	/** 

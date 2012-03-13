@@ -1,6 +1,5 @@
-package Tests;
+package tests;
 
-import Encryption.*;
 
 /**
  *
@@ -12,6 +11,8 @@ import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 
 import org.junit.Test;
+
+import encryption.*;
 
 
 

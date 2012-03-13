@@ -1,5 +1,6 @@
-package Encryption;
+package encryption;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigInteger;
@@ -14,20 +15,19 @@ import java.math.BigInteger;
 public class RsaInputStream extends InputStream
 {
 	// Defining the inputStream and the KeyPair used for encryption
-	private final InputStream input;
+	private final ByteArrayInputStream input;
 	private final KeyPair key;
 
 	/**
 	 * Create a new RSA input stream.
 	 * 
-	 * @param key
-	 *            Key to use.
 	 * @param input
 	 *            Input stream to use.
+	 * @param key
+	 *            Key to use.
 	 */
-	public RsaInputStream(KeyPair key, InputStream input)
-	{
-		// Checking if the arguments are valid
+	public RsaInputStream(ByteArrayInputStream input, KeyPair key)
+	{	// Checking if the arguments are valid
 		if (key == null)
 			throw new IllegalArgumentException(
 			        "Key must contains at least one byte!");
@@ -42,61 +42,17 @@ public class RsaInputStream extends InputStream
 		this.input = input;
 	}
 
-	@Override
-	public int available() throws IOException
-	{
-		return input.available();
-	}
 
 	@Override
-	public void close() throws IOException
+	public int read() throws IOException 
 	{
-		input.close();
-	}
-
-	@Override
-	public synchronized void mark(int readlimit)
-	{
-		input.mark(readlimit);
-	}
-
-	@Override
-	public boolean markSupported()
-	{
-		return input.markSupported();
-	}
-
-	@Override
-	public int read() throws IOException
-	{
-		//Filling the array with the crypted bytes
-		byte[] bytes = new byte[key.getModulus().length / 8 + 1];
+		byte[] bytes = new byte[key.getKeySize() / 8 + 1];
 		int r = input.read(bytes);
 		if (r != bytes.length)
 			return -1;
-		//Converting the array into a BigInteger
 		BigInteger bint = new BigInteger(bytes);
-		// Here comes the decryption process
-		
-		BigInteger result;
-		try {
-			result = key.decrypt(bint);
-		} catch (DecryptWithoutPrivateKeyException e) {
-			result = null;
-		}
-		
+		BigInteger result =key.decrypt(bint);
 		return result.intValue();
 	}
 
-	@Override
-	public synchronized void reset() throws IOException
-	{
-		input.reset();
-	}
-
-	@Override
-	public long skip(long n) throws IOException
-	{
-		return input.skip(n);
-	}
 }

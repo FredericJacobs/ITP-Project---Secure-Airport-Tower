@@ -1,14 +1,15 @@
-package Tests;
+package tests;
 
 import java.math.BigInteger;
 
-import Encryption.*;
 
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import encryption.*;
 import static org.junit.Assert.*;
 
 /**
@@ -64,14 +65,14 @@ public class KeyPairTest {
      * @throws DecryptWithoutPrivateKeyException 
      */
     @Test(expected=java.lang.NullPointerException.class)
-    public void testDecrypt() throws DecryptWithoutPrivateKeyException {
+    public void testDecrypt()  {
         System.out.println("decrypt");
         KeyPair instance = KeyGenerator.generateRSAKeyPair(128);
         instance.decrypt(null);
     }
     
     @Test
-    public void testEncryptDecrypt() throws DecryptWithoutPrivateKeyException {
+    public void testEncryptDecrypt()  {
         System.out.println("encrypt-decrypt");
         KeyPair instance = KeyGenerator.generateRSAKeyPair(128);
         BigInteger result = instance.encrypt(instance.decrypt(BigInteger.valueOf(294239487)));

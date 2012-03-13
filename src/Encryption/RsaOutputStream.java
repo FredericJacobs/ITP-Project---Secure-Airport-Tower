@@ -1,5 +1,6 @@
-package Encryption;
+package encryption;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.math.BigInteger;
@@ -13,18 +14,18 @@ import java.math.BigInteger;
  */
 public class RsaOutputStream extends OutputStream
 {
-	private final OutputStream output;
+	private final ByteArrayOutputStream output;
 	private final KeyPair key;
 
 	/**
 	 * Create a new RSA output stream.
 	 * 
-	 * @param key
-	 *            Key to use.
 	 * @param output
 	 *            Output stream to use.
+	 * @param key
+	 *            Key to use.
 	 */
-	public RsaOutputStream(KeyPair key, OutputStream output)
+	public RsaOutputStream(ByteArrayOutputStream output, KeyPair key)
 	{
 		// Checking if the arguments are valid
 		if (key == null)
@@ -52,19 +53,22 @@ public class RsaOutputStream extends OutputStream
 	{
 		output.flush();
 	}
+	
 
 	@Override
-	public void write(int b) throws IOException
-	{
-		//Converting Byte to BigInteger, encrypting it and putting it back to a byte array.
+	public void write(int b) throws IOException {
+		// Convertir le byte en BigInteger et le crypter.
 		BigInteger raw = BigInteger.valueOf(b & 0xFF);
 		BigInteger crypted = key.encrypt(raw);
+		// Convertir en tableau de bytes.
 		byte[] cryptedBytes = crypted.toByteArray();
-		//Making sure the size of the array is big enough to store each Byte.
+		// Le tableau doit avoir une taille de T = N/8 + 1
 		byte[] result = new byte[key.getKeySize() / 8 + 1];
 		System.arraycopy(cryptedBytes, 0, result, result.length
 		        - cryptedBytes.length, cryptedBytes.length);
-		// Write results needed
+		// Ecrire le résultat.
 		output.write(result);
+		
 	}
+	
 }

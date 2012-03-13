@@ -1,16 +1,17 @@
-package Message;
+package messaging;
 
 import java.io.BufferedOutputStream;
-import java.io.BufferedWriter;
 import java.io.DataOutputStream;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Comparator;
 import java.util.PriorityQueue;
+
+import encryption.*;
 import Journal.Journal;
+import messaging.messages.*;
+
 
 /** Description of Tour
  * Tour.java represents the tour of airport, which have the function of receiving and sending Message with the planes
@@ -40,48 +41,31 @@ public class Tour
 		
 		inQueue = new PriorityQueue <Message>(6, new Comparator<Message>() {
 			public int compare(Message a, Message b) {
-				int priorityA = a.getPriority();
-				int priorityB = b.getPriority();
-				if (priorityB > priorityA)
-					return -1;
-				else if (priorityB < priorityA)
-					return 1;
-				else
-					return 0;
+				return a.compareTo(b);
 			}
 		});
 		
 		
 		outQueue = new PriorityQueue <Message>(6, new Comparator<Message>() {
 			public int compare(Message a, Message b) {
-				int priorityA = a.getPriority();
-				int priorityB = b.getPriority();
-				if (priorityB > priorityA)
-					return -1;
-				else if (priorityB < priorityA)
-					return 1;
-				else
-					return 0;
+				return a.compareTo(b);
 			}
 		});
 	}
 
-	public static void receiveMessage(Message message){
-		inQueue.offer(message);	
-		int queueSize = inQueue.size();
-		for (int i = 0; i < queueSize; i++) {
-			inQueue.poll().sendMessage();
-		}
+	public static void addMessageToOutgoingQueue (Message message){
+		outQueue.offer(message);
 	}
 	
-	public static void sendMessage (Message message) {
-		
-		
+	public static void addMessageToIncomingQueue (Message message){
+		inQueue.offer(message);
 	}
-		
-	public static void readThedata() throws FileNotFoundException{
-		DataOutputStream outputStream = new DataOutputStream(new BufferedOutputStream(
-				new FileOutputStream("OutFile.dat")));
+	
+	public static Message getNextMessageOutgoingQueue (){
+		return outQueue.poll();
 	}
-
+	
+	public static Message getNextMessageIncomingQueue (){
+		return inQueue.poll();
+	}
 }
