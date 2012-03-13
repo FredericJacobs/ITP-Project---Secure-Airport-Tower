@@ -8,9 +8,11 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import junit.framework.Assert;
+import messaging.messages.DataMessage;
+
 import org.junit.BeforeClass;
 import org.junit.Test;
-
+import DataFile.*;
 /**
  * Pour faire fonctionner le test il faut placer le fichier "test_image_itp.png" dans 
  * un répertoire "test" dans le même dossier que "src".
@@ -21,8 +23,8 @@ import org.junit.Test;
  * La classe DataFile possède deux constructeurs :
  * 
  * -Un pour lire depuis un fichier déjà existant, qui ne prend qu'un seul paramètre , le chemin vers ce fichier.
- * -Un deuxième pour créer un fichier à partir de messages Data. Son constructeur prend deux paramètres : le chemin
- * du nouveau fichier, et le premier message Data reçu, qui contient des informations utiles telles que le hash, la taille
+ * -Un deuxième pour créer un fichier à partir de messages DataMessage. Son constructeur prend deux paramètres : le chemin
+ * du nouveau fichier, et le premier message DataMessage reçu, qui contient des informations utiles telles que le hash, la taille
  * totale du fichier et le format ( pour compléter le nom du fichier ).
  * 
  * @author Jeremy Gotteland
@@ -30,7 +32,7 @@ import org.junit.Test;
  */
 public class DataMessageTest {
 
-	private static LinkedList<Data> pieces;
+	private static LinkedList<DataMessage> pieces;
 	private static DataFile dataFile;
 
 	//Constants computed from the test file. Students have to compute themselves to get to the same result.
@@ -40,9 +42,7 @@ public class DataMessageTest {
 
 	@BeforeClass
 	public static void setUpClass() throws IOException {
-		
-		dataFile = new DataFile("test" + File.separator + "test_image_itp.png");
-
+		dataFile = new DataFile("tests" + File.separator + "test_image_itp.png");
 		pieces = generateDataList(dataFile);
 	}
 
@@ -58,7 +58,7 @@ public class DataMessageTest {
 
 		DataFile written = new DataFile("Test_File", pieces.removeFirst());
 
-		for (Data block : pieces) {
+		for (DataMessage block : pieces) {
 			written.writePacket(block);
 		}
 
@@ -77,10 +77,10 @@ public class DataMessageTest {
 
 		int fileSize = 4097;
 
-		Data firstDataBlock = new Data(null, 0, -1, -1, null, null, fileSize,
-				new byte[Data.MAX_PACKET_SIZE]);
-		Data wrongDataBlock = new Data(null, 2, -1, 1, null, null, fileSize,
-				new byte[Data.MAX_PACKET_SIZE - 2]);
+		DataMessage firstDataBlock = new DataMessage(null, 0, -1, -1, null, null, fileSize,
+				new byte[DataMessage.MAX_PACKET_SIZE]);
+		DataMessage wrongDataBlock = new DataMessage(null, 2, -1, 1, null, null, fileSize,
+				new byte[DataMessage.MAX_PACKET_SIZE - 2]);
 
 		DataFile test = new DataFile("dummy.rdm", firstDataBlock);
 
@@ -96,10 +96,10 @@ public class DataMessageTest {
 
 		int fileSize = 2046;
 
-		Data firstDataBlock = new Data(null, 0, -1, -1, null, null, fileSize,
-				new byte[Data.MAX_PACKET_SIZE]);
-		Data lastBlock = new Data(null, 1, -1, 1, null, null, fileSize,
-				new byte[Data.MAX_PACKET_SIZE - 2]);
+		DataMessage firstDataBlock = new DataMessage(null, 0, -1, -1, null, null, fileSize,
+				new byte[DataMessage.MAX_PACKET_SIZE]);
+		DataMessage lastBlock = new DataMessage(null, 1, -1, 1, null, null, fileSize,
+				new byte[DataMessage.MAX_PACKET_SIZE - 2]);
 
 		DataFile test = new DataFile("dummy.rdm", firstDataBlock);
 
@@ -109,29 +109,29 @@ public class DataMessageTest {
 
 	}
 
-	private static LinkedList<Data> generateDataList(File dataFile)
+	private static LinkedList<DataMessage> generateDataList(File dataFile)
 			throws IOException {
 
-		LinkedList<Data> pieces = new LinkedList<Data>();
+		LinkedList<DataMessage> pieces = new LinkedList<DataMessage>();
 
 		int fileSize = (int) dataFile.length();
 
 		BufferedInputStream bis = new BufferedInputStream(new FileInputStream(
 				dataFile));
 
-		byte[] buffer = new byte[Data.MAX_PACKET_SIZE];
+		byte[] buffer = new byte[DataMessage.MAX_PACKET_SIZE];
 		int available = 0;
 		int i = 0;
 
 		while ((available = bis.available()) > 0) {
 
-			if (available < Data.MAX_PACKET_SIZE) {
+			if (available < DataMessage.MAX_PACKET_SIZE) {
 				buffer = new byte[available];
 			}
 
 			bis.read(buffer, 0, buffer.length);
 
-			pieces.add(new Data(null, i, -1, -1, fileHash, pngFormat, fileSize,
+			pieces.add(new DataMessage(null, i, -1, -1, fileHash, pngFormat, fileSize,
 					buffer));
 
 			i++;
@@ -140,6 +140,7 @@ public class DataMessageTest {
 		Collections.shuffle(pieces);
 
 		return pieces;
+	
 	}
 
 }

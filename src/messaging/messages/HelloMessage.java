@@ -2,9 +2,9 @@ package messaging.messages;
 
 public class HelloMessage extends Message {
 	private boolean reserved;
-	public HelloMessage (byte[] planeID, int length, int priority, int posx,
+	public HelloMessage (byte[] planeID, int length, int posx,
 			int posy, boolean reserved) {
-		super (planeID, length, priority, posx, posy, MessageType.HELLO);
+		super (planeID, length, 1, posx, posy, MessageType.HELLO);
 		this.reserved = reserved;
 	}
 

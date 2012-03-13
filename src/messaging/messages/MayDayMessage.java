@@ -3,9 +3,9 @@ package messaging.messages;
 public class MayDayMessage extends Message {
 	private String cause;
 	
-	public MayDayMessage (byte[] planeID, int length, int priority, int posx,
+	public MayDayMessage (byte[] planeID, int length, int posx,
 			int posy, String cause) {
-		super (planeID, length, priority, posx, posy, MessageType.MAYDAY);
+		super (planeID, length, 0, posx, posy, MessageType.MAYDAY);
 		this.cause = cause;
 	}
 
