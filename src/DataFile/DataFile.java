@@ -70,7 +70,6 @@ public class DataFile extends File {
 	}
 
 	public byte[] getHash() {
-		this.computeHash();
 		return hash;
 	}
 

@@ -42,13 +42,12 @@ public class DataMessageTest {
 
 	@BeforeClass
 	public static void setUpClass() throws IOException {
-		dataFile = new DataFile("tests" + File.separator + "test_image_itp.png");
+		dataFile = new DataFile("bin"+File.separator+"tests" + File.separator + "test_image_itp.png");
 		pieces = generateDataList(dataFile);
 	}
 
 	@Test
 	public void readingDataTest() throws IOException {
-
 		Assert.assertTrue(Arrays.equals(fileHash, dataFile.getHash()));
 		Assert.assertTrue(Arrays.equals(pngFormat, dataFile.getFormat()));
 	}
