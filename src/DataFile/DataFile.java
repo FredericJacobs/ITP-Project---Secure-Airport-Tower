@@ -10,7 +10,6 @@ import java.io.RandomAccessFile;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Formatter;
-import java.util.Scanner;
 import messaging.messages.*;
 
 
@@ -19,7 +18,7 @@ public class DataFile extends File {
 	private byte[] hash;
 	private byte[] payload;
 	private byte[] fileFormat;
-	private static int packetSize;
+	private final static int PACKETSIZE = 1024;
 	private int lastPacketSize;
 	private int numberOfPackets;
 	private String pathToFile;
@@ -27,8 +26,8 @@ public class DataFile extends File {
 	
 	public DataFile(String path) {
 		super(path);
-		pathToFile = path;
-		DataFile.packetSize = 1024;
+		this.pathToFile = path;
+		numberOfPackets = (int) ((this.length() / PACKETSIZE)+1);
 	}
 	
 
@@ -41,10 +40,8 @@ public class DataFile extends File {
 	public byte[] getBlock(int offset) throws IOException, NoSuchAlgorithmException {
 		byte[] data = null;
 		BufferedInputStream stream = new BufferedInputStream(new FileInputStream(this));
-		
-		stream.read(data, offset, packetSize);
+		stream.read(data, offset, PACKETSIZE);
 		this.hash = this.computeHash(data);
-		
 		return data;
 	}
 	
@@ -75,8 +72,8 @@ public class DataFile extends File {
 
 	public byte[] getFormat() {
 		String fileFormatString = this.getName();
-		String[] splitStrings = fileFormatString.split(".");
-		fileFormatString = splitStrings[(splitStrings.length - 1)];
+		String[] splitStrings = fileFormatString.split("\\.");
+		fileFormatString = splitStrings[(splitStrings.length)-1];
 		fileFormat = fileFormatString.getBytes();
 		return fileFormat;
 	}
@@ -85,4 +82,10 @@ public class DataFile extends File {
 		// TODO Auto-generated method stub
 		
 	}
+
+
+	public String getPathToFile() {
+		return pathToFile;
+	}
+
 }

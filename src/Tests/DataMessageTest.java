@@ -38,7 +38,7 @@ public class DataMessageTest {
 	//Constants computed from the test file. Students have to compute themselves to get to the same result.
 	private final static byte[] fileHash = { 107, -72, -59, 15, 51, -46, 119,
 			98, -90, 43, 96, -84, -78, -127, -64, 68, -128, 10, -128, 121 };
-	private final static byte[] pngFormat = { 112, 110, 103, 32 };
+	private final static byte[] pngFormat = "png".getBytes();
 
 	@BeforeClass
 	public static void setUpClass() throws IOException {
@@ -48,8 +48,9 @@ public class DataMessageTest {
 
 	@Test
 	public void readingDataTest() throws IOException {
-		Assert.assertTrue(Arrays.equals(fileHash, dataFile.getHash()));
+		System.out.println(pngFormat.toString());
 		Assert.assertTrue(Arrays.equals(pngFormat, dataFile.getFormat()));
+		Assert.assertTrue(Arrays.equals(fileHash, dataFile.getHash()));
 	}
 
 	@Test
