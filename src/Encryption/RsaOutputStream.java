@@ -57,16 +57,12 @@ public class RsaOutputStream extends OutputStream
 
 	@Override
 	public void write(int b) throws IOException {
-		// Convertir le byte en BigInteger et le crypter.
 		BigInteger raw = BigInteger.valueOf(b & 0xFF);
 		BigInteger crypted = key.encrypt(raw);
-		// Convertir en tableau de bytes.
 		byte[] cryptedBytes = crypted.toByteArray();
-		// Le tableau doit avoir une taille de T = N/8 + 1
 		byte[] result = new byte[key.getKeySize() / 8 + 1];
 		System.arraycopy(cryptedBytes, 0, result, result.length
 		        - cryptedBytes.length, cryptedBytes.length);
-		// Ecrire le résultat.
 		output.write(result);
 		
 	}
