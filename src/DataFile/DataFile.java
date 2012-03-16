@@ -66,14 +66,14 @@ public class DataFile extends File {
 		return formatter.toString().getBytes();
 	}
 
-	public byte[] getHash() {
-		return hash;
-	}
-
+	public byte[] getHash() {	
+		return this.hash;
+	}	
 	public byte[] getFormat() {
 		String fileFormatString = this.getName();
 		String[] splitStrings = fileFormatString.split("\\.");
 		fileFormatString = splitStrings[(splitStrings.length)-1];
+		fileFormatString.toLowerCase();
 		fileFormat = fileFormatString.getBytes();
 		return fileFormat;
 	}

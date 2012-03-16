@@ -4,11 +4,13 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import junit.framework.Assert;
 import messaging.messages.DataMessage;
+
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -40,6 +42,7 @@ public class DataMessageTest {
 			98, -90, 43, 96, -84, -78, -127, -64, 68, -128, 10, -128, 121 };
 	private final static byte[] pngFormat = "png".getBytes();
 
+
 	@BeforeClass
 	public static void setUpClass() throws IOException {
 		dataFile = new DataFile("bin"+File.separator+"tests" + File.separator + "test_image_itp.png");
@@ -48,7 +51,6 @@ public class DataMessageTest {
 
 	@Test
 	public void readingDataTest() throws IOException {
-		System.out.println(pngFormat.toString());
 		Assert.assertTrue(Arrays.equals(pngFormat, dataFile.getFormat()));
 		Assert.assertTrue(Arrays.equals(fileHash, dataFile.getHash()));
 	}
