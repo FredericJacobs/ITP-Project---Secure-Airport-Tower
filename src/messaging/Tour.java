@@ -13,6 +13,7 @@ import Journal.Journal;
 import messaging.messages.*;
 
 
+
 /** Description of Tour
  * Tour.java represents the tour of airport, which have the function of receiving and sending Message with the planes
  * By using the class of Message, Tour can receive the Message in the way that Print all the information to the 
