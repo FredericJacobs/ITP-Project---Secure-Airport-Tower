@@ -70,4 +70,11 @@ public abstract class Message implements Comparable<Message> {
 				return 0;
 		}
 	}
+	public void print(){
+        String str = new String(planeID);
+		System.out.println("Type:" + MessageType.HELLO);
+		System.out.println("PlaneId :" + str);
+		System.out.println("posx" + posx);
+		System.out.println("posy" + posy);
+	}
 }

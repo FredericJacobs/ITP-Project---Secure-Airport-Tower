@@ -1,6 +1,7 @@
 package Plane;
 
 import java.io.BufferedReader;
+import ReadMesssages.*;
 import messaging.messages.*;
 
 import java.io.DataInputStream;
@@ -36,7 +37,7 @@ public class Plane {
 		}
 		System.out.println(hello.getByte());*/
 		try {
-			kkSocket = new Socket("LOCALHOST", 6891);
+			kkSocket = new Socket("LOCALHOST", 6896);
 			out = new PrintWriter(kkSocket.getOutputStream(), true);
 			in = new BufferedReader(new InputStreamReader(
 					kkSocket.getInputStream()));
@@ -67,10 +68,9 @@ public class Plane {
 				System.out.println("Client: " + fromUser);
 				out.println(fromUser);
 				hello.write(outData);//try the write method
-				System.out.println("Return data: " + inData);
+			//	System.out.println("Return data: " + inData);
 			}
 		}
-		
 		out.close();
 		in.close();
 		stdIn.close();

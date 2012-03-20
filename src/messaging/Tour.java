@@ -16,7 +16,7 @@ import java.util.PriorityQueue;
 
 //import encryption.KeyPair;
 
-import Journal.Journal;
+import ReadMesssages.ReadMessages;
 import messaging.messages.*;
 
 /**
@@ -88,7 +88,7 @@ public class Tour
 		DataOutputStream outData = null;
 		DataInputStream inData = null;
 		try {
-			serverSocket = new ServerSocket(6891);
+			serverSocket = new ServerSocket(6896);
 		} catch (IOException e) {
 			System.err.println("Could not listen on port");
 			System.exit(1);
@@ -112,7 +112,9 @@ public class Tour
 		while ((inputLine = in.readLine()) != null) {
 			outputLine = kkp.processInput(inputLine);
 			out.println(outputLine);
-			out.println(inData);// Return the first letter
+		out.println(inData);// Return the first letter
+		ReadMessages.readMessage(inData).print();
+		System.out.println("@@@@@@@@@@");
 			if (outputLine.equals("Bye."))
 				break;
 		}

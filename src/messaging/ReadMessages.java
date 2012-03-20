@@ -1,12 +1,13 @@
-package ReadMesssages;
+package messaging;
 
+import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import messaging.messages.*;
 public class ReadMessages {
-	public static Message readMessage(InputStream message) {
+	public static Message readMessage(DataInputStream message) {
 
-		byte messageBytes[] = new byte[29];
+		byte messageBytes[] = new byte[24];
 
 		try {
 			int i = message.read(messageBytes);
@@ -15,28 +16,23 @@ public class ReadMessages {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		// Find the type
+		int messageType = messageBytes[20] + messageBytes[21]
+				+ messageBytes[22] + messageBytes[23];
 
-		// Trouver le type de message, dans le byte 26
-		int messageType = messageBytes[24] + messageBytes[25]
-				+ messageBytes[26] + messageBytes[27];
-
-		// L'ID de l'avion est dans les bytes 0 - 7
+		// Plane ID
 		byte planeID[] = { messageBytes[0], messageBytes[1], messageBytes[2],
-				messageBytes[3], messageBytes[4], messageBytes[5],
-				messageBytes[6], messageBytes[7] };
-
-		int posX = messageBytes[16] + messageBytes[17] + messageBytes[18]
-				+ messageBytes[19];
-		int posY = messageBytes[20] + messageBytes[21] + messageBytes[22]
-				+ messageBytes[23];
+				messageBytes[3], messageBytes[4] };
+		int posX = messageBytes[5] + messageBytes[6] + messageBytes[7]
+				+ messageBytes[8];
+		int posY = messageBytes[9] + messageBytes[10] + messageBytes[11]
+				+ messageBytes[12];
 
 		switch (messageType) {
 		case 0:
-			return new HelloMessage(planeID, posX, posY, messageBytes[28], (byte)0);
+			return new HelloMessage(planeID,0, posX, posY, (byte)0);
 		}
-
 		return null;
-
 	}
 
 }
