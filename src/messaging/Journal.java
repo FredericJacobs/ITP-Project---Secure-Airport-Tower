@@ -1,4 +1,4 @@
-package Journal;
+package messaging;
 
 public class Journal {
 

@@ -36,11 +36,7 @@ public class KeyGeneratorTest {
     /**
      * Test of generateRSAKeyPair method, of class KeyGenerator.
      */
-    @Test(expected=java.lang.ArithmeticException.class)
-    public void testGenerateRSAKeyPair1() {
-        System.out.println("generateRSAKeyPair1");
-        KeyGenerator.generateRSAKeyPair(0);
-    }
+
     
     @Test(expected=java.lang.IllegalArgumentException.class)
     public void testGenerateRSAKeyPair2() {
