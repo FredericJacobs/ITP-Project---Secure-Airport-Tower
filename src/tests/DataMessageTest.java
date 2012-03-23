@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.reflect.Array;
+import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -44,7 +45,7 @@ public class DataMessageTest {
 
 
 	@BeforeClass
-	public static void setUpClass() throws IOException {
+	public static void setUpClass() throws IOException, NoSuchAlgorithmException {
 		dataFile = new DataFile("bin"+File.separator+"tests" + File.separator + "test_image_itp.png");
 		pieces = generateDataList(dataFile);
 	}

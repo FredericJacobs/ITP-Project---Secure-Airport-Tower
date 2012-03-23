@@ -24,10 +24,11 @@ public class DataFile extends File {
 	private String pathToFile;
 
 	
-	public DataFile(String path) {
+	public DataFile(String path) throws NoSuchAlgorithmException, IOException {
 		super(path);
 		this.pathToFile = path;
 		numberOfPackets = (int) ((this.length() / PACKETSIZE)+1);
+		hash = computeHash();
 	}
 	
 
@@ -64,6 +65,20 @@ public class DataFile extends File {
 		}
 		
 		return formatter.toString().getBytes();
+	}
+	
+	private byte[] computeHash() throws NoSuchAlgorithmException, IOException {
+		FileInputStream fis = new FileInputStream(pathToFile);
+		MessageDigest hasher = MessageDigest.getInstance("SHA-1");
+		byte[] dataBytes = new byte[1024];
+		 
+        int nread = 0; 
+        while ((nread = fis.read(dataBytes)) != -1) {
+          hasher.update(dataBytes, 0, nread);
+        };
+        byte[] mdbytes = hasher.digest();
+ 
+        return mdbytes;
 	}
 
 	public byte[] getHash() {	
