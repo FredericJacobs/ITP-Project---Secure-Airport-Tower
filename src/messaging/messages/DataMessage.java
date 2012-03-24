@@ -20,4 +20,20 @@ public class DataMessage extends Message {
 	public byte[]  getPayload() {
 		return this.payload;
 	}
+	
+	public int getfileSize(){
+		return fileSize;
+	}
+	
+	public byte [] getFormat (){
+		return format;
+	}
+	
+	public byte[] getHash (){
+		return hash;
+	}
+	
+	public int getContinuation (){
+		return continuation;
+	}	
 }

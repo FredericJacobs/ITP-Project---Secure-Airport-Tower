@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Formatter;
@@ -22,19 +23,37 @@ public class DataFile extends File {
 	private int lastPacketSize;
 	private int numberOfPackets;
 	private String pathToFile;
-
+	private boolean isComplete;
+	private FileOutputStream writingOutputStream ;
+	private byte[] payLoads[];
+	private int numberOfPacketsReceived;
 	
 	public DataFile(String path) throws NoSuchAlgorithmException, IOException {
-		super(path);
-		this.pathToFile = path;
+		super("bin"+File.separator +"tests" + File.separator + path);
+		this.pathToFile = "bin"+File.separator+"tests" + File.separator + path;
 		numberOfPackets = (int) ((this.length() / PACKETSIZE)+1);
 		hash = computeHash();
+		
+		isComplete = true;
+		
 	}
 	
 
-	public DataFile(String path, DataMessage removeFirst) {
-		super (path);
-		// TODO Auto-generated constructor stub
+	public DataFile(String path, DataMessage firstDataBlock) throws NoSuchAlgorithmException, IOException {
+		super ("bin"+File.separator +"tests" + File.separator + path);
+		this.pathToFile = "bin"+File.separator+"tests" + File.separator + path;
+		fileFormat = firstDataBlock.getFormat();
+		numberOfPackets = (int) ((firstDataBlock.getfileSize() / PACKETSIZE) +1);
+		hash = firstDataBlock.getHash();
+		if (firstDataBlock.getContinuation() == -1){
+			isComplete = true ;
+		}
+		else {isComplete = false ;}
+		
+		payLoads = new byte[DataMessage.MAX_PACKET_SIZE] [numberOfPackets];
+		numberOfPacketsReceived = 0;
+		writingOutputStream = new FileOutputStream (pathToFile);
+		
 	}
 
 
@@ -42,7 +61,6 @@ public class DataFile extends File {
 		byte[] data = null;
 		BufferedInputStream stream = new BufferedInputStream(new FileInputStream(this));
 		stream.read(data, offset, PACKETSIZE);
-		this.hash = this.computeHash(data);
 		return data;
 	}
 	
@@ -52,22 +70,11 @@ public class DataFile extends File {
 	}
 	
 	public boolean isComplete() {
-		return false;
+		return isComplete;
 	}
-	
-	private byte[] computeHash(byte[] file) throws NoSuchAlgorithmException {
-		MessageDigest hasher = MessageDigest.getInstance("SHA-1");
-		
-		Formatter formatter = new Formatter();
-		
-		for(byte i : hasher.digest(file)) {
-	        formatter.format("%02x", i);
-		}
-		
-		return formatter.toString().getBytes();
-	}
-	
+
 	private byte[] computeHash() throws NoSuchAlgorithmException, IOException {
+		
 		FileInputStream fis = new FileInputStream(pathToFile);
 		MessageDigest hasher = MessageDigest.getInstance("SHA-1");
 		byte[] dataBytes = new byte[1024];
@@ -84,18 +91,51 @@ public class DataFile extends File {
 	public byte[] getHash() {	
 		return this.hash;
 	}	
-	public byte[] getFormat() {
+	
+	public byte[] getFormat() throws UnsupportedEncodingException {
+		setFormat ();
+		return fileFormat;
+		
+	}
+	
+	public void setFormat() throws UnsupportedEncodingException {
+		
 		String fileFormatString = this.getName();
 		String[] splitStrings = fileFormatString.split("\\.");
 		fileFormatString = splitStrings[(splitStrings.length)-1];
 		fileFormatString.toLowerCase();
-		fileFormat = fileFormatString.getBytes();
-		return fileFormat;
+		
+		if (fileFormatString.length() < 4){
+			for (int i = fileFormatString.length() ; i < 4; i++){
+				fileFormatString = fileFormatString + " ";
+			}
+		}
+		
+		if (fileFormatString.length()>4){
+			for (int i = fileFormatString.length() ; i > 4; i--){
+				fileFormatString = fileFormatString.substring(0, (fileFormatString.length()-2));
+			}
+		}
+		
+		fileFormat = fileFormatString.getBytes("ASCII");
 	}
 
-	public void writePacket(DataMessage block) {
-		// TODO Auto-generated method stub
+	public void writePacket(DataMessage block) throws IOException {
+		numberOfPacketsReceived ++;
+		System.out.println(numberOfPackets);
+		System.out.println(numberOfPacketsReceived);
+		if (numberOfPacketsReceived < numberOfPackets){
+			payLoads[block.getContinuation()] = block.getPayload() ;
+		}
 		
+		if (numberOfPacketsReceived == (numberOfPackets-1)){
+			payLoads[block.getContinuation()] = block.getPayload() ;
+			for (int i = 0; i < payLoads.length; i++){
+				writingOutputStream.write(payLoads[i]);
+			}
+			isComplete = true;
+		}
+	   
 	}
 
 
