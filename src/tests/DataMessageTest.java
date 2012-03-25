@@ -76,7 +76,7 @@ public class DataMessageTest {
 	 * @throws IOException 
 	 * @throws NoSuchAlgorithmException 
 	 */
-	@Test
+	/* @Test
 	public void writingDataTest() throws NoSuchAlgorithmException, IOException {
 
 		DataFile written = new DataFile("Test_File", pieces.removeFirst());
@@ -88,11 +88,10 @@ public class DataMessageTest {
 
 		Assert.assertTrue(written.isComplete());
 		Assert.assertTrue(Arrays.equals(fileHash, written.getHash()));
-		//Assert.assertTrue(Arrays.equals(pngFormat, written.getFormat()));
-		//Assert.assertTrue(written.getName().endsWith(".png"));
-
+		Assert.assertTrue(Arrays.equals(pngFormat, written.getFormat()));
+		Assert.assertTrue(written.getName().endsWith(".png"));
 	}
-
+*/
 	/**
 	 * Format de mon constructeur Data :
 	 * 
@@ -104,10 +103,12 @@ public class DataMessageTest {
 	 * Ce test devrait lancer une "IllegalArgumentException" car on essaye
 	 * d'écrire un bloc de donnée de taille inférieure à 1024 bytes alors que ce
 	 * n'est pas le dernier bloc.
+	 * @throws IOException 
+	 * @throws NoSuchAlgorithmException 
 	 * 
 	 */
 	@Test(expected = java.lang.IllegalArgumentException.class)
-	public void badDataSizeTest() {
+	public void badDataSizeTest() throws NoSuchAlgorithmException, IOException {
 
 		System.out.println("Bad DataSize Test");
 
@@ -128,9 +129,11 @@ public class DataMessageTest {
 	/**
 	 * Ici aucune exception n'est levée car il s'agit du dernier bloc donc sa
 	 * taille peut-être inférieure à 1024 bytes.
+	 * @throws IOException 
+	 * @throws NoSuchAlgorithmException 
 	 */
 	@Test
-	public void lastPacketSizeTest() {
+	public void lastPacketSizeTest() throws NoSuchAlgorithmException, IOException {
 
 		System.out.println("Last PacketSize Test");
 
