@@ -1,5 +1,8 @@
 package messaging.messages;
 
+import java.io.DataOutputStream;
+import java.io.IOException;
+
 //Enumeration of the different Message types
 
 enum MessageType {
@@ -17,7 +20,6 @@ enum MessageType {
  * @author Frederic Jacobs
  * @version 1.0
  */
-
 public abstract class Message implements Comparable<Message> {
 	protected byte[] planeID;
 	protected int length;
@@ -55,8 +57,6 @@ public abstract class Message implements Comparable<Message> {
 		this.posy = posy;
 		this.type = type;
 	}
-
-	
 	public int getPriority() {
 		return this.priority;
 	}
@@ -72,9 +72,22 @@ public abstract class Message implements Comparable<Message> {
 	}
 	public void print(){
         String str = new String(planeID);
+        if(planeID!=null){
 		System.out.println("Type:" + MessageType.HELLO);
 		System.out.println("PlaneId :" + str);
-		System.out.println("posx" + posx);
-		System.out.println("posy" + posy);
+		System.out.println("posx: " + posx);
+		System.out.println("posy: " + posy);}
+        else {
+        	System.out.println("Empty Message");
+        }
+	}
+	public int getType(){
+		return type.ordinal();
+	}
+	public void write(DataOutputStream out) throws IOException{
+		out.writeInt(posx);
+		out.writeInt(posy);	
+		out.writeInt(type.ordinal());
+		out.write(planeID);
 	}
 }

@@ -14,9 +14,9 @@ import java.net.Socket;
 import java.util.Comparator;
 import java.util.PriorityQueue;
 
-//import encryption.KeyPair;
+import encryption.KeyPair;
 
-import ReadMesssages.ReadMessages;
+//import encryption.KeyPair;
 import messaging.messages.*;
 
 /**
@@ -40,7 +40,7 @@ public class Tour
 	// private KeyPair decryptKeypair;
 	// private KeyPair encryptKeypair;
 	private Journal journal;
-
+	private KeyPair publicKey;
 	public static Tour getInstance() {
 		if (instance == null)
 			instance = new Tour();
@@ -88,7 +88,7 @@ public class Tour
 		DataOutputStream outData = null;
 		DataInputStream inData = null;
 		try {
-			serverSocket = new ServerSocket(6896);
+			serverSocket = new ServerSocket(6900);
 		} catch (IOException e) {
 			System.err.println("Could not listen on port");
 			System.exit(1);
@@ -106,23 +106,39 @@ public class Tour
 		BufferedReader in = new BufferedReader(new InputStreamReader(
 				clientSocket.getInputStream()));
 		String inputLine, outputLine;
-		HelloProtocol kkp = new HelloProtocol();
-		outputLine = kkp.processInput(null);
-		out.println(outputLine);
-		while ((inputLine = in.readLine()) != null) {
-			outputLine = kkp.processInput(inputLine);
-			out.println(outputLine);
-		out.println(inData);// Return the first letter
-		ReadMessages.readMessage(inData).print();
-		System.out.println("@@@@@@@@@@");
-			if (outputLine.equals("Bye."))
-				break;
-		}
+		// HelloProtocol kkp = new HelloProtocol();
+		// outputLine = kkp.processInput(null);
+		//out.println("Tour of F.H checked, please send a message");
+	//	System.out.println("----Messages from the plane-----");
+		Message mes = ReadMessages.readMessage(inData);
+		mes.print();
+		repond(mes).write(outData);
+		
+		/*
+		 * while ((inputLine = in.readLine()) != null) { outputLine =
+		 * kkp.processInput(inputLine); out.println(outputLine);
+		 * out.println(inData);// Return the first letter
+		 * ReadMessages.readMessage(inData).print(); if
+		 * (outputLine.equals("Bye.")) break; }
+		 */
 		out.close();
 		in.close();
 		clientSocket.close();
 		serverSocket.close();
+	}
+	
+	public static Message repond(Message message){
+		int type = message.getType();
+		switch (type) {
+		case 0:
+			return  new HelloMessage("Tour".getBytes(), 0, 0, (byte) 0);
+		case 1: 
+	//		publicKey = (SendRSAMessage)message.getPublicKey();
+		default:
+			return null;
+		}
 
+		
 	}
 }
 

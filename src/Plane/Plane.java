@@ -1,7 +1,8 @@
 package Plane;
 
 import java.io.BufferedReader;
-import ReadMesssages.*;
+
+import messaging.ReadMessages;
 import messaging.messages.*;
 
 import java.io.DataInputStream;
@@ -22,11 +23,10 @@ public class Plane {
 		Socket kkSocket = null;
 		PrintWriter out = null;
 		BufferedReader in = null;
-		String planeID = "B1200";
+		String planeID = "B1778000";
 		DataOutputStream outData = null;
 		DataInputStream inData = null;
-		HelloMessage hello = new HelloMessage(planeID.getBytes(), 10, 20, 10,
-				(byte) 0);
+		HelloMessage hello = new HelloMessage(planeID.getBytes(), 20, 10,(byte) 0);
 		/*byte[] test = new byte[15];
 		test = hello.getByte();
 		for (int i = 0; i < test.length; i++) {
@@ -37,7 +37,7 @@ public class Plane {
 		}
 		System.out.println(hello.getByte());*/
 		try {
-			kkSocket = new Socket("LOCALHOST", 6896);
+			kkSocket = new Socket("LOCALHOST", 6900);
 			out = new PrintWriter(kkSocket.getOutputStream(), true);
 			in = new BufferedReader(new InputStreamReader(
 					kkSocket.getInputStream()));
@@ -53,12 +53,16 @@ public class Plane {
 			System.exit(1);
 		}
 
-		BufferedReader stdIn = new BufferedReader(new InputStreamReader(
+		/*BufferedReader stdIn = new BufferedReader(new InputStreamReader(
 				System.in));
 		String fromServer;
-		String fromUser;
-
-		while ((fromServer = in.readLine()) != null) {
+		String fromUser;		
+		fromServer = in.readLine();
+		System.out.println("Server: " + fromServer);
+		fromUser = stdIn.readLine();
+		out.println(fromUser);	*/		
+		hello.write(outData);
+		/*while ((fromServer = in.readLine()) != null) {
 			System.out.println("Server: " + fromServer);
 			if (fromServer.equals("Bye."))
 				break;
@@ -70,10 +74,12 @@ public class Plane {
 				hello.write(outData);//try the write method
 			//	System.out.println("Return data: " + inData);
 			}
-		}
+		}*/
+		System.out.println("----Messages from the tour-----");
+		ReadMessages.readMessage(inData).print();
 		out.close();
 		in.close();
-		stdIn.close();
+		//stdIn.close();
 		kkSocket.close();
 	}
 }
