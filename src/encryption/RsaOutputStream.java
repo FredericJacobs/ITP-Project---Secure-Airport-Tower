@@ -10,7 +10,7 @@ import java.math.BigInteger;
  * @author Frederic Jacobs
  * @author Hantao Zhao
  * @see InputStream
- * @see KeyPair1.0
+ * @see KeyPair
  */
 public class RsaOutputStream extends OutputStream
 {

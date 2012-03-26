@@ -38,7 +38,6 @@ import org.junit.Test;
  */
 public class DataMessageTest {
 
-	private static LinkedList<DataMessage> pieces;
 	private static DataFile dataFile;
 
 	// Constants computed from the test file. Students have to compute
@@ -51,7 +50,7 @@ public class DataMessageTest {
 	@BeforeClass
 	public static void setUpClass() throws IOException, NoSuchAlgorithmException {
 		dataFile = new DataFile("test_image_itp.png");
-		pieces = generateDataList(dataFile);
+		generateDataList(dataFile);
 	}
 
 	/**
