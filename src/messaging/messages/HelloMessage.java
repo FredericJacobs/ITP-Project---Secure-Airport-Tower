@@ -19,5 +19,6 @@ public class HelloMessage extends Message {
 	}
 	public void write(DataOutputStream out) throws IOException{
 		super.write(out);
+		out.write(reserved);
 	}
 }

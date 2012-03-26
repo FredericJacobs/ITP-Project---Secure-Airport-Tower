@@ -73,7 +73,7 @@ public abstract class Message implements Comparable<Message> {
 	public void print(){
         String str = new String(planeID);
         if(planeID!=null){
-		System.out.println("Type:" + MessageType.HELLO);
+		System.out.println("Type:" + type.toString());
 		System.out.println("PlaneId :" + str);
 		System.out.println("posx: " + posx);
 		System.out.println("posy: " + posy);}
@@ -85,9 +85,9 @@ public abstract class Message implements Comparable<Message> {
 		return type.ordinal();
 	}
 	public void write(DataOutputStream out) throws IOException{
+		out.write(planeID);
 		out.writeInt(posx);
 		out.writeInt(posy);	
 		out.writeInt(type.ordinal());
-		out.write(planeID);
 	}
 }

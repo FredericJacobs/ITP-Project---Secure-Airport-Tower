@@ -37,10 +37,12 @@ public class Tour
 	private static Tour instance;
 	private static PriorityQueue<Message> inQueue;
 	private static PriorityQueue<Message> outQueue;
-	// private KeyPair decryptKeypair;
-	// private KeyPair encryptKeypair;
+	private static KeyPair decryptKeypair;
+	private static KeyPair encryptKeypair;
+	private static int keepaliveX;
+	private static int keepaliveY;
 	private Journal journal;
-	private KeyPair publicKey;
+
 	public static Tour getInstance() {
 		if (instance == null)
 			instance = new Tour();
@@ -48,7 +50,6 @@ public class Tour
 	}
 
 	public Tour() {
-
 		inQueue = new PriorityQueue<Message>(6, new Comparator<Message>() {
 			public int compare(Message a, Message b) {
 				return a.compareTo(b);
@@ -79,14 +80,15 @@ public class Tour
 	}
 
 	public static void main(String[] args) throws IOException {
-
-		portTour();
+		TourNetwork();
 	}
 
-	public static void portTour() throws IOException {
+	public static void TourNetwork() throws IOException {
 		ServerSocket serverSocket = null;
 		DataOutputStream outData = null;
 		DataInputStream inData = null;
+		// Begin to connect by the net work socket , using the port "LOCALHOST",
+		// 6900
 		try {
 			serverSocket = new ServerSocket(6900);
 		} catch (IOException e) {
@@ -103,99 +105,48 @@ public class Tour
 		outData = new DataOutputStream(clientSocket.getOutputStream());
 		inData = new DataInputStream(clientSocket.getInputStream());
 		PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
-		BufferedReader in = new BufferedReader(new InputStreamReader(
-				clientSocket.getInputStream()));
-		String inputLine, outputLine;
-		// HelloProtocol kkp = new HelloProtocol();
-		// outputLine = kkp.processInput(null);
-		//out.println("Tour of F.H checked, please send a message");
-	//	System.out.println("----Messages from the plane-----");
+		// Connection finished
+		// this part is the main function to get and respond messages from or to
+		// the plane
+		// Recent issue: how to get continuing coming messages?
+
+		// while (inData!= null) doesnt work for it doesnt return the message
+		//
 		Message mes = ReadMessages.readMessage(inData);
 		mes.print();
-		repond(mes).write(outData);
-		
-		/*
-		 * while ((inputLine = in.readLine()) != null) { outputLine =
-		 * kkp.processInput(inputLine); out.println(outputLine);
-		 * out.println(inData);// Return the first letter
-		 * ReadMessages.readMessage(inData).print(); if
-		 * (outputLine.equals("Bye.")) break; }
-		 */
+		respond(mes).write(outData);
+		// finish the network and close the tunnel
 		out.close();
-		in.close();
 		clientSocket.close();
 		serverSocket.close();
 	}
-	
-	public static Message repond(Message message){
+
+	// respond to different type of message. Identify them by the method
+	// getType(). Partly functioning
+	public static Message respond(Message message) {
 		int type = message.getType();
 		switch (type) {
 		case 0:
-			return  new HelloMessage("Tour".getBytes(), 0, 0, (byte) 0);
-		case 1: 
-	//		publicKey = (SendRSAMessage)message.getPublicKey();
+			if (((HelloMessage) message).isCrypted()) {
+				return new HelloMessage("Tour0000".getBytes(), 0, 0, (byte) 1);
+			} else {
+				return new HelloMessage("Tour0000".getBytes(), 0, 0, (byte) 0);
+			}
+		case 1:
+			//Data, save the file that recieved TDB
+		case 2://Mayday, future issue
+		case 3://SendRSA, unfinished for the keypair
+			decryptKeypair = ((SendRSAMessage) message).getPublicKey();
+		//case 4,5,7 shouldnt happen to the tour
+		case 6:
+			return new ByeMessage("Tour0000".getBytes(), 0, 0, 0);
+		case 8: 
+			keepaliveX = ((KeepAliveMessage)message).keepaliveX();
+			keepaliveY = ((KeepAliveMessage)message).keepaliveY();
+			// keep alive
+		case 9: //Landing request, future issue
 		default:
 			return null;
 		}
-
-		
-	}
-}
-
-class HelloProtocol {
-	private static final int WAITING = 0;
-	private static final int SENTKNOCKKNOCK = 1;
-	private static final int SENTCLUE = 2;
-	private static final int ANOTHER = 3;
-	private static final int NUMJOKES = 5;
-
-	private int state = WAITING;
-	private int currentJoke = 0;
-
-	/*
-	 * public String processInput(String theInput) { String theOutput = null;
-	 * theOutput = "Plane connected, please send a messsage"; if
-	 * (theInput.equalsIgnoreCase("hello")) { theOutput = "Hello you!"; state =
-	 * SENTCLUE; } else { // theOutput = null; } return theOutput; }
-	 */
-
-	private String[] clues = { "Turnip", "Little Old Lady", "Atch", "Who",
-			"Who" };
-	private String[] answers = { "Turnip the heat, it's cold in here!",
-			"I didn't know you could yodel!", "Bless you!",
-			"Is there an owl in here?", "Is there an echo in here?" };
-
-	public String processInput(String theInput) {
-		String theOutput = null;
-
-		if (state == WAITING) {
-			theOutput = "Plane connected, please send a messsage";
-			state = SENTKNOCKKNOCK;
-		} else if (state == SENTKNOCKKNOCK) {
-			if (theInput.equalsIgnoreCase("Hello")) {
-				theOutput = clues[currentJoke];
-				state = SENTCLUE;
-			} else {
-				theOutput = "You're supposed to say \"Hello\"! "
-						+ "Try again. Knock! Knock!";
-			}
-		} else if (state == SENTCLUE) {
-			if (theInput.equalsIgnoreCase(clues[currentJoke] + " who?")) {
-				theOutput = answers[currentJoke] + " Want another? (y/n)";
-				state = ANOTHER;
-			} else {
-				theOutput = "Bye.";
-				state = WAITING;
-			}/*
-			 * else { theOutput = "You're supposed to say \"" +
-			 * clues[currentJoke] + " who?\"" + "! Try again. Knock! Knock!";
-			 * state = SENTKNOCKKNOCK; } } else if (state == ANOTHER) { if
-			 * (theInput.equalsIgnoreCase("y")) { theOutput = "Knock! Knock!";
-			 * if (currentJoke == (NUMJOKES - 1)) currentJoke = 0; else
-			 * currentJoke++; state = SENTKNOCKKNOCK; } else { theOutput =
-			 * "Bye."; state = WAITING; } }
-			 */
-		}
-		return theOutput;
 	}
 }

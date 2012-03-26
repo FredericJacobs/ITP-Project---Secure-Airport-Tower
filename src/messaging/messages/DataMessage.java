@@ -1,5 +1,8 @@
 package messaging.messages;
 
+import java.io.DataOutputStream;
+import java.io.IOException;
+
 public class DataMessage extends Message {
 	public static final int MAX_PACKET_SIZE = 1024; 
 	byte[] hash; // 20 octets (20 bytes) 
@@ -36,4 +39,12 @@ public class DataMessage extends Message {
 	public int getContinuation (){
 		return continuation;
 	}	
+	public void write(DataOutputStream out) throws IOException{
+		super.write(out);
+		out.write(hash);
+		out.writeInt(continuation);
+		out.write(format);
+		out.writeInt(fileSize);
+		out.write(payload);
+	}
 }

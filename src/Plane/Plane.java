@@ -12,6 +12,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.Scanner;
 
 public class Plane {
 
@@ -26,16 +27,8 @@ public class Plane {
 		String planeID = "B1778000";
 		DataOutputStream outData = null;
 		DataInputStream inData = null;
-		HelloMessage hello = new HelloMessage(planeID.getBytes(), 20, 10,(byte) 0);
-		/*byte[] test = new byte[15];
-		test = hello.getByte();
-		for (int i = 0; i < test.length; i++) {
-		}
-		for (int i = 0; i < test.length; i++) {
-			System.out.println(test[i]);// it doesnt work to save the planeit
-										// into the array
-		}
-		System.out.println(hello.getByte());*/
+		// Begin to connect by the net work socket , using the port "LOCALHOST",
+		// 6900
 		try {
 			kkSocket = new Socket("LOCALHOST", 6900);
 			out = new PrintWriter(kkSocket.getOutputStream(), true);
@@ -52,34 +45,38 @@ public class Plane {
 					.println("Couldn't get I/O for the connection to: LOCALHOST.");
 			System.exit(1);
 		}
+		// begin to transfer messages
+		System.out.println("This is plane B1778000 please give instructions");
+		System.out
+				.println("0=HELLO, 1=DATA, 2=MAYDAY, 3=SENDRSA, 4=CHOKE, 5=UNCHOKE, 6=BYE,7=ROUTING, 8=KEEPALIVE, 9=LANDINGREQUEST");
+		Scanner scanner = new Scanner(System.in);
 
-		/*BufferedReader stdIn = new BufferedReader(new InputStreamReader(
-				System.in));
-		String fromServer;
-		String fromUser;		
-		fromServer = in.readLine();
-		System.out.println("Server: " + fromServer);
-		fromUser = stdIn.readLine();
-		out.println(fromUser);	*/		
-		hello.write(outData);
-		/*while ((fromServer = in.readLine()) != null) {
-			System.out.println("Server: " + fromServer);
-			if (fromServer.equals("Bye."))
+		int i = 0;
+		while (i != 6) {
+			i = scanner.nextInt();
+			switch (i) {
+			case 0:
+				HelloMessage hello = new HelloMessage(planeID.getBytes(), 20,
+						10, (byte) 0);
+				hello.write(outData);
+				System.out.println("----Messages from the tour-----");
+				ReadMessages.readMessage(inData).print();
 				break;
-			fromUser = stdIn.readLine();
-
-			if (fromUser != null) {
-				System.out.println("Client: " + fromUser);
-				out.println(fromUser);
-				hello.write(outData);//try the write method
-			//	System.out.println("Return data: " + inData);
+			case 6:
+				ByeMessage bye = new ByeMessage(planeID.getBytes(),0, 20, 10);
+				bye.write(outData);
+				System.out.println("----Messages from the tour-----");
+				ReadMessages.readMessage(inData).print();
+				break;
+			case 8:
+				KeepAliveMessage KeepAlive = new KeepAliveMessage(
+						planeID.getBytes(), 20, 10, (byte) 0);
+				KeepAlive.write(outData);
+				System.out.println("----Messages from the tour-----");break;
 			}
-		}*/
-		System.out.println("----Messages from the tour-----");
-		ReadMessages.readMessage(inData).print();
+		}
 		out.close();
 		in.close();
-		//stdIn.close();
 		kkSocket.close();
 	}
 }

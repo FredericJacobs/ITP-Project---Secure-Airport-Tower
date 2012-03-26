@@ -1,5 +1,8 @@
 package messaging.messages;
 
+import java.io.DataOutputStream;
+import java.io.IOException;
+
 import encryption.*;
 
 public class SendRSAMessage extends Message
@@ -18,5 +21,8 @@ public class SendRSAMessage extends Message
 
 	public KeyPair getPublicKey (){
 		return publicKey;
+	}
+	public void write(DataOutputStream out) throws IOException{//how do we send an object? "KeyPair?"
+		super.write(out);
 	}
 }
