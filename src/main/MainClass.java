@@ -1,13 +1,13 @@
 package main;
 
 import twitter.*;
-
+import GUI.*;
 
 public class MainClass {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		SendTweet.publish("NIhao");
+		new Radar(args.length == 0 ? null : args[0]).setVisible(true); 
+	
 	}
 
 }
