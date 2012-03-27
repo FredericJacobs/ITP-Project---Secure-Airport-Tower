@@ -18,6 +18,7 @@ public class MayDayMessage extends Message {
 
 	public void write(DataOutputStream out) throws IOException {
 		super.write(out);
+		out.writeInt(length);
 		out.write(cause.getBytes());
 	}
 

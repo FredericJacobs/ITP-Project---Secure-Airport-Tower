@@ -3,15 +3,19 @@ package messaging;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.*;
+import encryption.KeyPair;
 import messaging.messages.*;
 import messaging.messages.RoutingMessage.moveType;
 import messaging.messages.RoutingMessage.routingMessageType;
 // This method aims at converting the DataInputStream into a new created message, by using the method read (for byte[]) and readInt
 //Right now(26.03) it can transfer all kinds of message except the sendRSA because I cant find a way to transfer the data keypair
+
 public class ReadMessages {
 	public static Message readMessage(DataInputStream message)
 			throws IOException {
 		byte planeID[] = new byte[8];
+
 		int i = message.read(planeID);
 		int posX = message.readInt();
 		int posY = message.readInt();
@@ -37,11 +41,20 @@ public class ReadMessages {
 			return new DataMessage(planeID, continuation, posX, posY, hash,
 					format, fileSize, payload);
 		case 2:
-			byte[] cause = new byte[20]; // we assume that all the cause can be
-											// stated in 20 letters
+			int length = message.readInt();
+			byte[] cause = new byte[length]; // we assume that all the cause can
+												// be
+												// stated in 20 letters
 			String str = new String(cause);
 			return new MayDayMessage(planeID, cause.length, posX, posY, str);
-		case 3: // sendRSA TBD
+		case 3:
+			int keySize = message.readInt();
+			int modulusLength = message.readInt();
+			byte[] modulus = new byte[modulusLength];
+			byte[] publicKey = new byte[keySize];
+			message.read(modulus);
+			message.read(publicKey);
+			return new SendRSAMessage(planeID,0,posX, posY, new KeyPair (new BigInteger(modulus),new BigInteger(publicKey) , null ,keySize));
 		case 4:
 			return new ChokeMessage(planeID, 0, posX, posY);
 		case 5:
