@@ -35,7 +35,7 @@ public class Plane {
 		// Begin to connect by the net work socket , using the port "LOCALHOST",
 		// 6900
 		try {
-			kkSocket = new Socket("LOCALHOST", 6901);
+			kkSocket = new Socket("LOCALHOST", 6969);
 			out = new PrintWriter(kkSocket.getOutputStream(), true);
 			in = new BufferedReader(new InputStreamReader(
 					kkSocket.getInputStream()));
@@ -83,6 +83,7 @@ public class Plane {
 						planeID.getBytes(), 20, 10, (byte) 0);
 				KeepAlive.write(outData);
 				System.out.println("----Messages from the tour-----");
+				ReadMessages.readMessage(inData).print();
 				break;
 			}
 		}

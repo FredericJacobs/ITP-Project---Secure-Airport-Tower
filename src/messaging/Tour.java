@@ -77,11 +77,11 @@ public class Tour {
 		return inQueue.poll();
 	}
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException, CloneNotSupportedException {
 		TourNetwork();
 	}
 
-	public static void TourNetwork() throws IOException {
+	public static void TourNetwork() throws IOException, CloneNotSupportedException {
 		ServerSocket serverSocket = null;
 		DataOutputStream outData = null;
 		DataInputStream inData = null;
@@ -89,7 +89,7 @@ public class Tour {
 		// Begin to connect by the net work socket , using the port "LOCALHOST",
 		// 6900
 		try {
-			serverSocket = new ServerSocket(6901);
+			serverSocket = new ServerSocket(6969);
 		} catch (IOException e) {
 			System.err.println("Could not listen on port");
 			System.exit(1);
@@ -124,7 +124,7 @@ public class Tour {
 		 * addMessageToIncomingQueue(mes); } } }).start();
 		 */
 		while (inData != null) {
-			Message mes = ReadMessages.readMessage(inData);
+			Message mes = ReadMessages.readMessage(inData).clone();
 			if (mes.getType() != 6) {
 				mes.print();
 				respond(mes).write(outData);
@@ -147,11 +147,12 @@ public class Tour {
 		int type = message.getType();
 		switch (type) {
 		case 0:
-			if (((HelloMessage) message).isCrypted()) {
+			return new HelloMessage("Tour0000".getBytes(), 0, 0, (byte)0);
+			/*if (((HelloMessage) message).isCrypted()) {
 				return new HelloMessage("Tour0000".getBytes(), 0, 0, (byte) 1);
 			} else {
 				return new HelloMessage("Tour0000".getBytes(), 0, 0, (byte) 0);
-			}
+			}*/
 		case 1:
 			// Data, save the file that received TDB
 		case 2:// Mayday, future issue
@@ -164,6 +165,10 @@ public class Tour {
 		case 8:
 			keepaliveX = ((KeepAliveMessage) message).keepaliveX();
 			keepaliveY = ((KeepAliveMessage) message).keepaliveY();
+			System.out.println("keepaliveX :" + keepaliveX);
+			System.out.println("keepaliveY :" + keepaliveY);
+			return new KeepAliveMessage("Tour0000".getBytes(), 0, 0, 0);
+
 			// keep alive
 		case 9: // Landing request, future issue
 		default:

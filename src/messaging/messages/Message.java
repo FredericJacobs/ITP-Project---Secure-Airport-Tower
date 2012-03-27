@@ -11,16 +11,16 @@ enum MessageType {
 }
 
 /**
- * Message is the file which contains the main class
- * Message. By using the abstract class Message we build all the type of
- * Message we'll send between planes and the control tower. All the sub-classes
- * are kept in a single Java file for clarity
+ * Message is the file which contains the main class Message. By using the
+ * abstract class Message we build all the type of Message we'll send between
+ * planes and the control tower. All the sub-classes are kept in a single Java
+ * file for clarity
  * 
  * @author Hantao Zhao
  * @author Frederic Jacobs
  * @version 1.0
  */
-public abstract class Message implements Comparable<Message> {
+public abstract class Message implements Comparable<Message>, Cloneable {
 	protected byte[] planeID;
 	protected int length;
 	protected int priority;
@@ -29,8 +29,8 @@ public abstract class Message implements Comparable<Message> {
 	protected MessageType type;
 
 	/**
-	 * Message is an abstract constructor. It defines what Message will have
-	 * to implement.
+	 * Message is an abstract constructor. It defines what Message will have to
+	 * implement.
 	 * 
 	 * @param planeID
 	 *            An Array of Bytes storing the unique identifier of a plane
@@ -57,37 +57,45 @@ public abstract class Message implements Comparable<Message> {
 		this.posy = posy;
 		this.type = type;
 	}
+
 	public int getPriority() {
 		return this.priority;
 	}
-		
+
 	public int compareTo(Message msg) {
-		if(this.priority < msg.getPriority())
+		if (this.priority < msg.getPriority())
 			return 1;
-		else if(this.priority > msg.getPriority())
+		else if (this.priority > msg.getPriority())
 			return -1;
 		else {
-				return 0;
+			return 0;
 		}
 	}
-	public void print(){
-        String str = new String(planeID);
-        if(planeID!=null){
-		System.out.println("Type:" + type.toString());
-		System.out.println("PlaneId :" + str);
-		System.out.println("posx: " + posx);
-		System.out.println("posy: " + posy);}
-        else {
-        	System.out.println("Empty Message");
-        }
+
+	public void print() {
+		String str = new String(planeID);
+		if (planeID != null) {
+			System.out.println("Type:" + type.toString());
+			System.out.println("PlaneId :" + str);
+			System.out.println("posx: " + posx);
+			System.out.println("posy: " + posy);
+		} else {
+			System.out.println("Empty Message");
+		}
 	}
-	public int getType(){
+
+	public int getType() {
 		return type.ordinal();
 	}
-	public void write(DataOutputStream out) throws IOException{
+
+	public void write(DataOutputStream out) throws IOException {
 		out.write(planeID);
 		out.writeInt(posx);
-		out.writeInt(posy);	
+		out.writeInt(posy);
 		out.writeInt(type.ordinal());
+	}
+
+	public Message clone() throws CloneNotSupportedException {
+		return (Message) super.clone();
 	}
 }
