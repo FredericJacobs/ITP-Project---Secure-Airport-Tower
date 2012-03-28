@@ -3,10 +3,8 @@ package GUI;
 import java.util.*;
 import java.awt.*;
 import java.awt.event.*;
-
 import javax.swing.*;
 
-import java.awt.image.*;
 
 
 @SuppressWarnings("serial")
