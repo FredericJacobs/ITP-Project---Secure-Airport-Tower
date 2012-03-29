@@ -31,7 +31,7 @@ import messaging.messages.*;
  * @author Frederic Jacobs
  * @version 1.0
  */
-public class Tour {
+public class Tour{
 	private static Tour instance;
 	private static PriorityQueue<Message> inQueue;
 	private static PriorityQueue<Message> outQueue;
@@ -60,6 +60,19 @@ public class Tour {
 			}
 		});
 	}
+	public static void setDecryptKeypair(KeyPair decrypt){
+	    decryptKeypair = decrypt;
+	}
+	public static void setEncryptKeypair(KeyPair encrypt){
+		encryptKeypair = encrypt;
+	}
+	public static  void setkeepaliveX(int posx){
+		keepaliveX = posx;
+	}
+	public static void setkeepaliveY(int posy){
+		keepaliveY = posy;
+	}
+
 
 	public static void addMessageToOutgoingQueue(Message message) {
 		outQueue.offer(message);
@@ -76,9 +89,17 @@ public class Tour {
 	public static Message getNextMessageIncomingQueue() {
 		return inQueue.poll();
 	}
+	public static void creatPriorityQueue(){
+		inQueue = new PriorityQueue<Message>(6, new Comparator<Message>() {
+			public int compare(Message a, Message b) {
+				return a.compareTo(b);
+			}
+		});
+	}
 
 	public static void main(String[] args) throws IOException,
 			CloneNotSupportedException {
+		creatPriorityQueue();
 		TourNetwork();
 	}
 
@@ -87,16 +108,28 @@ public class Tour {
 		ServerSocket serverSocket = null;
 		DataOutputStream outData = null;
 		DataInputStream inData = null;
-		boolean listening = true;
 		// Begin to connect by the net work socket , using the port "LOCALHOST",
 		// 6900
+	/*	addMessageToIncomingQueue(new ByeMessage("1553".getBytes(), 0, 20, 10));
+		addMessageToIncomingQueue(new HelloMessage("hello1".getBytes(), 20, 10, (byte) 0));
+		addMessageToIncomingQueue(new HelloMessage("hello2".getBytes(), 20, 10, (byte) 0));
+		addMessageToIncomingQueue(new ByeMessage("1778".getBytes(), 0, 20, 10));
+		System.out.println("queuesize" + inQueue.size());
+		int n = inQueue.size();
+		for (int i = 0; i < n;i++){
+		getNextMessageIncomingQueue().print();
+		System.out.println("queuesize = " + i);
+		}*/
 		try {
 			serverSocket = new ServerSocket(6969);
 		} catch (IOException e) {
 			System.err.println("Could not listen on port");
 			System.exit(1);
 		}
-		Socket clientSocket = null;
+		while(true){
+			new TourThread(serverSocket.accept()).start();
+		}
+		/*
 		try {
 			clientSocket = serverSocket.accept();
 		} catch (IOException e) {
@@ -107,7 +140,7 @@ public class Tour {
 
 		outData = new DataOutputStream(clientSocket.getOutputStream());
 		inData = new DataInputStream(clientSocket.getInputStream());
-		PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
+		PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);*/
 		// Connection finished
 		// this part is the main function to get and respond messages from or to
 		// the plane
@@ -125,17 +158,14 @@ public class Tour {
 		 * Message mes = ReadMessages.readMessage(inData);
 		 * addMessageToIncomingQueue(mes); } } }).start();
 		 */
-		try {
-			while (inData != null) {
+		
+/* [ the trying of using the queue] try {
+			boolean flag = true;
+			while (flag) {
 				Message mes = ReadMessages.readMessage(inData);		
-				if (mes.getType() != 6) {
-					mes.print();
-					respond(mes,outData);
-				} else {
-					mes.print();
-					respond(mes, outData);
-					System.out.println("Bye! Bon voyage");
-					break;
+				addMessageToIncomingQueue(mes);
+				if(mes.getType()==6){
+					flag = false;
 				}
 			}
 		} catch (Exception e) {
@@ -143,10 +173,38 @@ public class Tour {
 			System.out.println("Cant hear anything from the plane,oops...");
 			e.printStackTrace();
 		}
+		int inQueuesize = inQueue.size();
+		for (int i =0; i< inQueuesize;i++){
+			Message handleMessage = inQueue.poll();
+		if (handleMessage.getType() != 6) {
+			handleMessage.print();
+			respond(handleMessage,outData);
+		} else {
+			handleMessage.print();
+			respond(handleMessage, outData);
+			System.out.println("Bye! Bon voyage");
+			break;
+		}
+		}*/
+	/*		while (true) {
+				Message mes = ReadMessages.readMessage(inData);		
+				if (mes.getType() != 6) {
+					mes.print();
+					respond(mes,outData);
+				} else {
+					mes.print();
+					respond(mes,outData);
+					System.out.println("Bye! Bon voyage");
+					break;
+				}
+			}
 		// finish the network and close the tunnel
 		out.close();
 		clientSocket.close();
-		serverSocket.close();
+		
+		*/
+		//	serverSocket.close();
+
 	}
 
 	// respond to different type of message. Identify them by the method
@@ -175,9 +233,7 @@ public class Tour {
 			// case 4,5,7 shouldnt happen to the tour
 		case 6:
 			System.out.println("Connection terminated");
-			ByeMessage bye = new ByeMessage("Tour0000".getBytes(), 0, 0,(byte) 0);
-			bye.write(outData);
-			return bye;
+			return null;
 		case 8:
 			keepaliveX = ((KeepAliveMessage) message).keepaliveX();
 			keepaliveY = ((KeepAliveMessage) message).keepaliveY();

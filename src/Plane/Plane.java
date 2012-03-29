@@ -62,7 +62,7 @@ public class Plane {
 				hello.print();
 				hello.write(outData);
 				System.out.println("----Messages from the tour-----");
-				ReadMessages.readMessage(inData).print();
+			//	ReadMessages.readMessage(inData).print();
 				break;
 			case 1: 
 			case 2:
@@ -75,14 +75,13 @@ public class Plane {
 				ByeMessage bye = new ByeMessage(planeID.getBytes(), 0, 20, 10);
 				bye.write(outData);
 				System.out.println("----Messages from the tour-----");
-				ReadMessages.readMessage(inData).print();
+		//		ReadMessages.readMessage(inData).print();
 				System.out.println("Bye! Bon voyage!");
 				break;
 			case 8:
 				KeepAliveMessage KeepAlive = new KeepAliveMessage(planeID.getBytes(),0, 20, 10);
 				KeepAlive.write(outData);
 				System.out.println("----Messages from the tour-----no return message");
-				//ReadMessages.readMessage(inData).print();
 				break;
 			}
 		}
