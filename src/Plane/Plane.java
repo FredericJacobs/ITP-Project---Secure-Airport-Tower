@@ -46,8 +46,7 @@ public class Plane {
 			System.err.println("Don't know about host: LOCALHOST.");
 			System.exit(1);
 		} catch (IOException e) {
-			System.err
-					.println("Couldn't get I/O for the connection to: LOCALHOST.");
+			System.err.println("Couldn't get I/O for the connection to: LOCALHOST.");
 			System.exit(1);
 		}
 		// begin to transfer messages
@@ -60,6 +59,7 @@ public class Plane {
 			switch (i) {
 			case 0:
 				HelloMessage hello = new HelloMessage(planeID.getBytes(), 20, 10, (byte) 0);
+				hello.print();
 				hello.write(outData);
 				System.out.println("----Messages from the tour-----");
 				ReadMessages.readMessage(inData).print();
@@ -79,11 +79,10 @@ public class Plane {
 				System.out.println("Bye! Bon voyage!");
 				break;
 			case 8:
-				KeepAliveMessage KeepAlive = new KeepAliveMessage(
-						planeID.getBytes(), 20, 10, (byte) 0);
+				KeepAliveMessage KeepAlive = new KeepAliveMessage(planeID.getBytes(),0, 20, 10);
 				KeepAlive.write(outData);
-				System.out.println("----Messages from the tour-----");
-				ReadMessages.readMessage(inData).print();
+				System.out.println("----Messages from the tour-----no return message");
+				//ReadMessages.readMessage(inData).print();
 				break;
 			}
 		}

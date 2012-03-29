@@ -90,6 +90,8 @@ public abstract class Message implements Comparable<Message>, Cloneable {
 
 	public void write(DataOutputStream out) throws IOException {
 		out.write(planeID);
+		out.writeInt(length);
+		out.writeInt(priority);
 		out.writeInt(posx);
 		out.writeInt(posy);
 		out.writeInt(type.ordinal());

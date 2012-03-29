@@ -15,8 +15,9 @@ public class ReadMessages {
 	public static Message readMessage(DataInputStream message)
 			throws IOException {
 		byte planeID[] = new byte[8];
-
 		int i = message.read(planeID);
+		int length = message.readInt();
+		int priority = message.readInt();
 		int posX = message.readInt();
 		int posY = message.readInt();
 		int messageType = message.readInt();
@@ -41,10 +42,8 @@ public class ReadMessages {
 			return new DataMessage(planeID, continuation, posX, posY, hash,
 					format, fileSize, payload);
 		case 2:
-			int length = message.readInt();
-			byte[] cause = new byte[length]; // we assume that all the cause can
-												// be
-												// stated in 20 letters
+			int lengthcause = message.readInt();
+			byte[] cause = new byte[lengthcause]; 
 			String str = new String(cause);
 			return new MayDayMessage(planeID, cause.length, posX, posY, str);
 		case 3:
@@ -54,7 +53,9 @@ public class ReadMessages {
 			byte[] publicKey = new byte[keySize];
 			message.read(modulus);
 			message.read(publicKey);
-			return new SendRSAMessage(planeID,0,posX, posY, new KeyPair (new BigInteger(modulus),new BigInteger(publicKey) , null ,keySize));
+			return new SendRSAMessage(planeID, 0, posX, posY, new KeyPair(
+					new BigInteger(modulus), new BigInteger(publicKey), null,
+					keySize));
 		case 4:
 			return new ChokeMessage(planeID, 0, posX, posY);
 		case 5:
@@ -70,7 +71,7 @@ public class ReadMessages {
 					posY, routingMessageType.routingMessageTypeName(TypeR),
 					moveType.moveMessageTypeName(TypeM), payloadOfRouting);
 		case 8:
-			return new KeepAliveMessage(planeID, posX, posY, (byte) 0);
+			return new KeepAliveMessage(planeID,0, posX, posY);
 		case 9:
 			return new LandingMessage(planeID, posX, posY, (byte) 0);
 		default:

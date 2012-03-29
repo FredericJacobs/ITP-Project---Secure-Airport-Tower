@@ -77,11 +77,13 @@ public class Tour {
 		return inQueue.poll();
 	}
 
-	public static void main(String[] args) throws IOException, CloneNotSupportedException {
+	public static void main(String[] args) throws IOException,
+			CloneNotSupportedException {
 		TourNetwork();
 	}
 
-	public static void TourNetwork() throws IOException, CloneNotSupportedException {
+	public static void TourNetwork() throws IOException,
+			CloneNotSupportedException {
 		ServerSocket serverSocket = null;
 		DataOutputStream outData = null;
 		DataInputStream inData = null;
@@ -123,17 +125,23 @@ public class Tour {
 		 * Message mes = ReadMessages.readMessage(inData);
 		 * addMessageToIncomingQueue(mes); } } }).start();
 		 */
-		while (inData != null) {
-			Message mes = ReadMessages.readMessage(inData).clone();
-			if (mes.getType() != 6) {
-				mes.print();
-				respond(mes).write(outData);
-			} else {
-				mes.print();
-				respond(mes).write(outData);
-				System.out.println("Bye! Bon voyage");
-				break;
+		try {
+			while (inData != null) {
+				Message mes = ReadMessages.readMessage(inData);		
+				if (mes.getType() != 6) {
+					mes.print();
+					respond(mes,outData);
+				} else {
+					mes.print();
+					respond(mes, outData);
+					System.out.println("Bye! Bon voyage");
+					break;
+				}
 			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			System.out.println("Cant hear anything from the plane,oops...");
+			e.printStackTrace();
 		}
 		// finish the network and close the tunnel
 		out.close();
@@ -143,32 +151,39 @@ public class Tour {
 
 	// respond to different type of message. Identify them by the method
 	// getType(). Partly functioning
-	public static Message respond(Message message) {
+	public static Message respond(Message message, DataOutputStream outData)
+			throws IOException {
 		int type = message.getType();
 		switch (type) {
 		case 0:
-			return new HelloMessage("Tour0000".getBytes(), 0, 0, (byte)0);
-			/*if (((HelloMessage) message).isCrypted()) {
-				return new HelloMessage("Tour0000".getBytes(), 0, 0, (byte) 1);
-			} else {
-				return new HelloMessage("Tour0000".getBytes(), 0, 0, (byte) 0);
-			}*/
+			System.out.println("respond hello");
+			HelloMessage hello = new HelloMessage("Tour0000".getBytes(), 0, 0,
+					(byte) 0);
+		    hello.write(outData);
+			return hello;
+			/*
+			 * if (((HelloMessage) message).isCrypted()) { return new
+			 * HelloMessage("Tour0000".getBytes(), 0, 0, (byte) 1); } else {
+			 * return new HelloMessage("Tour0000".getBytes(), 0, 0, (byte) 0); }
+			 */
 		case 1:
 			// Data, save the file that received TDB
 		case 2:// Mayday, future issue
 		case 3:// SendRSA, unfinished for the keypair
 			decryptKeypair = ((SendRSAMessage) message).getPublicKey();
-			return new HelloMessage("Tour0000".getBytes(), 0, 0, (byte) 0);
+			return null;
 			// case 4,5,7 shouldnt happen to the tour
 		case 6:
-			return new ByeMessage("Tour0000".getBytes(), 0, 0, 0);
+			System.out.println("Connection terminated");
+			ByeMessage bye = new ByeMessage("Tour0000".getBytes(), 0, 0,(byte) 0);
+			bye.write(outData);
+			return bye;
 		case 8:
 			keepaliveX = ((KeepAliveMessage) message).keepaliveX();
 			keepaliveY = ((KeepAliveMessage) message).keepaliveY();
 			System.out.println("keepaliveX :" + keepaliveX);
 			System.out.println("keepaliveY :" + keepaliveY);
-			return new KeepAliveMessage("Tour0000".getBytes(), 0, 0, 0);
-
+			return null;
 			// keep alive
 		case 9: // Landing request, future issue
 		default:
