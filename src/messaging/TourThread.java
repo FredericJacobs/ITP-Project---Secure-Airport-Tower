@@ -84,7 +84,10 @@ public class TourThread extends Thread {
 			System.out.println("keepaliveY :" + ((KeepAliveMessage) message).keepaliveY());
 			return null;
 			// keep alive
-		case 9: // Landing request, future issue
+		case 9: 
+			System.out.println("To be done in the future, sorry for your lost...");
+			return null;
+			// Landing request, future issue
 		default:
 			return null;
 		}

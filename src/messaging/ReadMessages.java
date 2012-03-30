@@ -19,13 +19,12 @@ public class ReadMessages {
 		int length = message.readInt();
 		int priority = message.readInt();
 		int posX = message.readInt();
+		System.out.println("Keep alive X = " +posX);
 		int posY = message.readInt();
+		System.out.println("Keep alive Y = " +posY);
+
 		int messageType = message.readInt();
 		// Plane ID
-		// Find the type
-		System.out.println("planeID-Bytes : " + i);
-		System.out.println("messageType: " + messageType);
-
 		switch (messageType) {
 		case 0:
 			byte reserved = message.readByte();
@@ -71,12 +70,12 @@ public class ReadMessages {
 					posY, routingMessageType.routingMessageTypeName(TypeR),
 					moveType.moveMessageTypeName(TypeM), payloadOfRouting);
 		case 8:
-			return new KeepAliveMessage(planeID,0, posX, posY);
+			return new KeepAliveMessage(planeID, posX, posY);
 		case 9:
-			return new LandingMessage(planeID, posX, posY, (byte) 0);
+			return new LandingMessage(planeID,0, posX, posY);
 		default:
 			System.out.println("message not created");
-			return new ByeMessage("Bye".getBytes(), posX, posY, (byte) 0);
+			return new ByeMessage("Bye".getBytes(),0, posX, posY);
 		}
 	}
 }

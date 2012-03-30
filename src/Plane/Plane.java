@@ -22,7 +22,7 @@ public class Plane {
 	/**
 	 * @param args
 	 */
-	private static KeyPair decryptKeypair= KeyGenerator.generateRSAKeyPair(8);
+	private static KeyPair decryptKeypair= KeyGenerator.generateRSAKeyPair(256);
 	static String planeID = "B1778000";
 	
 	public static void main(String[] args) throws IOException {
@@ -79,7 +79,7 @@ public class Plane {
 				System.out.println("Bye! Bon voyage!");
 				break;
 			case 8:
-				KeepAliveMessage KeepAlive = new KeepAliveMessage(planeID.getBytes(),0, 20, 10);
+				KeepAliveMessage KeepAlive = new KeepAliveMessage(planeID.getBytes(), 20, 10);
 				KeepAlive.write(outData);
 				System.out.println("----Messages from the tour-----no return message");
 				break;

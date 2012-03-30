@@ -36,7 +36,6 @@ public class Tour{
 	private static PriorityQueue<Message> inQueue;
 	private static PriorityQueue<Message> outQueue;
 	private static KeyPair decryptKeypair;
-	private static KeyPair encryptKeypair;
 	private static int keepaliveX;
 	private static int keepaliveY;
 	private Journal journal;
@@ -63,9 +62,7 @@ public class Tour{
 	public static void setDecryptKeypair(KeyPair decrypt){
 	    decryptKeypair = decrypt;
 	}
-	public static void setEncryptKeypair(KeyPair encrypt){
-		encryptKeypair = encrypt;
-	}
+
 	public static  void setkeepaliveX(int posx){
 		keepaliveX = posx;
 	}
@@ -205,45 +202,8 @@ public class Tour{
 		*/
 		//	serverSocket.close();
 
-	}
+	}}
 
 	// respond to different type of message. Identify them by the method
 	// getType(). Partly functioning
-	public static Message respond(Message message, DataOutputStream outData)
-			throws IOException {
-		int type = message.getType();
-		switch (type) {
-		case 0:
-			System.out.println("respond hello");
-			HelloMessage hello = new HelloMessage("Tour0000".getBytes(), 0, 0,
-					(byte) 0);
-		    hello.write(outData);
-			return hello;
-			/*
-			 * if (((HelloMessage) message).isCrypted()) { return new
-			 * HelloMessage("Tour0000".getBytes(), 0, 0, (byte) 1); } else {
-			 * return new HelloMessage("Tour0000".getBytes(), 0, 0, (byte) 0); }
-			 */
-		case 1:
-			// Data, save the file that received TDB
-		case 2:// Mayday, future issue
-		case 3:// SendRSA, unfinished for the keypair
-			decryptKeypair = ((SendRSAMessage) message).getPublicKey();
-			return null;
-			// case 4,5,7 shouldnt happen to the tour
-		case 6:
-			System.out.println("Connection terminated");
-			return null;
-		case 8:
-			keepaliveX = ((KeepAliveMessage) message).keepaliveX();
-			keepaliveY = ((KeepAliveMessage) message).keepaliveY();
-			System.out.println("keepaliveX :" + keepaliveX);
-			System.out.println("keepaliveY :" + keepaliveY);
-			return null;
-			// keep alive
-		case 9: // Landing request, future issue
-		default:
-			return null;
-		}
-	}
-}
+
