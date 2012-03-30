@@ -9,26 +9,38 @@ import messaging.messages.Message;
 import messaging.messages.SendRSAMessage;
 import encryption.KeyPair;
 
+/**
+ * This class help the Tour to handle different type of messages
+ * 
+ * @author Hantao Zhao
+ * @author Frederic Jacobs
+ */
 public class TowerMessageHandler {
 	public TowerMessageHandler() {
 	}
 
+	/**
+	 * The respond method,it will respond a message and output the necessary
+	 * information by sending it into the DataOutputStream
+	 * 
+	 * @param plane
+	 *            The corresponded plane
+	 * @param message
+	 *            The message that need to be handled
+	 * @param outData
+	 *            The DataOutputStream where we send the feed back message
+	 * @throws IOException
+	 */
 	public void respond(Plane plane, Message message, DataOutputStream outData)
 			throws IOException {
 		int type = message.getType();
-		switch (type) {
+		switch (type) {// depends on different type of message we go to different cases 
 		case 0:
 			System.out.println("respond hello");
+			if (((HelloMessage) message).isCrypted()) {// To see if the hello is crypted or not, then give different respond hello message
 
-			if (((HelloMessage) message).isCrypted()) {
-				// KeyPair tourPublicKey = Tour.getDecryptKeypair();
-				// tourPublicKey.hidePrivateKey();
-				// SendRSAMessage respondHelloMessage = new SendRSAMessage(
-				// "Tour0000".getBytes(), 0, 0, 0, tourPublicKey);
-				// respondHelloMessage.write(outData);
 				plane.setPlaneID(message.getPlaneID());
-				new HelloMessage("Tour0000".getBytes(), 0, 0, (byte) 1)
-						.write(outData);
+				new HelloMessage("Tour0000".getBytes(), 0, 0, (byte) 1).write(outData);
 			}
 
 			else {
@@ -58,12 +70,8 @@ public class TowerMessageHandler {
 			System.out.println("Connection terminated");
 			break;
 		case 8:
-			Tour.setkeepaliveX(((KeepAliveMessage) message).keepaliveX());
-			Tour.setkeepaliveY(((KeepAliveMessage) message).keepaliveY());
-			System.out.println("keepaliveX :"
-					+ ((KeepAliveMessage) message).keepaliveX());
-			System.out.println("keepaliveY :"
-					+ ((KeepAliveMessage) message).keepaliveY());
+			plane.setPosx(((KeepAliveMessage) message).keepaliveX());
+			plane.setPosy(((KeepAliveMessage) message).keepaliveY());
 			break;
 		// keep alive
 		case 9:

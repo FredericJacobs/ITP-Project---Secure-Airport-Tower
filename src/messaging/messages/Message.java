@@ -58,10 +58,18 @@ public abstract class Message implements Comparable<Message>, Cloneable {
 		this.type = type;
 	}
 
+	/** Getter of the Priority
+	 * @return void
+	**/
 	public int getPriority() {
 		return this.priority;
 	}
 
+	/**
+	 * The compare method for the priorityQueue
+	 * 
+	 * @return int
+	 **/
 	public int compareTo(Message msg) {
 		if (this.priority < msg.getPriority())
 			return 1;
@@ -72,6 +80,11 @@ public abstract class Message implements Comparable<Message>, Cloneable {
 		}
 	}
 
+	/**
+	 * Print the current message in the Console
+	 * 
+	 * @return void
+	 **/
 	public void print() {
 		String str = new String(planeID);
 		if (planeID != null) {
@@ -83,9 +96,14 @@ public abstract class Message implements Comparable<Message>, Cloneable {
 			System.out.println("Empty Message");
 		}
 	}
-	public String getPlaneID(){
+
+	/**
+	 * Getter of the planeID
+	 * 
+	 * @return void
+	 **/
+	public String getPlaneID() {
 		String str = new String(planeID);
-		System.out.println("Try to get the planeID of " + str);
 		return str;
 	}
 
@@ -93,6 +111,11 @@ public abstract class Message implements Comparable<Message>, Cloneable {
 		return type.ordinal();
 	}
 
+	/**
+	 * To send the message through DataOutputStream, in a given order
+	 * 
+	 * @return void
+	 **/
 	public void write(DataOutputStream out) throws IOException {
 		out.write(planeID);
 		out.writeInt(length);
@@ -102,6 +125,11 @@ public abstract class Message implements Comparable<Message>, Cloneable {
 		out.writeInt(type.ordinal());
 	}
 
+	/**
+	 * Clone method in case of deep copy of some message.
+	 * 
+	 * @return the cloned message
+	 **/
 	public Message clone() throws CloneNotSupportedException {
 		return (Message) super.clone();
 	}

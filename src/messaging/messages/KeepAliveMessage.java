@@ -12,6 +12,11 @@ public class KeepAliveMessage extends Message {
 		super.write(out);
 	}
 
+	/**
+	 * Getter of the posX, posY
+	 * 
+	 * @return int x and y
+	 **/
 	public int keepaliveX() {
 		return posx;
 	}

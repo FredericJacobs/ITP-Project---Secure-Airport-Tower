@@ -6,6 +6,13 @@ import java.io.IOException;
 public class RoutingMessage extends Message {
 	public enum routingMessageType {
 		NEWFIRST, LAST, REPLACEALL;
+
+		/**
+		 * The method to return the routingMessage name by getting the integer
+		 * ordinal()
+		 * 
+		 * @return routingMessageType
+		 **/
 		public static routingMessageType routingMessageTypeName(int i) {
 			routingMessageType TypeR = null;
 			switch (i) {
@@ -22,6 +29,12 @@ public class RoutingMessage extends Message {
 
 	public enum moveType {
 		STRAIGHT, CIRCULAR, LANDING, NONE, DESTRUCTION;
+		/**
+		 * The method to return the moveType name by getting the integer
+		 * ordinal()
+		 * 
+		 * @return moveType
+		 **/
 		public static moveType moveMessageTypeName(int i) {
 			moveType TypeM = null;
 			switch (i) {
@@ -52,6 +65,9 @@ public class RoutingMessage extends Message {
 		this.payload = payload;
 	}
 
+	/**
+	 ** Override of the write message, to send out the supplementary information
+	 **/
 	public void write(DataOutputStream out) throws IOException {
 		super.write(out);
 		out.writeInt(TypeR.ordinal());
