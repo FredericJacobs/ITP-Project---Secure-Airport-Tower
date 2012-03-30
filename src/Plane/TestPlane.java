@@ -17,7 +17,7 @@ import java.util.Scanner;
 import encryption.KeyGenerator;
 import encryption.KeyPair;
 
-public class Plane {
+public class TestPlane {
 
 	/**
 	 * @param args

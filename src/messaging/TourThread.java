@@ -28,14 +28,16 @@ public class TourThread extends Thread {
 					socket.getInputStream());
 			PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
 			TowerMessageHandler messageHandler = new TowerMessageHandler();
+			int planenumber = Tour.planeCounter;
+			Tour.planeCounter++;
 			while (true) {
 				Message mes = ReadMessages.readMessage(inData);
 				if (mes.getType() != 6) {
 					mes.print();
-					messageHandler.respond(mes, outData);
+					messageHandler.respond(Tour.plane[planenumber],mes, outData);
 				} else {
 					mes.print();
-					messageHandler.respond(mes, outData);
+					messageHandler.respond(Tour.plane[planenumber],mes, outData);
 					System.out.println("Bye! Bon voyage");
 					break;
 				}

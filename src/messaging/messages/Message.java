@@ -83,6 +83,11 @@ public abstract class Message implements Comparable<Message>, Cloneable {
 			System.out.println("Empty Message");
 		}
 	}
+	public String getPlaneID(){
+		String str = new String(planeID);
+		System.out.println("Try to get the planeID of " + str);
+		return str;
+	}
 
 	public int getType() {
 		return type.ordinal();

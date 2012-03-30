@@ -39,7 +39,8 @@ public class Tour{
 	private static int keepaliveX;
 	private static int keepaliveY;
 	private Journal journal;
-
+	public static Plane plane[] = new Plane[100];
+	public static int planeCounter = 0;
 	public static Tour getInstance() {
 		if (instance == null)
 			instance = new Tour();
@@ -73,7 +74,6 @@ public class Tour{
 	public static void setkeepaliveY(int posy){
 		keepaliveY = posy;
 	}
-
 
 	public static void addMessageToOutgoingQueue(Message message) {
 		outQueue.offer(message);
