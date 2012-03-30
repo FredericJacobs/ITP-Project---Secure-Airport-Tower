@@ -8,12 +8,9 @@ import messaging.messages.HelloMessage;
 import messaging.messages.KeepAliveMessage;
 import messaging.messages.Message;
 import messaging.messages.SendRSAMessage;
+import encryption.*;
 
 public class TourThread extends Thread {
-
-	/**
-	 * @param args
-	 */
 
 	private Socket socket = null;
 
@@ -25,11 +22,14 @@ public class TourThread extends Thread {
 	public void run() {
 
 		try {
+			
+			
 			DataOutputStream outData = new DataOutputStream(
 					socket.getOutputStream());
 			DataInputStream inData = new DataInputStream(
 					socket.getInputStream());
 			PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+			
 			while (true) {
 				Message mes = ReadMessages.readMessage(inData);
 				if (mes.getType() != 6) {
@@ -58,21 +58,36 @@ public class TourThread extends Thread {
 		switch (type) {
 		case 0:
 			System.out.println("respond hello");
-			HelloMessage hello = new HelloMessage("Tour0000".getBytes(), 0, 0,
-					(byte) 0);
-			hello.write(outData);
-			return hello;
-			/*
-			 * if (((HelloMessage) message).isCrypted()) { return new
-			 * HelloMessage("Tour0000".getBytes(), 0, 0, (byte) 1); } else {
-			 * return new HelloMessage("Tour0000".getBytes(), 0, 0, (byte) 0); }
-			 */
+			
+			
+			
+			if (((HelloMessage) message).isCrypted()) { 
+				
+				KeyPair tourPublicKey = Tour.getDecryptKeypair();
+				tourPublicKey.hidePrivateKey();
+				SendRSAMessage respondHelloMessage = new SendRSAMessage ("Tour0000".getBytes(), 0, 0, 0, tourPublicKey);
+				respondHelloMessage.write(outData);
+				return respondHelloMessage;
+			}
+			
+			else {
+				
+				HelloMessage respondHelloMessage = new HelloMessage("Tour0000".getBytes(), 0, 0, (byte) 0);
+				respondHelloMessage.write(outData);
+				return respondHelloMessage;
+					 
+			}
+		
+			
 		case 1:
 			// Data, save the file that received TDB
 		case 2:// Mayday, future issue
 		case 3:// SendRSA, unfinished for the keypair
-			Tour.setDecryptKeypair(((SendRSAMessage) message).getPublicKey());
-			return null;
+			KeyPair tourPublicKey = Tour.getDecryptKeypair();
+			tourPublicKey.hidePrivateKey();
+			
+			return new SendRSAMessage ("Tour0000".getBytes(), 0, 0, 0, tourPublicKey);
+			
 			// case 4,5,7 shouldnt happen to the tour
 		case 6:
 			System.out.println("Connection terminated");

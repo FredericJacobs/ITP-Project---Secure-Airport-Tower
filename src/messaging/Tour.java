@@ -14,7 +14,7 @@ import java.net.Socket;
 import java.util.Comparator;
 import java.util.PriorityQueue;
 
-import encryption.KeyPair;
+import encryption.*;
 
 //import encryption.KeyPair;
 import messaging.messages.*;
@@ -62,6 +62,10 @@ public class Tour{
 	public static void setDecryptKeypair(KeyPair decrypt){
 	    decryptKeypair = decrypt;
 	}
+	
+	public static KeyPair getDecryptKeypair(){
+		return decryptKeypair;
+	}
 
 	public static  void setkeepaliveX(int posx){
 		keepaliveX = posx;
@@ -98,6 +102,7 @@ public class Tour{
 			CloneNotSupportedException {
 		creatPriorityQueue();
 		TourNetwork();
+		decryptKeypair = KeyGenerator.generateRSAKeyPair(256);
 	}
 
 	public static void TourNetwork() throws IOException,
