@@ -19,8 +19,9 @@ import encryption.KeyPair;
 
 
 /**
- ** This class the a test plane for our first step of the socket programming. Since we will use the .jar file to model the planes we dont need this class anymore.
- ** But just in case we want to keep in to try some test. 
+ ** This class the a test plane for our first step of the socket programming. Since we will use the .jar file to model the planes we dont need this class for now
+ *
+ ** But just in case we keep it in to try some test also to fulfill the demand of the mid-term check
  **/
 public class TestPlane {
 
