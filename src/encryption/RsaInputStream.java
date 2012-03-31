@@ -1,5 +1,6 @@
 package encryption;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigInteger;
@@ -14,7 +15,7 @@ import java.math.BigInteger;
 public class RsaInputStream extends InputStream
 {
 	// Defining the inputStream and the KeyPair used for encryption
-	private final InputStream input;
+	private final ByteArrayInputStream input;
 	private final KeyPair key;
 
 	/**
@@ -25,7 +26,7 @@ public class RsaInputStream extends InputStream
 	 * @param key
 	 *            Key to use.
 	 */
-	public RsaInputStream(InputStream input, KeyPair key)
+	public RsaInputStream(ByteArrayInputStream input, KeyPair key)
 	{	// Checking if the arguments are valid
 		if (key == null)
 			throw new IllegalArgumentException(

@@ -7,9 +7,7 @@ import java.io.DataOutputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -35,7 +33,7 @@ import messaging.messages.*;
  */
 public class Tour {
 	/**
-	 * To make sure that the tour is unique we create the Singleton Pattern by
+	 * To make sure that the tour is unique we creat the Singleton Pattern by
 	 * using the instance and getInstance(). Thus it is impossible to use the
 	 * constructor of the tour. That is to say that if we want the tower to use
 	 * some method we need to write it in the main method.
@@ -49,7 +47,7 @@ public class Tour {
 	 *            The public Key of the Tour
 	 * @param Journal
 	 *            The joural of the tour
-	 * @param planes
+	 * @param plane
 	 *            [] The array of the planes connected with the tour
 	 * @param planeCounter
 	 *            The static integer to count the number of the plane. Once a
@@ -60,7 +58,7 @@ public class Tour {
 	private static PriorityQueue<Message> inQueue;//
 	private static KeyPair decryptKeypair;// the KeyPair for the tour
 	private Journal journal;
-	public static Plane planes[] = new Plane[100];
+	public static Plane plane[] = new Plane[100];
 	public static int planeCounter = 0;
 
 	/**
@@ -122,7 +120,7 @@ public class Tour {
 	}
 
 	/**
-	 * The main method of the tour. It will create a inqueue, open a socket sever
+	 * The main method of the tour. It will creat a inqueue, open a socket sever
 	 * connection and generates a decryptKeypair
 	 * 
 	 * @param args
@@ -145,8 +143,8 @@ public class Tour {
 	public static void TourNetwork() throws IOException,
 			CloneNotSupportedException {
 		ServerSocket serverSocket = null;
-		OutputStream outData = null;
-		InputStream inData = null;
+		DataOutputStream outData = null;
+		DataInputStream inData = null;
 		// Begin to connect by the net work socket , using the port "LOCALHOST",
 		// 6900
 		try {

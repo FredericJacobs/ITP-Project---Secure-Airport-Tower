@@ -1,5 +1,6 @@
 package encryption;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.math.BigInteger;
@@ -13,7 +14,7 @@ import java.math.BigInteger;
  */
 public class RsaOutputStream extends OutputStream
 {
-	private final OutputStream output;
+	private final ByteArrayOutputStream output;
 	private final KeyPair key;
 
 	/**
@@ -24,7 +25,7 @@ public class RsaOutputStream extends OutputStream
 	 * @param key
 	 *            Key to use.
 	 */
-	public RsaOutputStream(OutputStream output, KeyPair key)
+	public RsaOutputStream(ByteArrayOutputStream output, KeyPair key)
 	{
 		// Checking if the arguments are valid
 		if (key == null)
