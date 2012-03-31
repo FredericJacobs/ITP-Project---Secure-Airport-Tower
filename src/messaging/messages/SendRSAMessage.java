@@ -11,7 +11,6 @@ public class SendRSAMessage extends Message {
 	public SendRSAMessage(byte[] planeID, int length, int posx, int posy,
 			KeyPair myKey) {
 		super(planeID, length, 2, posx, posy, MessageType.SENDRSA);
-		myKey.hidePrivateKey();
 		publicKey = myKey;
 	}
 	/**

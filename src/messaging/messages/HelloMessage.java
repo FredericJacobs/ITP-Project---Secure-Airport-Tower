@@ -15,7 +15,7 @@ public class HelloMessage extends Message {
 	**/
 	public boolean isCrypted (){
 		boolean flag = false;
-		if ((int)reserved == 1){
+		if (reserved ==  1 << 4	){
 			flag = true;
 		}
 		return flag;

@@ -10,10 +10,10 @@ import encryption.KeyPair;
  ** with the Tour. It has several parameters.
  *
  ** @param planeID
- ** @param keypairo save the necessary Keypair for Crypeted communication.
+ ** @param keypairo save the necessary Keypair for encrypted communication.
  ** @param messages
  *            The table of the messages that have been given and send.!! Not
- *            used yet for I cant find a way to initialize the abstract message
+ *            used yet for I can't find a way to initialize the abstract message
  ** @author Hantao Zhao
  ** @author Frederic Jacobs
  **/

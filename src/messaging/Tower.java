@@ -1,16 +1,10 @@
 package messaging;
 
-import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.net.ServerSocket;
-import java.net.Socket;
 import java.util.Comparator;
 import java.util.PriorityQueue;
 
@@ -31,7 +25,7 @@ import messaging.messages.*;
  * @author Frederic Jacobs
  * @version 1.0
  */
-public class Tour {
+public class Tower {
 	/**
 	 * To make sure that the tour is unique we creat the Singleton Pattern by
 	 * using the instance and getInstance(). Thus it is impossible to use the
@@ -46,19 +40,19 @@ public class Tour {
 	 * @param KeyPair
 	 *            The public Key of the Tour
 	 * @param Journal
-	 *            The joural of the tour
-	 * @param plane
+	 *            The journal of the tour
+	 * @param planes
 	 *            [] The array of the planes connected with the tour
 	 * @param planeCounter
 	 *            The static integer to count the number of the plane. Once a
 	 *            plane is connected, it will plus 1.
 	 */
-	private static Tour instance;
+	private static Tower instance;
 
-	private static PriorityQueue<Message> inQueue;//
+	public static PriorityQueue<Message> inQueue;//
 	private static KeyPair decryptKeypair;// the KeyPair for the tour
 	private Journal journal;
-	public static Plane plane[] = new Plane[100];
+	public static Plane planes[] = new Plane[100];
 	public static int planeCounter = 0;
 
 	/**
@@ -66,13 +60,13 @@ public class Tour {
 	 * 
 	 * @return
 	 */
-	public static Tour getInstance() {
+	public static Tower getInstance() {
 		if (instance == null)
-			instance = new Tour();
+			instance = new Tower();
 		return instance;
 	}
 
-	public Tour() {
+	public Tower() {
 		inQueue = new PriorityQueue<Message>(6, new Comparator<Message>() {
 			public int compare(Message a, Message b) {
 				return a.compareTo(b);
@@ -129,9 +123,20 @@ public class Tour {
 	 */
 	public static void main(String[] args) throws IOException,
 			CloneNotSupportedException {
+		decryptKeypair = KeyGenerator.generateRSAKeyPair(256);
+		
+		FileOutputStream publicKeyFile = new FileOutputStream("MyKey");
+		DataOutputStream publicKey = new DataOutputStream(publicKeyFile);
+		publicKey.writeInt(decryptKeypair.getKeySize());
+		publicKey.writeInt(decryptKeypair.getModulus().length);
+		publicKey.write(decryptKeypair.getModulus());
+		publicKey.writeInt(decryptKeypair.getPublicKey().length);
+		publicKey.write(decryptKeypair.getPublicKey());
+		
+		
 		creatPriorityQueue();
 		TourNetwork();
-		decryptKeypair = KeyGenerator.generateRSAKeyPair(256);
+		
 	}
 
 	/**
@@ -143,8 +148,6 @@ public class Tour {
 	public static void TourNetwork() throws IOException,
 			CloneNotSupportedException {
 		ServerSocket serverSocket = null;
-		DataOutputStream outData = null;
-		DataInputStream inData = null;
 		// Begin to connect by the net work socket , using the port "LOCALHOST",
 		// 6900
 		try {
@@ -154,7 +157,7 @@ public class Tour {
 			System.exit(1);
 		}
 		while (true) {
-			new TourThread(serverSocket.accept()).start();// call the TourThread
+			new TowerThread(serverSocket.accept()).start();// call the TourThread
 															// class
 		}
 	}

@@ -4,7 +4,7 @@ import java.awt.BorderLayout;
 
 import javax.swing.JFrame;
 
-import messaging.Tour;
+import messaging.Tower;
 
 /**
  * This class represents the main window of the application. It mainly consists
@@ -44,7 +44,7 @@ public class AirportGUI extends JFrame {
 		// Add here the observers to he appropriate classes
 		
 		// Run the tower
-		new Thread(Tour.getInstance()).start();
+		new Thread(Tower.getInstance()).start();
 	}
 	
 	/** This method starts a standalone GUI, for testing purposes. */

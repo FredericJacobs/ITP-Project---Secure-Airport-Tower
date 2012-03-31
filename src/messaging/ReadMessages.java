@@ -2,7 +2,6 @@ package messaging;
 
 import java.io.DataInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.math.*;
 import encryption.KeyPair;
 import messaging.messages.*;
@@ -26,6 +25,7 @@ public class ReadMessages {
 	 * @return Message The reformed new created Message
 	 * @throws IOException
 	 */
+	
 	public static Message readMessage(DataInputStream message)
 			throws IOException {
 
@@ -33,6 +33,7 @@ public class ReadMessages {
 		 * to read the DataInputStream in the same order with the
 		 * DataOutputStream
 		 */
+		
 		byte planeID[] = new byte[8];
 		int i = message.read(planeID);
 		int length = message.readInt();
@@ -41,6 +42,13 @@ public class ReadMessages {
 		int posY = message.readInt();
 
 		int messageType = message.readInt();
+		System.out.println("Printing Message");
+		System.out.println(i);
+		System.out.println(length);
+		System.out.println(priority);
+		System.out.println(posX);
+		System.out.println(posY);
+		System.out.println(messageType);
 		// Plane ID
 		/**
 		 * After all the basic parameters of the Message have been saved, we

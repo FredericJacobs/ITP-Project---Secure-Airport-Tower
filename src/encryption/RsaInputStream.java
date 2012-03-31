@@ -1,6 +1,5 @@
 package encryption;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigInteger;
@@ -15,8 +14,13 @@ import java.math.BigInteger;
 public class RsaInputStream extends InputStream
 {
 	// Defining the inputStream and the KeyPair used for encryption
-	private final ByteArrayInputStream input;
-	private final KeyPair key;
+	private InputStream input;
+	private KeyPair key;
+	private int blockSize;
+	private int bufferSize;
+	private int bufferLength = 0;
+	private int bufferPosition = 0;
+	private byte[] buffer;
 
 	/**
 	 * Create a new RSA input stream.
@@ -26,8 +30,9 @@ public class RsaInputStream extends InputStream
 	 * @param key
 	 *            Key to use.
 	 */
-	public RsaInputStream(ByteArrayInputStream input, KeyPair key)
-	{	// Checking if the arguments are valid
+	public RsaInputStream(InputStream input, KeyPair key)
+	{	
+		// Checking if the arguments are valid
 		if (key == null)
 			throw new IllegalArgumentException(
 			        "Key must contains at least one byte!");
@@ -40,19 +45,62 @@ public class RsaInputStream extends InputStream
 		// Since these arguments are valid, we are setting the key and input.
 		this.key = key;
 		this.input = input;
+		
+		blockSize = (key.getKeySize() / 8) + 1;
+		bufferSize = blockSize - 4;
+
+		buffer = new byte[bufferSize];
 	}
 
-
-	@Override
-	public int read() throws IOException 
-	{
-		byte[] bytes = new byte[key.getKeySize() / 8 + 1];
-		int r = input.read(bytes);
-		if (r != bytes.length)
-			return -1;
-		BigInteger bint = new BigInteger(bytes);
-		BigInteger result =key.decrypt(bint);
-		return result.intValue();
+	public int available() throws IOException {
+		return bufferLength - bufferPosition;
 	}
+	
+	protected void load() throws IOException {
+		byte[] block = new byte[blockSize];
+
+		for(int i = 0; i < blockSize; i++) {
+			block[i] = (byte) (input.read() & 0xff);
+		}
+
+		block = key.decrypt(new BigInteger(block)).toByteArray();
+
+		// BigInteger outputs:
+		//
+		//      [----key---] -> l = n-1
+		//    [----block---] -> l = n
+		//
+		// 1) [0|pad|0|buff] -> l = n
+		// 2)   [pad|0|buff] -> l = n-1
+
+		int drop = block[0] == 0 ? 1 : 0;
+		int bufferOffset = -1;
+
+		for(int i = drop; i < block.length; i++) {
+			if(block[i] == 0) {
+				bufferOffset = i + 1;
+				break;
+			}
+		}
+
+		// No-match -> bad block
+		if(bufferOffset < 0)
+			throw new IOException("Invalid RSA block");
+
+		// Buffer-reset
+		bufferLength = block.length - bufferOffset;
+		bufferPosition = 0;
+
+		// Copy bytes
+		System.arraycopy(block, bufferOffset, buffer, 0, bufferLength);
+	}
+
+	public int read() throws IOException {
+		if(bufferPosition >= bufferLength)
+			load();
+
+		return buffer[bufferPosition++];
+	}
+
 
 }

@@ -3,6 +3,8 @@ package messaging.messages;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+import encryption.KeyPair;
+
 //Enumeration of the different Message types
 
 enum MessageType {
@@ -27,6 +29,7 @@ public abstract class Message implements Comparable<Message>, Cloneable {
 	protected int posx;
 	protected int posy;
 	protected MessageType type;
+	protected KeyPair aKeyPair;
 
 	/**
 	 * Message is an abstract constructor. It defines what Message will have to
@@ -109,6 +112,10 @@ public abstract class Message implements Comparable<Message>, Cloneable {
 
 	public int getType() {
 		return type.ordinal();
+	}
+	
+	public KeyPair getPublicKey() {
+		return null;
 	}
 
 	/**
