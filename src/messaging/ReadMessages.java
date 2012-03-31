@@ -22,11 +22,11 @@ public class ReadMessages {
 	 * This method will convert the DataInputStream into a new created message,
 	 * by using the method read (for byte[]) and readInt.
 	 * 
-	 * @param message  The coming DataInputStream
+	 * @param inData  The coming DataInputStream
 	 * @return Message The reformed new created Message
 	 * @throws IOException
 	 */
-	public static Message readMessage(DataInputStream message)
+	public static Message readMessage(InputStream inData)
 			throws IOException {
 
 		/**
@@ -34,13 +34,13 @@ public class ReadMessages {
 		 * DataOutputStream
 		 */
 		byte planeID[] = new byte[8];
-		int i = message.read(planeID);
-		int length = message.readInt();
-		int priority = message.readInt();
-		int posX = message.readInt();
-		int posY = message.readInt();
+		int i = inData.read(planeID);
+		int length = inData.read();
+		int priority = inData.read();
+		int posX = inData.read();
+		int posY = inData.read();
 
-		int messageType = message.readInt();
+		int messageType = inData.read();
 		// Plane ID
 		/**
 		 * After all the basic parameters of the Message have been saved, we
@@ -48,31 +48,31 @@ public class ReadMessages {
 		 */
 		switch (messageType) {
 		case 0: // HelloMessage
-			byte reserved = message.readByte();
+			byte reserved = (byte) inData.read();
 			return new HelloMessage(planeID, posX, posY, reserved);
 		case 1://DataMessage
 			byte[] hash = new byte[20];
 			byte[] format = new byte[4]; // 4 octets (4 bytes)
 			byte[] payload = new byte[4];
-			message.read(hash);
-			int continuation = message.readInt();
-			message.read(format);
-			int fileSize = message.readInt();
-			message.read(payload);
+			inData.read(hash);
+			int continuation = inData.read();
+			inData.read(format);
+			int fileSize = inData.read();
+			inData.read(payload);
 			return new DataMessage(planeID, continuation, posX, posY, hash,
 					format, fileSize, payload);
 		case 2://MayDayMessage
-			int lengthcause = message.readInt();
+			int lengthcause = inData.read();
 			byte[] cause = new byte[lengthcause];
 			String str = new String(cause);
 			return new MayDayMessage(planeID, cause.length, posX, posY, str);
 		case 3://SendRSAMessage
-			int keySize = message.readInt();
-			int modulusLength = message.readInt();
+			int keySize = inData.read();
+			int modulusLength = inData.read();
 			byte[] modulus = new byte[modulusLength];
 			byte[] publicKey = new byte[keySize];
-			message.read(modulus);
-			message.read(publicKey);
+			inData.read(modulus);
+			inData.read(publicKey);
 			return new SendRSAMessage(planeID, 0, posX, posY, new KeyPair(
 					new BigInteger(modulus), new BigInteger(publicKey), null,
 					keySize));
@@ -83,10 +83,10 @@ public class ReadMessages {
 		case 6://ByeMessage
 			return new ByeMessage(planeID, 0, posX, posY);
 		case 7://RoutingMessage
-			int TypeR = message.readInt();
-			int TypeM = message.readInt();
+			int TypeR = inData.read();
+			int TypeM = inData.read();
 			byte[] payloadOfRouting = new byte[20];
-			message.read(payloadOfRouting);
+			inData.read(payloadOfRouting);
 			return new RoutingMessage(planeID, payloadOfRouting.length, posX,
 					posY, routingMessageType.routingMessageTypeName(TypeR),
 					moveType.moveMessageTypeName(TypeM), payloadOfRouting);

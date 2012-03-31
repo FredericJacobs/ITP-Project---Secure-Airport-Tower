@@ -3,11 +3,8 @@ package messaging;
 import java.net.*;
 import java.io.*;
 
-import messaging.messages.ByeMessage;
-import messaging.messages.HelloMessage;
-import messaging.messages.KeepAliveMessage;
-import messaging.messages.Message;
-import messaging.messages.SendRSAMessage;
+import messaging.Tour;
+import messaging.messages.*;
 import encryption.*;
 
 /**
@@ -33,21 +30,22 @@ public class TourThread extends Thread {
 	public void run() {
 
 		try {
-			//
-			DataOutputStream outData = new DataOutputStream(
+			
+			OutputStream outData = new DataOutputStream(
 					socket.getOutputStream());
-			DataInputStream inData = new DataInputStream(
+			InputStream inData = new DataInputStream(
 					socket.getInputStream());
 
-			TowerMessageHandler messageHandler = new TowerMessageHandler(); // creat a TowerMessageHandler to respond the messages send by the planes
-			int planenumber = Tour.planeCounter;// To get a number of the planes which connect with the tour.
-			Tour.planeCounter++; //  The planeCounter ++,  for the next plane
-			Tour.plane[planenumber] = new Plane(); // Created a new plane by using the order
+			TowerMessageHandler messageHandler = new TowerMessageHandler(); // create a TowerMessageHandler to respond the messages send by the planes
+			int planenumber = Tour.planeCounter; // To get a number of the planes which connect with the tour.
+			Tour.planeCounter ++; //  The planeCounter ++,  for the next plane
+			Tour.planes[planenumber] = new Plane(); // Created a new plane by using the order
 			while (true) {
+				
 				Message mes = ReadMessages.readMessage(inData);				// read the message send by the DataInputStream
 
 				Tour.addMessageToIncomingQueue(mes);				// Add it into the incomingQueue
-
+				
 				
 				try {				//Give the tour a moment to respond
 					Thread.sleep(1000);
@@ -55,10 +53,14 @@ public class TourThread extends Thread {
 				}
 				
 				if (mes.getType() != 6) {            // Handle the message , if the messageType isnt Bye, then go to the next
-					messageHandler.respond(Tour.plane[planenumber],
-							Tour.getNextMessageIncomingQueue(), outData);
+					if (messageHandler.respond(Tour.planes[planenumber], Tour.getNextMessageIncomingQueue(), outData)){
+					outData = new RsaOutputStream (socket.getOutputStream(), Tour.getDecryptKeypair() );
+					inData = new RsaInputStream(socket.getInputStream(), Tour.planes[planenumber].getKeypair());
+					}
+					
+					
 				} else {							// Handle the bye message and stop reading from the plane
-					messageHandler.respond(Tour.plane[planenumber],
+					messageHandler.respond(Tour.planes[planenumber],
 							Tour.getNextMessageIncomingQueue(), outData);
 					System.out.println("Bye! Bon voyage");
 					break;

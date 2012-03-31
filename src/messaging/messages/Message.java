@@ -1,7 +1,7 @@
 package messaging.messages;
 
-import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 
 //Enumeration of the different Message types
 
@@ -116,13 +116,13 @@ public abstract class Message implements Comparable<Message>, Cloneable {
 	 * 
 	 * @return void
 	 **/
-	public void write(DataOutputStream out) throws IOException {
+	public void write(OutputStream out) throws IOException {
 		out.write(planeID);
-		out.writeInt(length);
-		out.writeInt(priority);
-		out.writeInt(posx);
-		out.writeInt(posy);
-		out.writeInt(type.ordinal());
+		out.write(length);
+		out.write(priority);
+		out.write(posx);
+		out.write(posy);
+		out.write(type.ordinal());
 	}
 
 	/**

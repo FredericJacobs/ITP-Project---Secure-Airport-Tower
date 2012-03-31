@@ -1,7 +1,7 @@
 package messaging.messages;
 
-import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 
 public class HelloMessage extends Message {
 	private byte reserved;
@@ -23,7 +23,8 @@ public class HelloMessage extends Message {
 	/** An override of the write message , to send out one byte to represent if the Hello message is crypted
 	 * @return boolean: true for Crypted and false for not Crypted
 	**/
-	public void write(DataOutputStream out) throws IOException{
+	
+	public void write(OutputStream out) throws IOException{
 		super.write(out);
 		out.write(reserved);
 	}
