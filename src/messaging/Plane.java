@@ -97,4 +97,9 @@ public class Plane {
 		return posY;
 	}
 
+	public boolean hasCrashed() {
+		
+		return false;
+	}
+
 }

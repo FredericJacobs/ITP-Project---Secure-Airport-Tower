@@ -1,4 +1,4 @@
-package GUI
+package GUI;
 
 import java.awt.AlphaComposite;
 import java.awt.BasicStroke;
@@ -68,11 +68,11 @@ public class AirportPanel extends JPanel {
 		setLayout(null);
 
 		try {
-			this.imgBack  = ImageIO.read(new File("img/map.png"));
-			this.imgPlane = ImageIO.read(new File("img/plane.png"));
-			this.imgTower = ImageIO.read(new File("img/tower.png"));
-			this.imgKboom = ImageIO.read(new File("img/kboom.png"));
-			this.imgRadar = ImageIO.read(new File("img/radar.png"));
+			this.imgBack  = ImageIO.read(new File("src/img/map.png"));
+			this.imgPlane = ImageIO.read(new File("src/img/plane.png"));
+			this.imgTower = ImageIO.read(new File("src/img/tower.png"));
+			this.imgKboom = ImageIO.read(new File("src/img/kboom.png"));
+			this.imgRadar = ImageIO.read(new File("src/img/radar.png"));
 		} catch (IOException e) {
 			System.err.println("Cannot read image files: " + e.getMessage());
 			System.exit(1);
@@ -120,9 +120,9 @@ public class AirportPanel extends JPanel {
 		g2d.setTransform(AffineTransform.getRotateInstance(0));
 
 		// Store the current position of every plane in the previousPositions buffer
-		for (TowerAgent plane: Tower.getInstance().getPlanes()) {
+		for (Plane plane: Tower.getInstance().getPlanes()) {
 			Point p = new Point(plane.getPosX(), plane.getPosY());
-			String planeId = new String(plane.getId());
+			String planeId = new String(plane.getPlaneID());
 			CircularBuffer<Point> cb = previousPositions.get(planeId);
 			if (cb != null) {
 				cb.add(p);
@@ -136,8 +136,8 @@ public class AirportPanel extends JPanel {
 		
 		// Draw trails so we can see the route that the planes have taken
 		g2d.setColor(Color.CYAN);
-		for (TowerAgent plane: Tower.getInstance().getPlanes()) {
-			String planeId = new String(plane.getId());
+		for (Plane plane: Tower.getInstance().getPlanes()) {
+			String planeId = new String(plane.getPlaneID());
 			CircularBuffer<Point> previousPos = previousPositions.get(planeId);
 			for (int j = 1; j < previousPos.size(); j++) {
 				Point p1 = previousPos.get(j);
@@ -150,8 +150,8 @@ public class AirportPanel extends JPanel {
 		// Draw the planes themselves
 		g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
 		g2d.setColor(Color.GREEN);
-		for (TowerAgent plane: Tour.getInstance().getPlanes()) {
-			String planeId = new String(plane.getId());
+		for (Plane plane: Tower.getInstance().getPlanes()) {
+			String planeId = new String (plane.getPlaneID());
 			BufferedImage planeImg = plane.hasCrashed() ? imgKboom : imgPlane; 
 
 			g2d.setTransform(AffineTransform.getRotateInstance(0, plane.getPosX(), plane.getPosY()));

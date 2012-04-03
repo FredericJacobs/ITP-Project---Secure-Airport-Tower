@@ -73,6 +73,7 @@ public class TestPlane {
 			case 1: 
 			case 2:
 			case 3: 
+				// Encryption Support broken in this test. Use given planes
 				SendRSAMessage sendRSA = new SendRSAMessage(planeID.getBytes(),8, 20, 10,decryptKeypair);
 				sendRSA.write(outData);
 				ReadMessages.readMessage(inData).print();

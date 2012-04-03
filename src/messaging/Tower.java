@@ -1,6 +1,5 @@
 package messaging;
 
-import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -25,7 +24,7 @@ import messaging.messages.*;
  * @author Frederic Jacobs
  * @version 1.0
  */
-public class Tower {
+public class Tower implements Runnable {
 	/**
 	 * To make sure that the tour is unique we create the Singleton Pattern by
 	 * using the instance and getInstance(). Thus it is impossible to use the
@@ -51,7 +50,6 @@ public class Tower {
 
 	public static PriorityQueue<Message> inQueue;//
 	private static KeyPair decryptKeypair;// the KeyPair for the tour
-	private Journal journal;
 	public static Plane planes[] = new Plane[100];
 	public static int planeCounter = 0;
 
@@ -114,7 +112,7 @@ public class Tower {
 	}
 
 	/**
-	 * The main method of the tour. It will creat a inqueue, open a socket sever
+	 * The main method of the tour. It will create a inqueue, open a socket sever
 	 * connection and generates a decryptKeypair
 	 * 
 	 * @param args
@@ -132,8 +130,6 @@ public class Tower {
 		publicKey.write(decryptKeypair.getModulus());
 		publicKey.writeInt(decryptKeypair.getPublicKey().length);
 		publicKey.write(decryptKeypair.getPublicKey());
-		
-		
 		creatPriorityQueue();
 		TourNetwork();
 		
@@ -160,6 +156,17 @@ public class Tower {
 			new TowerThread(serverSocket.accept()).start();// call the TourThread
 															// class
 		}
+	}
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public Plane[] getPlanes() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
