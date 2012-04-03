@@ -75,15 +75,18 @@ public class ReadMessages {
 			String str = new String(cause);
 			return new MayDayMessage(planeID, cause.length, posX, posY, str);
 		case 3://SendRSAMessage
+			
 			int keySize = message.readInt();
 			int modulusLength = message.readInt();
 			byte[] modulus = new byte[modulusLength];
-			byte[] publicKey = new byte[keySize];
 			message.read(modulus);
+			int publicKeyLength = message.readInt();
+			byte[] publicKey = new byte[publicKeyLength];
 			message.read(publicKey);
 			return new SendRSAMessage(planeID, 0, posX, posY, new KeyPair(
 					new BigInteger(modulus), new BigInteger(publicKey), null,
 					keySize));
+			
 		case 4://ChokeMessage
 			return new ChokeMessage(planeID, 0, posX, posY);
 		case 5://UnchokeMessage
