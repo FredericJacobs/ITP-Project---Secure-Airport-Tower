@@ -49,11 +49,7 @@ public class TowerThread extends Thread {
 				mes = ReadMessages.readMessage(inData);
 				// read the message send by the DataInputStream
 				Tower.addMessageToIncomingQueue(mes);// Add it into the incomingQueue				
-				try {				//Give the tour a moment to respond
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-				}
-				
+			
 				if (mes.getType() != 6) {            // Handle the message , if the messageType isnt Bye, then go to the next
 					
 					encryptionStatus = (messageHandler.respond(Tower.planes[planenumber], planenumber , Tower.getNextMessageIncomingQueue(), outData));
