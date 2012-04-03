@@ -3,6 +3,7 @@ package encryption;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigInteger;
+import java.util.Arrays;
 
 /**
  * Read and decrypt bytes from an input stream. This stream uses RSA decryption.
@@ -60,11 +61,15 @@ public class RsaInputStream extends InputStream
 		byte[] block = new byte[blockSize];
 
 		for(int i = 0; i < blockSize; i++) {
-			block[i] = (byte) (input.read() & 0xff);
+			block[i] = (byte) (input.read());
 		}
+		
+
 
 		block = key.decrypt(new BigInteger(block)).toByteArray();
 
+		System.out.println(Arrays.toString(block));
+		
 		// BigInteger outputs:
 		//
 		//      [----key---] -> l = n-1
@@ -99,7 +104,7 @@ public class RsaInputStream extends InputStream
 		if(bufferPosition >= bufferLength)
 			load();
 
-		return buffer[bufferPosition++];
+		return (buffer[bufferPosition++]& 0xff);
 	}
 
 

@@ -40,8 +40,8 @@ public class ReadMessages {
 		int priority = message.readInt();
 		int posX = message.readInt();
 		int posY = message.readInt();
-
 		int messageType = message.readInt();
+		
 		System.out.println("Printing Message");
 		System.out.println(i);
 		System.out.println(length);

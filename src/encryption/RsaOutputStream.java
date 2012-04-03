@@ -14,6 +14,7 @@ import java.security.SecureRandom;
  * @see KeyPair
  */
 public class RsaOutputStream extends OutputStream
+
 {
 	private final OutputStream output;
 	private final KeyPair key;

@@ -27,7 +27,7 @@ import messaging.messages.*;
  */
 public class Tower {
 	/**
-	 * To make sure that the tour is unique we creat the Singleton Pattern by
+	 * To make sure that the tour is unique we create the Singleton Pattern by
 	 * using the instance and getInstance(). Thus it is impossible to use the
 	 * constructor of the tour. That is to say that if we want the tower to use
 	 * some method we need to write it in the main method.
