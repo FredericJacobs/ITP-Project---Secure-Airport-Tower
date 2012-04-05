@@ -41,17 +41,7 @@ public class ReadMessages {
 		int posX = message.readInt();
 		int posY = message.readInt();
 		int messageType = message.readInt();
-		
-		System.out.println("Printing Message");
-		System.out.println(i);
-		System.out.println(length);
-		System.out.println(priority);
-		System.out.println(posX);
-		System.out.println(posY);
-		System.out.println(messageType);
-		Event event = new Event(priority, Message.messageTypeName(messageType),new String(planeID),"Tower");
-		Tower.addeventToTower(event);
-		
+
 		// Plane ID
 		/**
 		 * After all the basic parameters of the Message have been saved, we
