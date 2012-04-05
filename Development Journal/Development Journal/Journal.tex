@@ -73,13 +73,24 @@ The reason why we want this to be an abstract class is really straightforward. W
 
 
 \section{Week Three}
-During this third week, we came back to the \emph{encryption} and we made two new classes. \verb RSAInputStream   (inheriting \verb InputStream  ) and \verb RSAOutputStream  (inheriting \verb Outputstream  )  to support inputs and outputs of encrypted data and messages. These classes were built pretty quickly and we focused more on the \verb DataFile  class which was way more difficult to code. To start with, we choose to use a \verb HashMap  for rebuilding files. Splitting files was easy but rebuilding them once splited took some extra time. We adapted the Unit Test to work correctly but we definitely need to come back to this file to improve it.
+During this third week, we came back to the \emph{encryption} and we made two new classes. \verb RSAInputStream   (inheriting \verb InputStream  ) and \verb RSAOutputStream  (inheriting \verb OutputStream  )  to support inputs and outputs of encrypted data and messages. These classes were built pretty quickly and we focused more on the \verb DataFile  class which was way more difficult to code. To start with, we choose to use a \verb HashMap  for rebuilding files. Splitting files was easy but rebuilding them once splited took some extra time. We adapted the Unit Test to work correctly but we definitely need to come back to this file to improve it.
 
 \section{Week Four}
 This week we were given a two weeks assignment. We started in the morning refactoring our project with more consistent naming of the packages. We also worked on fixing the \verb DataFile  class that needed improvements. Then we started working on a new networking package defining the Sockets needed for messaging. It took us some time to realize we actually needed one socket per plane from a Tower's perspective. We started coding this but forgot multi-threading which made the whole program very unresponsive. That week has been very busy for us ("Voyage d'études") and other assignments. So we left it like until the next Tuesday.
 
 \section{Week Five}
 We made some great progress. The networking part finally got cleaner and we are now trying to put everything together. In the meanwhile we used a external library to make an OAuth on Twitter. We made a static class that can send tweets. Hence, the keys are set in a configuration file and can't be set differently at the time. Over the weekend we made some great progress. The networking discovery now works and the handshake is correctly done. Our class \verb DataFile  now works with the given tests. We still want it to become more robust and we'll  be looking into implementing a better hash verification implementation because it is very tricky on how it behaves.
+
+\section{Week Six}
+
+The midterm return is coming up, so we need to try our best to combine our packages and build a reliable connection not only just between the tower and the plane, but also between our packages and classes. We can already hear and talk to any given airplane by using our RSA encryption streams.  This weekend we worked on adapting the encrypted communication to the given test plane. We decided to finish the \verb DataFile  during the vacation. 
+On the other hand, we are done with Twitter Integration. Sending a Tweet is easy and can be done in a single line of code. We finalized the JournalGUI but definitely needs some improvements. 
+
+\section{Midterm Conclusion}
+When starting new ITPs we did really misunderstand the expected way of coding and wasted lots of time coding it the wrong way or fixing little mistakes. The biggest difficulty we faced so far was putting all the separate pieces together. Making the packages work together was tricky. An example of this is the \verb DataFile  . It works quite well when we run it with our own tests but it doesn’t work for the demo planes. The good news is that basic functions are working and according to the assistant the main architecture is satisfactory. Meanwhile we would love having some suggestions about architecture so we can make it more robust after the midterm. 
+
+\includegraphics[scale=0.45]{UML.pdf}
+
 \end{document}
 
 
