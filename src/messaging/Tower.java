@@ -1,6 +1,7 @@
 package messaging;
 
 import java.io.DataOutputStream;
+import GUI.*;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -52,6 +53,13 @@ public class Tower implements Runnable {
 	private static KeyPair decryptKeypair;// the KeyPair for the tour
 	public static Plane planes[] = new Plane[100];
 	public static int planeCounter = 0;
+	public static JournalGUI journalgui = new JournalGUI();
+	
+	
+	public static void addeventToTower(Event e){
+	journalgui.addEvent(e);	
+	}
+
 
 	/**
 	 * The functional method for Singleton Pattern

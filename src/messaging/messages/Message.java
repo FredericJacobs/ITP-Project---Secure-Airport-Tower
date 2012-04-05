@@ -12,6 +12,8 @@ enum MessageType {
 	// MessageType.DATA.ordinal(); To obtain the order number of MessageType
 }
 
+
+
 /**
  * Message is the file which contains the main class Message. By using the
  * abstract class Message we build all the type of Message we'll send between
@@ -140,4 +142,31 @@ public abstract class Message implements Comparable<Message>, Cloneable {
 	public Message clone() throws CloneNotSupportedException {
 		return (Message) super.clone();
 	}
+	
+	public static String messageTypeName(int i) {
+		String Type = null;
+		switch (i) {
+		case 0:
+		Type = "HELLO";
+		case 1:
+		Type = "DATA";
+		case 2:
+		Type = "MAYDAY";
+		case 3:
+		Type = "SENDRSA";	
+		case 4:
+		Type = "CHOKE";	
+		case 5:
+		Type = "UNCHOKE";	
+		case 6:
+		Type = "BYE";	
+		case 7:
+		Type = "ROUTING";	
+		case 8:
+		Type = "KEEPALIVE";	
+		case 9:
+		Type = "LANDINGREQUEST";	
+		}
+		return Type;
+		}
 }
