@@ -35,8 +35,10 @@ public class ReadMessages {
 		 */
 		
 		byte planeID[] = new byte[8];
-		int i = message.read(planeID);
+		message.read(planeID);
+		@SuppressWarnings("unused")
 		int length = message.readInt();
+		@SuppressWarnings("unused")
 		int priority = message.readInt();
 		int posX = message.readInt();
 		int posY = message.readInt();

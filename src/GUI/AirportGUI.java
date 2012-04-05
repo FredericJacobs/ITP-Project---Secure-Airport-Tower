@@ -4,7 +4,7 @@ import java.awt.BorderLayout;
 
 import javax.swing.JFrame;
 
-import messaging.Tower;
+import messaging.*;
 
 /**
  * This class represents the main window of the application. It mainly consists
