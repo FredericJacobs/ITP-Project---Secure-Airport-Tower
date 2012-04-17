@@ -147,25 +147,25 @@ public abstract class Message implements Comparable<Message>, Cloneable {
 		String Type = null;
 		switch (i) {
 		case 0:
-		Type = "HELLO";
+		Type = "HELLO";break;
 		case 1:
-		Type = "DATA";
+		Type = "DATA";break;
 		case 2:
-		Type = "MAYDAY";
+		Type = "MAYDAY";break;
 		case 3:
-		Type = "SENDRSA";	
+		Type = "SENDRSA";	break;
 		case 4:
-		Type = "CHOKE";	
+		Type = "CHOKE";	break;
 		case 5:
-		Type = "UNCHOKE";	
+		Type = "UNCHOKE";	break;
 		case 6:
-		Type = "BYE";	
+		Type = "BYE";	break;
 		case 7:
-		Type = "ROUTING";	
+		Type = "ROUTING";	break;
 		case 8:
-		Type = "KEEPALIVE";	
+		Type = "KEEPALIVE";	break;
 		case 9:
-		Type = "LANDINGREQUEST";	
+		Type = "LANDINGREQUEST";	break;
 		}
 		return Type;
 		}

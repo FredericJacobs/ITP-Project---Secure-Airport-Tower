@@ -53,6 +53,7 @@ public class Tower implements Runnable {
 	private static KeyPair decryptKeypair;// the KeyPair for the tour
 	public static Plane planes[] = new Plane[100];
 	public static int planeCounter = 0;
+	public static Journal journal = new Journal();
 	
 	/**
 	 * The functional method for Singleton Pattern

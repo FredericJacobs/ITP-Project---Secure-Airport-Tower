@@ -33,12 +33,18 @@ public class TowerMessageHandler {
 	public int respond(Plane plane, int planenumber, Message message, DataOutputStream outData)
 			throws IOException {
 		int type = message.getType();
+		Event event = new Event(message, message.getPlaneID(), "Tower");
+		Tower.journal.addEvent(event);
 		switch (type) {// depends on different type of message we go to different cases 
 		case 0:
 			if (((HelloMessage) message).isCrypted()) {// To see if the hello is crypted or not, then give different respond hello message
 				plane.setPlaneID(message.getPlaneID());
-				new HelloMessage("Tour0000".getBytes(), 0, 0, (byte) (1 << 4)).write(outData);
+				HelloMessage respondHelloMessage =new HelloMessage("Tour0000".getBytes(), 0, 0, (byte) (1 << 4));
+				respondHelloMessage.write(outData);
+			    Event eventR = new Event(respondHelloMessage,"Tower", message.getPlaneID());
+				Tower.journal.addEvent(eventR);
 				return 1;
+
 			}
 
 			else {
@@ -46,6 +52,8 @@ public class TowerMessageHandler {
 						"Tour0000".getBytes(), 0, 0, (byte) 0);
 				plane.setPlaneID(message.getPlaneID());
 				respondHelloMessage.write(outData);
+			    Event eventR = new Event(respondHelloMessage,"Tower", message.getPlaneID());
+				Tower.journal.addEvent(eventR);
 				return 0;
 			}
 			
