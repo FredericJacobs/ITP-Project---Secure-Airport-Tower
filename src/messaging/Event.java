@@ -3,8 +3,11 @@ package messaging;
 import java.util.*;
 import messaging.messages.Message;
 
-@SuppressWarnings({ "serial", "rawtypes" })
-public class Event extends Vector {
+public class Event extends Vector<Object> {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private Message message;
 	private String source;
 	private String destination;
