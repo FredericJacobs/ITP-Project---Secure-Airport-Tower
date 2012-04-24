@@ -73,9 +73,7 @@ public class TowerMessageHandler {
 
 			// Data, save the file that received TDB
 		case 2:
-
-			System.out.println("got case 2");
-
+			Circle.landingUrgent(plane,outData);
 			return 0;// Mayday, future issue
 		case 3:// SendRSA, unfinished for the keypair
 			Tower.planes[planenumber].setKeypair(message.getPublicKey());
@@ -85,10 +83,13 @@ public class TowerMessageHandler {
 			if (Tower.landingRoute.size() != 0) {
 				Tower.landingRoute.remove(0);
 			}
-			if(Tower.smallCircle.size() != 0){
-				Tower.smallCircle.remove(0);
-			}
-			
+			if(Tower.longCircle.size() != 0){
+				Tower.longCircle.remove(0);
+			}else if(Tower.middleCircle.size() != 0){
+				Tower.middleCircle.remove(0);				
+			}else if(Tower.smallCircle.size() != 0){
+				Tower.smallCircle.remove(0);				
+			}			
 			System.out.println("Connection terminated");
 			return 0;
 		case 8:

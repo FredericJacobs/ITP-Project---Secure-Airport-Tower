@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Event;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DateFormat;
@@ -29,6 +30,8 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableRowSorter;
 
+import messaging.Tower;
+
 /**
  * This class displays the Tower's Journal, i.e. a list of received messages.
  * 
@@ -51,6 +54,7 @@ public class JournalGUI extends JFrame implements ActionListener /*, Observer*/ 
 	private Container container;
 	private JTextField tfFilter;
 	private JComboBox cbFilter;
+	private Vector vector;
 
 	public JournalGUI() {
 		init();
@@ -66,6 +70,10 @@ public class JournalGUI extends JFrame implements ActionListener /*, Observer*/ 
 		buildButtons();
 		buildTable();
 		setMinimumSize(new Dimension(550, 370));
+		for(;;){
+			vector.add(Tower.journal.getEvent(0));
+		addEvent(vector);
+		}
 	}
 
 	public void clearAll() {
@@ -114,7 +122,6 @@ public class JournalGUI extends JFrame implements ActionListener /*, Observer*/ 
 	 *  String destination    the message destination (same format as source)
 	 *  java.util.Date data   the date and time when the message arrived
      */
-	@SuppressWarnings("rawtypes")
 	public void addEvent(Vector v) {
 		model.addRow(v);
 	}

@@ -206,14 +206,6 @@ public class Tower implements Runnable {
 	}
 
 
-
-	@Override
-	public void run() {
-		// TODO Auto-generated method stub
-
-	}
-
-
 	public Plane[] getPlanes() {
 		// TODO Auto-generated method stub
 		return null;

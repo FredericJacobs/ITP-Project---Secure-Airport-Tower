@@ -78,6 +78,20 @@ public class Circle {
 			respondLanding.write(outData);
 		}
 	}
+	
+	public static void landingUrgent(Plane plane, DataOutputStream outData) throws IOException{
+		Tower.landingRoute.add(plane);
+		RoutingMessage respondLanding = new RoutingMessage(
+				"Tour0000".getBytes(), 0, Tower.landingPointX,
+				Tower.landingPointY, routingMessageType.NEWFIRST,
+				moveType.LANDING, int2bytes(0));
+		respondLanding.write(outData);
+		for(int i = 0;i<Tower.planes.length;i++){
+			answerLandingRequest(Tower.planes[i],outData);
+		}
+		
+		
+	}
 //Transfer int to byte[]
 	private static byte[] int2bytes(int num) {
 		byte[] b = new byte[4];

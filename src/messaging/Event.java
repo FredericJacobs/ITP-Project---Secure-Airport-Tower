@@ -3,7 +3,7 @@ package messaging;
 import java.util.*;
 import messaging.messages.Message;
 
-public class Event extends Vector<Object> {
+public class Event extends Vector {
 	/**
 	 * 
 	 */
