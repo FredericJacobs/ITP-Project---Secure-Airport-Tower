@@ -6,6 +6,9 @@ import java.io.IOException;
 import messaging.messages.HelloMessage;
 import messaging.messages.KeepAliveMessage;
 import messaging.messages.Message;
+import messaging.messages.RoutingMessage;
+import messaging.messages.RoutingMessage.moveType;
+import messaging.messages.RoutingMessage.routingMessageType;
 
 /**
  * This class help the Tour to handle different type of messages
@@ -23,28 +26,33 @@ public class TowerMessageHandler {
 	 * 
 	 * @param plane
 	 *            The corresponded plane
-	 * @param planenumber 
+	 * @param planenumber
 	 * @param message
 	 *            The message that need to be handled
 	 * @param outData
 	 *            The DataOutputStream where we send the feed back message
 	 * @throws IOException
 	 */
-	public int respond(Plane plane, int planenumber, Message message, DataOutputStream outData)
-			throws IOException {
+	public int respond(Plane plane, int planenumber, Message message,
+			DataOutputStream outData) throws IOException {
 		int type = message.getType();
 		Event event = new Event(message, message.getPlaneID(), "Tower");
 		Tower.journal.addEvent(event);
-		switch (type) {// depends on different type of message we go to different cases 
+		plane.setPlaneID(message.getPlaneID());
+		switch (type) {// depends on different type of message we go to
+						// different cases
 		case 0:
-			if (((HelloMessage) message).isCrypted()) {// To see if the hello is crypted or not, then give different respond hello message
-				plane.setPlaneID(message.getPlaneID());
-				HelloMessage respondHelloMessage =new HelloMessage("Tour0000".getBytes(), 0, 0, (byte) (1 << 4));
+			if (((HelloMessage) message).isCrypted()) {// To see if the hello is
+														// crypted or not, then
+														// give different
+														// respond hello message
+				HelloMessage respondHelloMessage = new HelloMessage(
+						"Tour0000".getBytes(), 0, 0, (byte) (1 << 4));
 				respondHelloMessage.write(outData);
-			    Event eventR = new Event(respondHelloMessage,"Tower", message.getPlaneID());
+				Event eventR = new Event(respondHelloMessage, "Tower",
+						message.getPlaneID());
 				Tower.journal.addEvent(eventR);
 				return 1;
-
 			}
 
 			else {
@@ -52,40 +60,50 @@ public class TowerMessageHandler {
 						"Tour0000".getBytes(), 0, 0, (byte) 0);
 				plane.setPlaneID(message.getPlaneID());
 				respondHelloMessage.write(outData);
-			    Event eventR = new Event(respondHelloMessage,"Tower", message.getPlaneID());
+				Event eventR = new Event(respondHelloMessage, "Tower",
+						message.getPlaneID());
 				Tower.journal.addEvent(eventR);
 				return 0;
 			}
-			
 
 		case 1:
-			
+
 			System.out.println("got one message");
 			return 0;
 
-		// Data, save the file that received TDB
+			// Data, save the file that received TDB
 		case 2:
-			
+
 			System.out.println("got case 2");
-			
+
 			return 0;// Mayday, future issue
 		case 3:// SendRSA, unfinished for the keypair
 			Tower.planes[planenumber].setKeypair(message.getPublicKey());
 			return 2;
-		// case 4,5,7 shouldnt happen to the tour
+			// case 4,5,7 shouldnt happen to the tour
 		case 6:
+			if (Tower.landingRoute.size() != 0) {
+				Tower.landingRoute.remove(0);
+			}
+			if(Tower.smallCircle.size() != 0){
+				Tower.smallCircle.remove(0);
+			}
+			
 			System.out.println("Connection terminated");
 			return 0;
 		case 8:
 			plane.setPosx(((KeepAliveMessage) message).keepaliveX());
 			plane.setPosy(((KeepAliveMessage) message).keepaliveY());
 			return 0;
-		// keep alive
+			// keep alive
 		case 9:
-			System.out
-					.println("To be done in the future, sorry for your lost...");
+
+			// Handle the landing message
+			Circle.answerLandingRequest(plane, outData);
+
+			// System.out.println("To be done in the future, sorry for your lost...");
 			return 0;
-		// Landing request, future issue
+			// Landing request, future issue
 		default:
 			return 0;
 		}

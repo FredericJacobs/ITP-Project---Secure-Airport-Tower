@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.PriorityQueue;
 
@@ -56,6 +57,32 @@ public class Tower implements Runnable {
 	public static int planeCounter = 0;
 	public static Journal journal = new Journal();
 	
+	public final static int landingPointX = 533;
+	public final static int landingPointY = 437;
+	public static ArrayList <Plane>landingRoute = new ArrayList<Plane>();
+	public static ArrayList <Plane>smallCircle = new ArrayList<Plane>();
+	
+	public static int smallPointX;
+	public static int smallPointY;
+	public static int smallAngle;
+
+	
+	public static ArrayList <Plane>middleCircle = new ArrayList<Plane>();
+	public static int middlePointX;
+	public static int middlePointY;
+	public static int middleAngle;
+	
+	public static ArrayList <Plane>longCircle = new ArrayList<Plane>();
+	
+	public static int longPointX;
+	public static int longPointY;
+	public static int longAngle;
+	
+	public static int straightX;
+	public static int straightY;
+
+
+
 	/**
 	 * The functional method for Singleton Pattern
 	 * 
@@ -142,17 +169,18 @@ public class Tower implements Runnable {
 	}
 	
 	/**
-	 * The main method of the tour. It will create a inqueue, open a socket sever
-	 * connection and generates a decryptKeypair
+	 * The main method of the tour. It will create a inqueue, open a socket
+	 * sever connection and generates a decryptKeypair
 	 * 
 	 * @param args
 	 * @throws IOException
 	 * @throws CloneNotSupportedException
+	 */
 	 
 	public static void main(String[] args) throws IOException, CloneNotSupportedException {
-		 (new Thread(new Tower())).start();
-	}
-	*/
+		 (new Thread(new Tower())).start();	
+		}
+
 	/**
 	 * TourNetwork is a method to open a socket connection server
 	 * 
@@ -171,11 +199,19 @@ public class Tower implements Runnable {
 			System.exit(1);
 		}
 		while (true) {
-			new TowerThread(serverSocket.accept()).start();// call the TourThread
+			new TowerThread(serverSocket.accept()).start();// call the
+															// TourThread
 															// class
 		}
 	}
 
+
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+
+	}
 
 
 	public Plane[] getPlanes() {
