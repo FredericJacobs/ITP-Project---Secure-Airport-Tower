@@ -74,5 +74,7 @@ public class RoutingMessage extends Message {
 		out.writeInt(TypeM.ordinal());
 		out.write(payload);
 	}
+	
+	
 
 }
