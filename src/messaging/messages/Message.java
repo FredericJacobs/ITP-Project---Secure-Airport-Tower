@@ -4,6 +4,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 import encryption.KeyPair;
+import generals.XYPosition;
 
 //Enumeration of the different Message types
 
@@ -107,6 +108,10 @@ public abstract class Message implements Comparable<Message>, Cloneable {
 	 * 
 	 * @return void
 	 **/
+	public XYPosition getPosition (){
+		return new XYPosition (posx, posy);
+	}
+	
 	public String getPlaneID() {
 		String str = new String(planeID);
 		return str;

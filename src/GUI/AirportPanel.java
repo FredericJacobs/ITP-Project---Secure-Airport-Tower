@@ -1,5 +1,7 @@
 package GUI;
 
+import generals.XYPosition;
+
 import java.awt.AlphaComposite;
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -19,7 +21,6 @@ import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 import messaging.Tower;
-import messaging.TowerAgent;
 
 
 /**
@@ -67,13 +68,15 @@ public class AirportPanel extends JPanel {
 
 	public AirportPanel() {
 		setLayout(null);
+		String currentDir = new File("").getAbsolutePath();
+		System.out.println(currentDir);
 
 		try {
-			this.imgBack  = ImageIO.read(new File("src"+ File.pathSeparator +"GUI"+ File.pathSeparator +"img"+ File.pathSeparator +"map.png"));
-			this.imgPlane = ImageIO.read(new File("src"+ File.pathSeparator +"GUI"+ File.pathSeparator +"img"+ File.pathSeparator+ "plane.png"));
-			this.imgTower = ImageIO.read(new File("src"+ File.pathSeparator +"GUI"+ File.pathSeparator +"img"+ File.pathSeparator + "tower.png"));
-			this.imgKboom = ImageIO.read(new File("src"+ File.pathSeparator +"GUI"+ File.pathSeparator +"img"+ File.pathSeparator+ "kboom.png"));
-			this.imgRadar = ImageIO.read(new File("src"+ File.pathSeparator +"GUI"+ File.pathSeparator +"img"+ File.pathSeparator + "radar.png"));
+			this.imgBack  = ImageIO.read(new File("src"+ File.separator +"GUI"+ File.separator +"img"+ File.separator +"map.png"));
+			this.imgPlane = ImageIO.read(new File("src"+ File.separator +"GUI"+ File.separator +"img"+ File.separator+ "plane.png"));
+			this.imgTower = ImageIO.read(new File("src"+ File.separator +"GUI"+ File.separator +"img"+ File.separator + "tower.png"));
+			this.imgKboom = ImageIO.read(new File("src"+ File.separator +"GUI"+ File.separator +"img"+ File.separator+ "kboom.png"));
+			this.imgRadar = ImageIO.read(new File("src"+ File.separator +"GUI"+ File.separator +"img"+ File.separator + "radar.png"));
 		} catch (IOException e) {
 			System.err.println("Cannot read image files: " + e.getMessage());
 			System.exit(1);
@@ -121,9 +124,11 @@ public class AirportPanel extends JPanel {
 		g2d.setTransform(AffineTransform.getRotateInstance(0));
 
 		// Store the current position of every plane in the previousPositions buffer
-		for (TowerAgent plane: Tower.getInstance().getPlanes()) {
-			Point p = new Point(plane.getPosX(), plane.getPosX());
-			String planeId = new String(plane.getId());
+		System.out.println(Tower.journal.positions.size());
+		for (int i=0; i < Tower.journal.positions.size() ; i++) {
+			XYPosition newPosition = Tower.journal.positions.get(i).getPosition();
+			Point p = new Point(newPosition.getPosx(), newPosition.getPosy());
+			String planeId = new String(Tower.journal.positions.get(i).getPlaneID());
 			CircularBuffer<Point> cb = previousPositions.get(planeId);
 			if (cb != null) {
 				cb.add(p);
@@ -137,8 +142,8 @@ public class AirportPanel extends JPanel {
 		
 		// Draw trails so we can see the route that the planes have taken
 		g2d.setColor(Color.CYAN);
-		for (TowerAgent plane: Tower.getInstance().getPlanes()) {
-			String planeId = new String(plane.getId());
+		for (int i=0; i < Tower.journal.positions.size() ; i++) {
+			String planeId = new String(Tower.journal.positions.get(i).getPlaneID());
 			CircularBuffer<Point> previousPos = previousPositions.get(planeId);
 			for (int j = 1; j < previousPos.size(); j++) {
 				Point p1 = previousPos.get(j);
@@ -151,24 +156,29 @@ public class AirportPanel extends JPanel {
 		// Draw the planes themselves
 		g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
 		g2d.setColor(Color.GREEN);
-		for (TowerAgent plane: Tower.getInstance().getPlanes()) {
-			String planeId = new String(plane.getId());
-			BufferedImage planeImg = plane.hasCrashed() ? imgKboom : imgPlane; 
+		for (int i=0; i < Tower.journal.positions.size() ; i++) {
+			String planeId = new String(Tower.journal.positions.get(i).getPlaneID());
+			
+			
+			BufferedImage planeImg = Tower.journal.positions.get(i).hasCrashed() ? imgKboom : imgPlane; 
+			
+			XYPosition newPosition = Tower.journal.positions.get(i).getPosition();
 
-			g2d.setTransform(AffineTransform.getRotateInstance(0, plane.getPosX(), plane.getPosX()));
-			g2d.drawString(planeId + " (" + plane.getPosX() + ", " + plane.getPosX() + ")",
-					plane.getPosX() + planeImg.getWidth() / 2, plane.getPosX());
-
+			
+			g2d.setTransform(AffineTransform.getRotateInstance(0, newPosition.getPosx(), newPosition.getPosy()));
+			g2d.drawString(planeId + " (" + newPosition.getPosx() + ", " + newPosition.getPosy() + ")",
+					newPosition.getPosx() + planeImg.getWidth() / 2, newPosition.getPosy());
+			
 			// Compute the rotation angle of the plane, and draw it
 			CircularBuffer<Point> previousPos = previousPositions.get(planeId);
 			double dx = previousPos.get(previousPos.size() - 1).getX() - previousPos.get(previousPos.size() - 2).getX();
 			double dy = previousPos.get(previousPos.size() - 1).getY() - previousPos.get(previousPos.size() - 2).getY();
 			double theta = Math.atan2(dy, dx);
-			g2d.setTransform(AffineTransform.getRotateInstance(theta, plane.getPosX(), plane.getPosX()));
+			g2d.setTransform(AffineTransform.getRotateInstance(theta, newPosition.getPosx(), newPosition.getPosy()));
 			g2d.drawImage(
 					planeImg,
-					plane.getPosX() - planeImg.getWidth() / 2,
-					plane.getPosX() - planeImg.getHeight() / 2,
+					newPosition.getPosx() - planeImg.getWidth() / 2,
+					newPosition.getPosy() - planeImg.getHeight() / 2,
 					null);
 		}
 	}

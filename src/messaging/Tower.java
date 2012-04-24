@@ -2,6 +2,7 @@ package messaging;
 
 import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -113,6 +114,33 @@ public class Tower implements Runnable {
 		});
 	}
 
+	public void run (){
+		decryptKeypair = KeyGenerator.generateRSAKeyPair(256);
+		
+		File outputFile = new File ("MyKey");
+		outputFile.delete() ;
+		FileOutputStream publicKeyFile;
+		try {
+			publicKeyFile = new FileOutputStream("MyKey");
+			DataOutputStream publicKey = new DataOutputStream(publicKeyFile);
+			publicKey.writeInt(decryptKeypair.getKeySize());
+			publicKey.writeInt(decryptKeypair.getModulus().length);
+			publicKey.write(decryptKeypair.getModulus());
+			publicKey.writeInt(decryptKeypair.getPublicKey().length);
+			publicKey.write(decryptKeypair.getPublicKey());
+			creatPriorityQueue();
+			TourNetwork();
+		} catch (FileNotFoundException e) {
+			System.out.println("Key Not Found");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (CloneNotSupportedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	/**
 	 * The main method of the tour. It will create a inqueue, open a socket sever
 	 * connection and generates a decryptKeypair
@@ -120,25 +148,11 @@ public class Tower implements Runnable {
 	 * @param args
 	 * @throws IOException
 	 * @throws CloneNotSupportedException
-	 */
-	public static void main(String[] args) throws IOException,
-			CloneNotSupportedException {
-		decryptKeypair = KeyGenerator.generateRSAKeyPair(256);
-		
-		File outputFile = new File ("MyKey");
-		outputFile.delete() ;
-		FileOutputStream publicKeyFile = new FileOutputStream("MyKey");
-		DataOutputStream publicKey = new DataOutputStream(publicKeyFile);
-		publicKey.writeInt(decryptKeypair.getKeySize());
-		publicKey.writeInt(decryptKeypair.getModulus().length);
-		publicKey.write(decryptKeypair.getModulus());
-		publicKey.writeInt(decryptKeypair.getPublicKey().length);
-		publicKey.write(decryptKeypair.getPublicKey());
-		creatPriorityQueue();
-		TourNetwork();
-		
+	 
+	public static void main(String[] args) throws IOException, CloneNotSupportedException {
+		 (new Thread(new Tower())).start();
 	}
-
+	*/
 	/**
 	 * TourNetwork is a method to open a socket connection server
 	 * 
@@ -162,11 +176,7 @@ public class Tower implements Runnable {
 		}
 	}
 
-	@Override
-	public void run() {
-		// TODO Auto-generated method stub
-		
-	}
+
 
 	public Plane[] getPlanes() {
 		// TODO Auto-generated method stub
