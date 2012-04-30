@@ -15,7 +15,7 @@ public class AirportGUI extends JFrame {
 
 	private static final long serialVersionUID = -6319538639673860639L;
 	private DownloadGUI downloadGUI;
-	private JournalGUI journalGUI;
+	private static JournalGUI journalGUI;
 	
 	public AirportGUI() {
 		
@@ -52,4 +52,7 @@ public class AirportGUI extends JFrame {
 		new AirportGUI();
 	}
 
+	public static JournalGUI getJournalGUI() {
+		return journalGUI;
+	}
 }

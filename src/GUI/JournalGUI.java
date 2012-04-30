@@ -11,6 +11,8 @@ import java.awt.event.ActionListener;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.Enumeration;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.Vector;
 
 import javax.swing.Box;
@@ -29,8 +31,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableRowSorter;
-
-import messaging.Tower;
+import messaging.*;
 
 /**
  * This class displays the Tower's Journal, i.e. a list of received messages.
@@ -39,14 +40,17 @@ import messaging.Tower;
  * the right data (see the addEvent method)
  * 
  */
-public class JournalGUI extends JFrame implements ActionListener /*, Observer*/ {
+public class JournalGUI extends JFrame implements ActionListener  , Observer {
 
 	private static final long serialVersionUID = -8316495054463238988L;
-	private static final String[] columnNames = {"Priority", "Type", "Source", "Destination", "Date"};
+	private static final String[] columnNames = { "Priority", "Type", "Source",
+			"Destination", "Date" };
 
-    private static final Color[] PRIORITY_BACKCOLOR = new Color[]{Color.RED, Color.ORANGE, Color.YELLOW, Color.BLUE, Color.CYAN};
-    private static final Color[] PRIORITY_FORECOLOR = new Color[]{Color.WHITE, Color.BLACK, Color.BLACK, Color.WHITE, Color.BLACK};
-    
+	private static final Color[] PRIORITY_BACKCOLOR = new Color[] { Color.RED,
+			Color.ORANGE, Color.YELLOW, Color.BLUE, Color.CYAN };
+	private static final Color[] PRIORITY_FORECOLOR = new Color[] {
+			Color.WHITE, Color.BLACK, Color.BLACK, Color.WHITE, Color.BLACK };
+
 	private TableRowSorter<DefaultTableModel> sorter;
 	private CustomTableModel model;
 	private JTable table;
@@ -63,17 +67,13 @@ public class JournalGUI extends JFrame implements ActionListener /*, Observer*/ 
 	public void init() {
 		setTitle("Event Journal");
 		setLocationRelativeTo(null);
-		setSize(new Dimension(700,400));
+		setSize(new Dimension(700, 400));
 		setResizable(true);
 		setLayout(new BorderLayout());
 		this.container = getContentPane();
 		buildButtons();
 		buildTable();
 		setMinimumSize(new Dimension(550, 370));
-		for(;;){
-			vector.add(Tower.journal.getEvent(0));
-		addEvent(vector);
-		}
 	}
 
 	public void clearAll() {
@@ -86,7 +86,8 @@ public class JournalGUI extends JFrame implements ActionListener /*, Observer*/ 
 		pan.setLayout(new BoxLayout(pan, BoxLayout.X_AXIS));
 
 		JLabel lblFilter = new JLabel("Filter by ");
-		cbFilter = new JComboBox(new String[]{"Priority", "Type", "Source", "Destination"});
+		cbFilter = new JComboBox(new String[] { "Priority", "Type", "Source",
+				"Destination" });
 		tfFilter = new JTextField();
 		tfFilter.setMinimumSize(new Dimension(80, tfFilter.getHeight()));
 		tfFilter.setPreferredSize(tfFilter.getMinimumSize());
@@ -115,20 +116,21 @@ public class JournalGUI extends JFrame implements ActionListener /*, Observer*/ 
 		container.add(pan, BorderLayout.SOUTH);
 	}
 
-	/** This method expects to receive a vector with the following content:
-	 * 	int priority          the priority of the message forming this event
-	 *  String type           the type of message (e.g. DATA)
-	 *  String source         the message source (e.g. "Tower" or a plane id
-	 *  String destination    the message destination (same format as source)
-	 *  java.util.Date data   the date and time when the message arrived
-     */
+	/**
+	 * This method expects to receive a vector with the following content: int
+	 * priority the priority of the message forming this event String type the
+	 * type of message (e.g. DATA) String source the message source (e.g.
+	 * "Tower" or a plane id String destination the message destination (same
+	 * format as source) java.util.Date data the date and time when the message
+	 * arrived
+	 */
 	public void addEvent(Vector v) {
 		model.addRow(v);
 	}
 
 	private void newFilter(String text) {
 		RowFilter<DefaultTableModel, Object> rf = null;
-		//If current expression doesn't parse, don't update.
+		// If current expression doesn't parse, don't update.
 		try {
 			rf = RowFilter.regexFilter(text, cbFilter.getSelectedIndex());
 		} catch (java.util.regex.PatternSyntaxException e) {
@@ -136,7 +138,6 @@ public class JournalGUI extends JFrame implements ActionListener /*, Observer*/ 
 		}
 		sorter.setRowFilter(rf);
 	}
-
 
 	private void buildTable() {
 		model = new CustomTableModel();
@@ -148,7 +149,8 @@ public class JournalGUI extends JFrame implements ActionListener /*, Observer*/ 
 		table = new JTable(model);
 
 		// Color the lines
-		for (Enumeration<TableColumn> e = table.getColumnModel().getColumns() ; e.hasMoreElements() ;) {
+		for (Enumeration<TableColumn> e = table.getColumnModel().getColumns(); e
+				.hasMoreElements();) {
 			e.nextElement().setCellRenderer(new CustomTableCellRenderer());
 		}
 
@@ -170,7 +172,7 @@ public class JournalGUI extends JFrame implements ActionListener /*, Observer*/ 
 			setVisible(false);
 		} else if (obj == btnFilter) {
 			newFilter(tfFilter.getText());
-		} 
+		}
 	}
 
 	private class CustomTableCellRenderer extends DefaultTableCellRenderer {
@@ -178,12 +180,15 @@ public class JournalGUI extends JFrame implements ActionListener /*, Observer*/ 
 		private static final long serialVersionUID = 1L;
 
 		@Override
-		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,boolean hasFocus, int row, int column) {
-			Component cell = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+		public Component getTableCellRendererComponent(JTable table,
+				Object value, boolean isSelected, boolean hasFocus, int row,
+				int column) {
+			Component cell = super.getTableCellRendererComponent(table, value,
+					isSelected, hasFocus, row, column);
 
 			if (value instanceof Date) {
-				setText(DateFormat.getDateTimeInstance(
-						DateFormat.SHORT, DateFormat.SHORT).format(value));
+				setText(DateFormat.getDateTimeInstance(DateFormat.SHORT,
+						DateFormat.SHORT).format(value));
 			}
 
 			Object val = table.getValueAt(row, 0);
@@ -209,6 +214,22 @@ public class JournalGUI extends JFrame implements ActionListener /*, Observer*/ 
 
 	}
 
-	/** MODIFY ME: This is how the JournalGUI expects new events to be delivered from the Tower. */
+	@Override
+	public void update(Observable o, Object arg) {
+		messaging.Event printEvent = Tower.journal.getEvent(0);
+		Vector print = new Vector();
+		print.add(printEvent.getMessage().getPriority());
+		print.add(printEvent.getMessage().messageTypeName(printEvent.getMessage().getType()));
+		print.add(printEvent.getSource());
+		print.add(printEvent.getDestination());
+		print.add(printEvent.getDate());
+		addEvent(print);
+		// TODO Auto-generated method stub
+	}
+
+	/**
+	 * MODIFY ME: This is how the JournalGUI expects new events to be delivered
+	 * from the Tower.
+	 */
 
 }
