@@ -7,6 +7,7 @@ import messaging.messages.*;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -16,7 +17,7 @@ import java.util.Scanner;
 
 import encryption.KeyGenerator;
 import encryption.KeyPair;
-
+import generals.XYPosition;;
 
 /**
  ** This class the a test plane for our first step of the socket programming. Since we will use the .jar file to model the planes we dont need this class for now
@@ -30,14 +31,19 @@ public class TestPlane {
 	 */
 	private static KeyPair decryptKeypair= KeyGenerator.generateRSAKeyPair(256);
 	static String planeID = "B1778000";
+	static final int PLANE_UPDATE_INTERVAL = 100 ; 
+	static boolean encryptionEnabledAtLaunch;
+	static XYPosition planePosition;
+	static File encryptionKey = null;
+	static Socket kkSocket = null;
+	static PrintWriter out = null;
+	static BufferedReader in = null;
+	static DataOutputStream outData = null;
+	static DataInputStream inData = null;
 	
 	public static void main(String[] args) throws IOException {
-
-		Socket kkSocket = null;
-		PrintWriter out = null;
-		BufferedReader in = null;
-		DataOutputStream outData = null;
-		DataInputStream inData = null;
+		
+		init(args);
 		// Begin to connect by the net work socket , using the port "LOCALHOST",
 		// 6900
 		try {
@@ -95,5 +101,21 @@ public class TestPlane {
 		out.close();
 		in.close();
 		kkSocket.close();
+	}
+
+	private static void init(String[] args) {
+		if (!((args.length)%2 == 0)){
+			System.out.println("The entered launch parameters are not valid");
+			System.exit(-1);
+		}
+		
+		for (int i = 0; i< args.length; i=i+2){
+			if (args[i].compareTo("--encryption-enabled")){
+				if (args[(i+1)]).compareTo("true")){
+					
+				}
+			}
+			
+		}
 	}
 }

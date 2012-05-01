@@ -124,7 +124,6 @@ public class AirportPanel extends JPanel {
 		g2d.setTransform(AffineTransform.getRotateInstance(0));
 
 		// Store the current position of every plane in the previousPositions buffer
-		System.out.println(Tower.journal.positions.size());
 		for (int i=0; i < Tower.journal.positions.size() ; i++) {
 			XYPosition newPosition = Tower.journal.positions.get(i).getPosition();
 			Point p = new Point(newPosition.getPosx(), newPosition.getPosy());
