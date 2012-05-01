@@ -4,7 +4,12 @@ public class XYPosition {
 	private int posx;
 	private int posy;
 	
-	public XYPosition (int posx, int posy){
+	XYPosition (){
+		this.posx=0;
+		this.posy=0;
+	}
+	
+	XYPosition (int posx, int posy){
 		this.posx = posx;
 		this.posy = posy;
 	}
@@ -26,5 +31,12 @@ public class XYPosition {
 		return posy;
 	}
 
-
+	public void setPosx(int posx){
+		this.posx = posx;
+	}
+	
+	public void setPosy(int posy){
+		this.posy = posy;
+	}
+		
 }

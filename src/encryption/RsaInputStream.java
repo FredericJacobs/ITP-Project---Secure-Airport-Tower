@@ -69,7 +69,7 @@ public class RsaInputStream extends InputStream
 
 		// BigInteger outputs:
 		//
-		//      [----key---] -> l = n-1
+		//    [----key---] --> l = n-1
 		//    [----block---] -> l = n
 		//
 		// 1) [0|pad|0|buff] -> l = n
@@ -85,7 +85,6 @@ public class RsaInputStream extends InputStream
 			}
 		}
 
-		// No-match -> bad block
 		if(bufferOffset < 0)
 			throw new IOException("Invalid RSA block");
 

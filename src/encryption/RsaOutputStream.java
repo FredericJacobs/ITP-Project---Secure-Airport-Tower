@@ -83,13 +83,9 @@ public class RsaOutputStream extends OutputStream
 				padding_bytes[i] = (byte) (rand.nextInt() & 0xff);
 			}
 		}
-
+		// Correcting padding 
 		System.arraycopy(padding_bytes, 0, block, 2, padding);
-
-		// Padding boundary
 		block[padding + 2] = 0;
-
-		// Buffer copying
 		System.arraycopy(buffer, 0, block, padding + 3, bufferLength);
 
 		// Encrypt
@@ -109,7 +105,7 @@ public class RsaOutputStream extends OutputStream
 	}
 
 	public void close() throws IOException {
-		flush(); // If buffer isn't empty, flush it
+		flush(); 
 		output.close();
 	}
 	

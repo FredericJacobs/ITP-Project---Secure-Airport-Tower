@@ -17,7 +17,8 @@ import java.util.Scanner;
 
 import encryption.KeyGenerator;
 import encryption.KeyPair;
-import generals.XYPosition;;
+import generals.XYPosition;
+
 
 /**
  ** This class the a test plane for our first step of the socket programming. Since we will use the .jar file to model the planes we dont need this class for now
@@ -30,16 +31,19 @@ public class TestPlane {
 	 * @param args
 	 */
 	private static KeyPair decryptKeypair= KeyGenerator.generateRSAKeyPair(256);
-	static String planeID = "B1778000";
-	static final int PLANE_UPDATE_INTERVAL = 100 ; 
-	static boolean encryptionEnabledAtLaunch;
-	static XYPosition planePosition;
-	static File encryptionKey = null;
-	static Socket kkSocket = null;
-	static PrintWriter out = null;
-	static BufferedReader in = null;
-	static DataOutputStream outData = null;
-	static DataInputStream inData = null;
+	private static String planeID = "B1778000";
+	private static final int PLANE_UPDATE_INTERVAL = 100 ; 
+	private static boolean encryptionEnabledAtLaunch;
+	private static XYPosition planePosition;
+	private static File encryptionKey = null;
+	private static Socket kkSocket = null;
+	private static PrintWriter out = null;
+	private static BufferedReader in = null;
+	private static DataOutputStream outData = null;
+	private static DataInputStream inData = null;
+	private static String towerHost = "LOCALHOST";
+	private static String towerPort = "6969";
+	
 	
 	public static void main(String[] args) throws IOException {
 		
@@ -47,7 +51,7 @@ public class TestPlane {
 		// Begin to connect by the net work socket , using the port "LOCALHOST",
 		// 6900
 		try {
-			kkSocket = new Socket("LOCALHOST", 6969);
+			kkSocket = new Socket(towerHost, Integer.parseInt(towerPort));
 			out = new PrintWriter(kkSocket.getOutputStream(), true);
 			in = new BufferedReader(new InputStreamReader(
 					kkSocket.getInputStream()));
@@ -104,18 +108,39 @@ public class TestPlane {
 	}
 
 	private static void init(String[] args) {
-		if (!((args.length)%2 == 0)){
-			System.out.println("The entered launch parameters are not valid");
-			System.exit(-1);
-		}
-		
-		for (int i = 0; i< args.length; i=i+2){
-			if (args[i].compareTo("--encryption-enabled")){
-				if (args[(i+1)]).compareTo("true")){
-					
-				}
+		planePosition = new XYPosition();
+		for (int i = 0; i< args.length; i++){
+			
+			if (args[i].equals("--encryption-enabled")){
+				encryptionEnabledAtLaunch = (args[++i].equals("true"));
 			}
 			
+			if (args[i].equals("--towerkey")){
+				System.out.println("This key may not be up-to-date, please fetch it securely from the tower");
+				System.exit(-1);
+			}
+			
+			if (args[i].equals("--towerhost")){
+				towerHost = (args[++i]);
+			}
+			
+			if (args[i].equals("--towerport")){
+				towerPort = (args[++i]);
+			}
+			
+			if (args[i].equals("--file-to-send")){
+				//NOT IMPLEMENTED YET
+			}
+			
+			if (args[i].equals("--initialX")){
+				planePosition.setPosx(Integer.parseInt(args[++i]));
+			}
+			
+			if (args[i].equals("--initialY")){
+				planePosition.setPosy(Integer.parseInt(args[++i]));
+			}
+			
+			if 
 		}
 	}
 }
