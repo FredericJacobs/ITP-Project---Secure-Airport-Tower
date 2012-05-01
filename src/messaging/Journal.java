@@ -40,7 +40,7 @@ public class Journal extends Observable {
 	}
 
 	public Event getEvent(int i) {
-		return list.get(i);
+		return list.remove(0);
 	}
 
 	public int listSize() {
