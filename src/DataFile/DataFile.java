@@ -48,7 +48,7 @@ public class DataFile extends File {
 	**/
 	
 	public DataFile(String path) throws NoSuchAlgorithmException, IOException {
-		super("bin"+File.separator +"tests" + File.separator + path);
+		super("bin"+File.separator +"LocalStorage" + File.separator + path);
 		owner = true;
 		this.pathToFile = "bin"+File.separator+"tests" + File.separator + path;
 		if ((this.length() % PACKETSIZE) != 0){
@@ -70,7 +70,7 @@ public class DataFile extends File {
 	**/
 
 	public DataFile(String path, DataMessage firstDataBlock) throws NoSuchAlgorithmException, IOException {
-		super ("bin"+File.separator +"tests" + File.separator + path);
+		super ("bin"+File.separator +"IncomingFiles" + File.separator + path);
 		String formatOfTheFile = new String (firstDataBlock.getFormat());
 		owner = false;
 		this.pathToFile = "bin"+File.separator +"tests" + File.separator + path + formatOfTheFile;
@@ -223,4 +223,5 @@ public class DataFile extends File {
 		return pathToFile;
 	}
 
+	
 }

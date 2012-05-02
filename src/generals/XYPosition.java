@@ -9,7 +9,7 @@ public class XYPosition {
 		this.posy=0;
 	}
 	
-	XYPosition (int posx, int posy){
+	public XYPosition (int posx, int posy){
 		this.posx = posx;
 		this.posy = posy;
 	}
