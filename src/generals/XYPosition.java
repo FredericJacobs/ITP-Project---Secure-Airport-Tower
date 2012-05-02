@@ -4,7 +4,7 @@ public class XYPosition {
 	private int posx;
 	private int posy;
 	
-	XYPosition (){
+	public XYPosition (){
 		this.posx=0;
 		this.posy=0;
 	}

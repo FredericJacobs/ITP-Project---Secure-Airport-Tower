@@ -140,7 +140,6 @@ public class TestPlane {
 				planePosition.setPosy(Integer.parseInt(args[++i]));
 			}
 			
-			if 
 		}
 	}
 }

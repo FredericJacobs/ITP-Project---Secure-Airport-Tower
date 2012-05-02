@@ -16,6 +16,7 @@ import java.security.SecureRandom;
 public class RsaOutputStream extends OutputStream
 
 {
+	// Defining the OutputStream and the KeyPair used for encryption
 	private final OutputStream output;
 	private final KeyPair key;
 	private int blockSize;
@@ -100,7 +101,6 @@ public class RsaOutputStream extends OutputStream
 
 		output.write(block);
 		output.flush();
-
 		bufferLength = 0;
 	}
 
