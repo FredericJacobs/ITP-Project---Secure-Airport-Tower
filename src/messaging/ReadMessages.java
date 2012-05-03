@@ -65,9 +65,10 @@ public class ReadMessages {
 			return new DataMessage(planeID, continuation, posX, posY, hash,
 					format, fileSize, payload);
 		case 2://MayDayMessage
-			@SuppressWarnings("deprecation")
-			String cause = message.readLine();
-			return new MayDayMessage(planeID, cause.length(), posX, posY, cause);
+			int lengthcause = message.readInt();
+			byte[] cause = new byte[lengthcause];
+			String str = new String(cause);
+			return new MayDayMessage(planeID, cause.length, posX, posY, str);
 		case 3://SendRSAMessage
 			
 			int keySize = message.readInt();
