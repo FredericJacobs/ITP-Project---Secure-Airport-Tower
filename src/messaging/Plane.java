@@ -82,7 +82,7 @@ public class Plane {
 	 * @param keyPair The KeyPairthat should be saved
 	 */
 	public void setPosx(int posx) {
-		this.posX=posx;
+		this.posX = posx;
 	}
 
 	public void setPosy(int posy) {
@@ -98,6 +98,7 @@ public class Plane {
 	}
 
 	public boolean hasCrashed() {
+		
 		return false;
 	}
 

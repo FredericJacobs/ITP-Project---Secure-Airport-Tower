@@ -1,19 +1,20 @@
 package DataFile;
 
 import java.io.BufferedInputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.RandomAccessFile;
 import java.io.UnsupportedEncodingException;
-import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
+import java.util.Formatter;
+import java.util.HashMap;
 
+import encryption.KeyPair;
 
 import messaging.messages.*;
 
@@ -35,22 +36,31 @@ public class DataFile extends File {
 	private final static int PACKETSIZE = 1024;
 	private int lastPacketSize;
 	private int numberOfPackets;
+	private String pathToFile;
+	private boolean isComplete;
+	private FileOutputStream writingOutputStream ;
+	private byte[] payLoads[];
 	private int numberOfPacketsReceived;
-	private static RandomAccessFile myRandomAccessFile;
+	private boolean owner;
+	
 	/** This Constructor is used for creating DataMessages. It parses the original files into DataMessages of a given length.
 	* @param path Path to the file you want to create 
 	**/
 	
-	public DataFile(String path) {
-		super(path);
-		this.hash = this.computeHash();
-		try {
-			this.setFormat();
-		} catch (UnsupportedEncodingException e) {
-			System.err.println("No ASCII on this System ? No way");
+	public DataFile(String path) throws NoSuchAlgorithmException, IOException {
+		super("bin"+File.separator +"tests" + File.separator + path);
+		owner = true;
+		this.pathToFile = "bin"+File.separator+"tests" + File.separator + path;
+		if ((this.length() % PACKETSIZE) != 0){
+			numberOfPackets = (int) ((this.length() / PACKETSIZE)+1);
+			lastPacketSize = (int) (this.length() % PACKETSIZE); 	
 		}
-		// Having 0 packetsReceived means we initialized it with a file on the disk not fetched from the network
-		numberOfPacketsReceived = 0;
+		else{
+			numberOfPackets = (int) (this.length() / PACKETSIZE);
+			lastPacketSize = 0;
+		}
+		hash = computeHash();
+		isComplete = true;
 		
 	}
 	
@@ -59,29 +69,43 @@ public class DataFile extends File {
 	* @param firstDataBlock This is the first DataMessage that should be written to the drive. 
 	**/
 
-	public DataFile(String path, DataMessage firstDataBlock) {
-		super (path + "." + new String(firstDataBlock.getFormat()));
+	public DataFile(String path, DataMessage firstDataBlock) throws NoSuchAlgorithmException, IOException {
+		super ("bin"+File.separator +"tests" + File.separator + path);
+		String formatOfTheFile = new String (firstDataBlock.getFormat());
+		owner = false;
+		this.pathToFile = "bin"+File.separator +"tests" + File.separator + path + formatOfTheFile;
 		fileFormat = firstDataBlock.getFormat();
 		numberOfPackets = (int) ((firstDataBlock.getfileSize() / PACKETSIZE) +1);
 		hash = firstDataBlock.getHash();
-		numberOfPacketsReceived = 1;
+		if (firstDataBlock.getContinuation() == -1){
+			isComplete = true ;
+		}
+		else {isComplete = false ;}
 		
-		try {
-			myRandomAccessFile = new RandomAccessFile(path + "." + new String(firstDataBlock.getFormat()), "rw");
-			myRandomAccessFile.seek(firstDataBlock.getContinuation() * PACKETSIZE);
-			myRandomAccessFile.write(firstDataBlock.getPayload());
-			myRandomAccessFile.close();
-
-		} catch (FileNotFoundException e) {
-			System.err.println("Wrong Access Path");
-
-		} catch (IOException e) {
-			System.err.println("I/O Issue (Do you have all the permissions ?)");
+		payLoads = new byte[DataMessage.MAX_PACKET_SIZE] [numberOfPackets];
+		numberOfPacketsReceived = 1;
+		writingOutputStream = new FileOutputStream (pathToFile);
+		writingOutputStream.write(firstDataBlock.getPayload());
+	}
+	
+	/** The getName method had to be overridden because the given test wasn't passing the extension as part of the path. Therefore we added the file extension in the name of the file to return an accurate file name.
+	 * @return Name of the file and it's extension
+	**/
+	
+	@Override
+	public String getName(){
+		if (owner){
+			return super.getName();
+		}
+		else {
+			String fileFormatString = new String (fileFormat);
+			fileFormatString = fileFormatString.replaceAll("\\s","");
+			return (super.getName() + "." +fileFormatString);
 		}
 	}
 	
 	/** This method returns the block of data at a given position in the file. It will always return packages of size PACKETSIZE.
-	 * @param offset The offset defines what block exactly should be returned.
+	 * @param offset The offset defines what block exactlty should be returned.
 	 * @return The requested block of data.
 	**/
 
@@ -97,48 +121,26 @@ public class DataFile extends File {
 	**/
 
 	public boolean isComplete() {
-
-		if (Arrays.equals(this.computeHash(), this.hash)) {
-			return true;
-		}
-		return false;
+		return isComplete;
 	}
 	
 	/** This method allow to get a hash of a complete DataFile. No hash of individual packages is computed. So if the hash computed originally and then on the receiver's side don't match, the whole file needs to be resent.
 	 * @return byte array of the hash
 	**/
 
-	public byte[] computeHash() {
+	private byte[] computeHash() throws NoSuchAlgorithmException, IOException {
 		
-		FileInputStream fis;
-		try {
-			fis = new FileInputStream(this);
-		} catch (FileNotFoundException e) {
-			System.err.println("Couldn't find self. Weird");
-			fis = null;
-		}
-		MessageDigest hasher;
-		try {
-			hasher = MessageDigest.getInstance("SHA-1");
-		} catch (NoSuchAlgorithmException e) {
-			System.err.println("SHA-1 is not installed");
-			hasher = null;
-		}
+		FileInputStream fis = new FileInputStream(pathToFile);
+		MessageDigest hasher = MessageDigest.getInstance("SHA-1");
 		byte[] dataBytes = new byte[1024];
-
+		 
         int nread = 0; 
-        try {
-			while ((nread = fis.read(dataBytes)) != -1) {
-			  hasher.update(dataBytes, 0, nread);
-			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		};
+        while ((nread = fis.read(dataBytes)) != -1) {
+          hasher.update(dataBytes, 0, nread);
+        };
         byte[] mdbytes = hasher.digest();
  
         return mdbytes;
-
 	}
 
 	/** Getter method for the Hash
@@ -154,7 +156,10 @@ public class DataFile extends File {
 	 * @return byte array of the format
 	**/
 	
-	public byte[] getFormat() {
+	public byte[] getFormat() throws UnsupportedEncodingException {
+		if (owner){
+			setFormat ();
+		}
 		return fileFormat;	
 	}
 	
@@ -186,92 +191,36 @@ public class DataFile extends File {
 	 * @return byte array of the format
 	**/
 	
-	public void writePacket(DataMessage block) {
+	public void writePacket(DataMessage block) throws IOException, NoSuchAlgorithmException {
 		
-		if (!Arrays.equals(hash, block.getHash()))
-			throw new IllegalArgumentException("Wrong fichier.");
-
-		if (!isValideSize(block))
-			throw new IllegalArgumentException("Bad size.");
-		
-		lastPacketSize = block.getfileSize();
-		try {
-			myRandomAccessFile = new RandomAccessFile(this, "rw");
-			myRandomAccessFile.seek(block.getContinuation() * PACKETSIZE);
-			myRandomAccessFile.write(block.getPayload());
-			numberOfPacketsReceived++;
-			myRandomAccessFile.close();
-		} catch (FileNotFoundException e) {
-			System.err.println("The DataFile should exist.");
-		}
-		catch (IOException e) {
-			System.err.println("Seems like we don't have the required permissions");
-		}
-	}
-	
-	public int numberOfPacketsReceive() {
-		return numberOfPacketsReceived;
-	}
-	
-	
-	public void writeToOutputStream(String planeID, DataOutputStream out) {
-		try {
-			myRandomAccessFile = new RandomAccessFile(this.getAbsolutePath(), "r");
-			long fileSize = this.length();
-			int continuation = -1;
-			byte[] payload = new byte[PACKETSIZE];
-
-			if (this.length() > PACKETSIZE) {
-				while (continuation < fileSize / PACKETSIZE) {
-					myRandomAccessFile.read(payload);
-					continuation++;
-				 new DataMessage(planeID.getBytes("ASCII"),continuation, 0, 0,hash, fileFormat,
-							payload.length, payload).write(out);
-
-				}
+		numberOfPacketsReceived ++;
+		if (numberOfPacketsReceived < numberOfPackets){
+			if (block.getPayload().length != DataMessage.MAX_PACKET_SIZE){
+				throw new IllegalArgumentException();
 			}
+			else{
+				payLoads[block.getContinuation()] = block.getPayload() ;
+			}
+		}
+		
+		if (numberOfPacketsReceived == numberOfPackets){
+				
+				payLoads[block.getContinuation()] = block.getPayload();
+				
+				for (int i = 0; i < payLoads.length; i++){
+					writingOutputStream.write(payLoads[i]);
+				}
+				isComplete = true;
 			
-			payload = new byte[(int) (fileSize % (PACKETSIZE))];
-			myRandomAccessFile.read(payload);
-			new DataMessage(planeID.getBytes("ASCII"), continuation, 0, 0, hash, fileFormat,
-					payload.length, payload).write(out);
-
-			myRandomAccessFile.close();
-		} catch (FileNotFoundException e) {
-			System.err.println("The DataFile should exist.");
-		}
-		catch (IOException e) {
-			System.err.println("Seems like we don't have the required permissions");
-		}
+			}
 	}
 	
-	@Override
-	public String getName(){
-		if (numberOfPacketsReceived == 0){
-			return super.getName();
-		}
-		else {
-			String fileFormatString = new String (fileFormat);
-			fileFormatString = fileFormatString.replaceAll("\\s","");
-			return (super.getName() + "." +fileFormatString);
-		}
-	}
+	/** Getter method for the file path.
+	 * @return path to the file
+	**/
 	
-	
-	private boolean isValideSize(DataMessage dataMessage) {
-		if (dataMessage.getPayload().length > DataMessage.MAX_PACKET_SIZE)
-			return false;
-		if (dataMessage.getPayload().length == DataMessage.MAX_PACKET_SIZE
-				&& dataMessage.getContinuation() * DataMessage.MAX_PACKET_SIZE > dataMessage.getfileSize())
-			return false;
-		if (dataMessage.getPayload().length < DataMessage.MAX_PACKET_SIZE
-				&& ((dataMessage.getContinuation()) * DataMessage.MAX_PACKET_SIZE + dataMessage
-						.getPayload().length) != dataMessage.getfileSize())
-			return false;
-
-		return true;
-
+	public String getPathToFile() {
+		return pathToFile;
 	}
 
-	
 }
