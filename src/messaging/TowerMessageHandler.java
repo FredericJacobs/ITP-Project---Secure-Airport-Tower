@@ -2,7 +2,11 @@ package messaging;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 
+import DataFile.DataFile;
+
+import messaging.messages.DataMessage;
 import messaging.messages.HelloMessage;
 import messaging.messages.KeepAliveMessage;
 import messaging.messages.Message;
@@ -17,6 +21,9 @@ import messaging.messages.RoutingMessage.routingMessageType;
  * @author Frederic Jacobs
  */
 public class TowerMessageHandler {
+	
+	DataFile towerDataFile = null;
+	
 	public TowerMessageHandler() {
 	}
 
@@ -67,11 +74,24 @@ public class TowerMessageHandler {
 			}
 
 		case 1:
-
-			System.out.println("got one message");
+			System.out.println("Gotcha Part");
+			if (towerDataFile == null){
+				try {
+					towerDataFile = new DataFile ("testfile", (DataMessage) message);
+				} catch (NoSuchAlgorithmException e) {
+					System.err.println("Error : DataFile shouldn't be this one");
+				}
+				return 0;
+			}
+			
+			try {
+				towerDataFile.writePacket((DataMessage) message);
+			} catch (NoSuchAlgorithmException e) {
+				
+			}
+			
 			return 0;
-
-			// Data, save the file that received TDB
+			
 		case 2:
 			Circle.landingUrgent(plane,outData);
 			return 0;// Mayday, future issue
@@ -96,7 +116,6 @@ public class TowerMessageHandler {
 			plane.setPosx(((KeepAliveMessage) message).keepaliveX());
 			plane.setPosy(((KeepAliveMessage) message).keepaliveY());
 			return 0;
-			// keep alive
 		case 9:
 
 			// Handle the landing message

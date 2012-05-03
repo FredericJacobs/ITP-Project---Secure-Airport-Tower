@@ -3,7 +3,6 @@ package messaging;
 import messaging.messages.Message;
 
 import encryption.KeyPair;
-import generals.XYPosition;
 
 /**
  ** This is the class of Plane. It is responsible for creat a array of the planes
@@ -24,7 +23,8 @@ public class Plane {
 	private KeyPair keypair;
 	private Message messages[];
 	private int messageNo = 0;
-	private XYPosition position;
+	private int posX;
+	private int posY;
 
 	public Plane() {
 	}
@@ -82,19 +82,19 @@ public class Plane {
 	 * @param keyPair The KeyPairthat should be saved
 	 */
 	public void setPosx(int posx) {
-		this.position.setPosx(posx);
+		this.posX=posx;
 	}
 
 	public void setPosy(int posy) {
-		this.position.setPosy(posy);
+		this.posY = posy;
 	}
 
 	public int getPosX() {
-		return this.position.getPosx();
+		return posX;
 	}
 
 	public int getPosY() {
-		return this.position.getPosy();
+		return posY;
 	}
 
 	public boolean hasCrashed() {
