@@ -49,6 +49,7 @@ public class AirportPanel extends JPanel {
 	private BufferedImage imgTower;
 	private BufferedImage imgKboom;
 	private BufferedImage imgRadar;
+	private BufferedImage imgPlaneMayDay;
 	
 	// The position of the tower in the background image
 	private static final int TOWER_X = 625;
@@ -77,6 +78,7 @@ public class AirportPanel extends JPanel {
 			this.imgTower = ImageIO.read(new File("src"+ File.separator +"GUI"+ File.separator +"img"+ File.separator + "tower.png"));
 			this.imgKboom = ImageIO.read(new File("src"+ File.separator +"GUI"+ File.separator +"img"+ File.separator+ "kboom.png"));
 			this.imgRadar = ImageIO.read(new File("src"+ File.separator +"GUI"+ File.separator +"img"+ File.separator + "radar.png"));
+			this.imgPlaneMayDay = ImageIO.read(new File("src"+ File.separator +"GUI"+ File.separator +"img"+ File.separator + "plane_mayday.png"));
 		} catch (IOException e) {
 			System.err.println("Cannot read image files: " + e.getMessage());
 			System.exit(1);
@@ -156,10 +158,12 @@ public class AirportPanel extends JPanel {
 		g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
 		g2d.setColor(Color.GREEN);
 		for (int i=0; i < Tower.journal.positions.size() ; i++) {
+			
 			String planeId = new String(Tower.journal.positions.get(i).getPlaneID());
-			
-			
 			BufferedImage planeImg = Tower.journal.positions.get(i).hasCrashed() ? imgKboom : imgPlane; 
+			if (Tower.journal.positions.get(i).sentMayDay()){
+				planeImg = imgPlaneMayDay;
+			}
 			
 			XYPosition newPosition = Tower.journal.positions.get(i).getPosition();
 

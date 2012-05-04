@@ -65,7 +65,6 @@ public class ReadMessages {
 			return new DataMessage(planeID, continuation, posX, posY, hash,
 					format, fileSize, payload);
 		case 2://MayDayMessage
-			@SuppressWarnings("deprecation")
 			String cause = message.readLine();
 			return new MayDayMessage(planeID, cause.length(), posX, posY, cause);
 		case 3://SendRSAMessage

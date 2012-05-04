@@ -27,9 +27,13 @@ public class Journal extends Observable {
 			if (e.getSource().equalsIgnoreCase(positions.get(i).getPlaneID())) {
 				positions.get(i).updatePosition(e.getMessage().getPosition());
 				updatedPosition = true;
+				if (e.getMessage().getType() == 6){
+					positions.get(i).setMayDayStatus(true);
+				}
 				System.out.println("position updated");
 				break;
 			}
+
 		}
 		if (!updatedPosition) {
 			positions.add(new PlanePosition(e.getSource(), e.getMessage()

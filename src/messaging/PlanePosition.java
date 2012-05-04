@@ -6,6 +6,7 @@ public class PlanePosition {
 	private String planeid;
 	private XYPosition position;
 	boolean hasCrashed;
+	boolean sentMayDay;
 	
 	PlanePosition (String planeid, XYPosition position){
 		this.planeid = planeid ;
@@ -28,6 +29,14 @@ public class PlanePosition {
 	// NO SETTER FOR CRASHED PLANE YET !
 	public boolean hasCrashed () {
 		return hasCrashed;
+	}
+	
+	public void setMayDayStatus(boolean MayDayStatus){
+		sentMayDay = MayDayStatus;
+	}
+	
+	public boolean sentMayDay(){
+		return sentMayDay;
 	}
 	
 }
