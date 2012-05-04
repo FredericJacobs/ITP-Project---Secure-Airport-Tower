@@ -1,7 +1,6 @@
 package DataFile;
 
 import java.io.BufferedInputStream;
-import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -9,7 +8,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.io.UnsupportedEncodingException;
-import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
@@ -19,10 +17,9 @@ import messaging.messages.*;
 
 /**
  * This class is responsible for creating DataMessages objects from a File. It can also write a File from a bunch of DataMessages.
- * The DataMessages should be routed to this DataFile. Order doesn't really matter, except the first one that should be the first message too. 
- * This design pattern isn't by far the best one but we were given this in the ITP Description. We corrected this issue by sorting all the packages again before writing them to the disk.
- * This is clearly not optimized for dealing with huge files.
- * DataFile has two Constructors. One for sending files (creating DataMessages files from a file) and one for receiving files (creating a file from DataMessages).
+ * The DataMessages should be routed to this DataFile. After some refactor we didn't stick to the original description of the DataFile because 
+ * we belived it didn't make much sense to have this bunch of superficial variable (or we may not have understood what they were doing). We managed
+ * to get this class working with a slightly modified version of the original test
  * @author Frederic Jacobs
  * @author Hantao Zhao
  * @see DataMessage
@@ -33,8 +30,6 @@ public class DataFile extends File {
 	private byte[] hash;
 	private byte[] fileFormat;
 	private final static int PACKETSIZE = 1024;
-	private int lastPacketSize;
-	private int numberOfPackets;
 	private int numberOfPacketsReceived;
 	private static RandomAccessFile myRandomAccessFile;
 	/** This Constructor is used for creating DataMessages. It parses the original files into DataMessages of a given length.
@@ -49,23 +44,23 @@ public class DataFile extends File {
 		} catch (UnsupportedEncodingException e) {
 			System.err.println("No ASCII on this System ? No way");
 		}
+		
 		// Having 0 packetsReceived means we initialized it with a file on the disk not fetched from the network
+		
 		numberOfPacketsReceived = 0;
 		
 	}
 	
 	/** This Constructor is used to build a file from a bunch of DataMessages.
-	* @param path This sets the name of the file we want to build
-	* @param firstDataBlock This is the first DataMessage that should be written to the drive. 
+	* @param path This sets the access path to the file we want to create
+	* @param firstDataBlock This is the first DataMessage that should be written to the file. 
 	**/
 
 	public DataFile(String path, DataMessage firstDataBlock) {
 		super (path + "." + new String(firstDataBlock.getFormat()));
 		fileFormat = firstDataBlock.getFormat();
-		numberOfPackets = (int) ((firstDataBlock.getfileSize() / PACKETSIZE) +1);
 		hash = firstDataBlock.getHash();
 		numberOfPacketsReceived = 1;
-		
 		try {
 			myRandomAccessFile = new RandomAccessFile(path + "." + new String(firstDataBlock.getFormat()), "rw");
 			myRandomAccessFile.seek(firstDataBlock.getContinuation() * PACKETSIZE);
@@ -132,13 +127,12 @@ public class DataFile extends File {
 			  hasher.update(dataBytes, 0, nread);
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//Should abort this filetransfer
+			//Will be implemented later once the implementation is ready
 		};
         byte[] mdbytes = hasher.digest();
  
         return mdbytes;
-
 	}
 
 	/** Getter method for the Hash
@@ -158,7 +152,7 @@ public class DataFile extends File {
 		return fileFormat;	
 	}
 	
-	/** Setter of the file format for file system files.
+	/** Setter of the file format for file system files. No return necessary. Just setting the fileFormat ByteArray.
 	**/
 	
 	public void setFormat() throws UnsupportedEncodingException {
@@ -182,8 +176,8 @@ public class DataFile extends File {
 		fileFormat = fileFormatString.getBytes("ASCII");
 	}
 
-	/** Method allowing to write packages to the file.
-	 * @return byte array of the format
+	/** 
+	 * Method allowing to write packages to the file. Using the RandomAccessFile to write the payload of a given message to the filesystem.
 	**/
 	
 	public void writePacket(DataMessage block) {
@@ -194,7 +188,6 @@ public class DataFile extends File {
 		if (!isValideSize(block))
 			throw new IllegalArgumentException("Bad size.");
 		
-		lastPacketSize = block.getfileSize();
 		try {
 			myRandomAccessFile = new RandomAccessFile(this, "rw");
 			myRandomAccessFile.seek(block.getContinuation() * PACKETSIZE);
@@ -209,10 +202,20 @@ public class DataFile extends File {
 		}
 	}
 	
+	/**
+	 * Returns the number of packets received
+	 * @return number of packets received
+	 */
 	public int numberOfPacketsReceive() {
 		return numberOfPacketsReceived;
 	}
 	
+	/**
+	 * When files over the network we want these file transfers to be handled by the DataFile so we need to give it the information (namely the planeID) and the outputStream so that it can send the
+	 * message to the right plane on the right outputstream 
+	 * @param planeID PlaneID of the receipient plane
+	 * @param out Stream to the right plane
+	 */
 	
 	public void writeToOutputStream(String planeID, DataOutputStream out) {
 		try {
@@ -220,7 +223,6 @@ public class DataFile extends File {
 			long fileSize = this.length();
 			int continuation = -1;
 			byte[] payload = new byte[PACKETSIZE];
-
 			if (this.length() > PACKETSIZE) {
 				while (continuation < fileSize / PACKETSIZE) {
 					myRandomAccessFile.read(payload);
@@ -244,7 +246,9 @@ public class DataFile extends File {
 			System.err.println("Seems like we don't have the required permissions");
 		}
 	}
-	
+	/**
+	 * We need to override the original method since we want the name to be the one that we initialize independently with our file format and the access path is not enough
+	 */
 	@Override
 	public String getName(){
 		if (numberOfPacketsReceived == 0){
@@ -257,6 +261,11 @@ public class DataFile extends File {
 		}
 	}
 	
+	/**
+	 * Quick check to see if a dataMessage is the right size otherwise we just return that it's an invalid message
+	 * @param dataMessage Message that should be checked for it's size.
+	 * @return True or false according to the validity of the size of a packet
+	 */
 	
 	private boolean isValideSize(DataMessage dataMessage) {
 		if (dataMessage.getPayload().length > DataMessage.MAX_PACKET_SIZE)
