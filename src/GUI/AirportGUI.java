@@ -16,6 +16,7 @@ public class AirportGUI extends JFrame {
 	private static final long serialVersionUID = -6319538639673860639L;
 	private DownloadGUI downloadGUI;
 	private static JournalGUI journalGUI;
+	private static Choker choker;
 	
 	public AirportGUI() {
 		
@@ -27,6 +28,7 @@ public class AirportGUI extends JFrame {
 		// Create other windows for the journal and the list of downloaded files
 		journalGUI = new JournalGUI();
 		downloadGUI = new DownloadGUI();
+		choker = new Choker();
 		
 		// Create an airport panel, add it to this window
 		setLayout(new BorderLayout());
@@ -38,6 +40,7 @@ public class AirportGUI extends JFrame {
 		setVisible(true);
 		journalGUI.setVisible(true);
 		downloadGUI.setVisible(true);
+		choker.setVisible(true);
 
 		// TODO: this is how the GUI interfaces with the tower, to get the
 		// journal and the list of downloaded files. 

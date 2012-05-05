@@ -166,8 +166,6 @@ public class AirportPanel extends JPanel {
 			}
 			
 			XYPosition newPosition = Tower.journal.positions.get(i).getPosition();
-
-			
 			g2d.setTransform(AffineTransform.getRotateInstance(0, newPosition.getPosx(), newPosition.getPosy()));
 			g2d.drawString(planeId + " (" + newPosition.getPosx() + ", " + newPosition.getPosy() + ")",
 					newPosition.getPosx() + planeImg.getWidth() / 2, newPosition.getPosy());
