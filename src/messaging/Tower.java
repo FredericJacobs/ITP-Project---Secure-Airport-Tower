@@ -62,8 +62,8 @@ public class Tower implements Runnable {
 	public static ArrayList <Plane>landingRoute = new ArrayList<Plane>();
 	public static ArrayList <Plane>smallCircle = new ArrayList<Plane>();
 	
-	public static int smallPointX = 100;
-	public static int smallPointY = 100;
+	public static int smallPointX = 500;
+	public static int smallPointY = 500;
 	public static int smallAngle = 180;
 
 	

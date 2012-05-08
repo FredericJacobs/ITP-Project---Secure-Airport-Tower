@@ -9,10 +9,8 @@ import DataFile.DataFile;
 import messaging.messages.DataMessage;
 import messaging.messages.HelloMessage;
 import messaging.messages.KeepAliveMessage;
-import messaging.messages.Message;
-import messaging.messages.RoutingMessage;
-import messaging.messages.RoutingMessage.moveType;
-import messaging.messages.RoutingMessage.routingMessageType;
+import messaging.messages.*;
+
 
 /**
  * This class help the Tour to handle different type of messages
@@ -97,6 +95,11 @@ public class TowerMessageHandler {
 			}	
 			System.out.println("Connection terminated");
 			return 0;
+		case 7:
+			Tower.landingRoute.remove(0);
+			ByeMessage respondHelloMessage = new ByeMessage(
+					"Tour0000".getBytes(), 0, 0, 0);
+			respondHelloMessage.write(outData);
 		case 8:
 			plane.setPosx(((KeepAliveMessage) message).keepaliveX());
 			plane.setPosy(((KeepAliveMessage) message).keepaliveY());

@@ -23,8 +23,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.OverlayLayout;
 
+import messaging.Event;
 import messaging.Tower;
 import messaging.messages.ChokeMessage;
+import messaging.messages.UnchokeMessage;
 
 public class Choker extends JFrame implements MouseListener {
 	private static final long serialVersionUID = 1L;
@@ -33,6 +35,7 @@ public class Choker extends JFrame implements MouseListener {
 	ImageIcon chokeButton;
 	ImageIcon unChokeButton;
 	boolean status = false;
+	boolean choking = false;
 	Timer timer = new Timer();
 	public Choker() throws IOException {
 		chokeButton = new ImageIcon("src" + File.separator + "GUI"
@@ -69,30 +72,48 @@ public class Choker extends JFrame implements MouseListener {
 				ChokeMessage chock = new ChokeMessage("Tour0000".getBytes(), 0,
 						0, 0);
 				chock.write(outData);
+				Event eventR = new Event(chock, "Tower",
+						"Allplanes");
+				Tower.journal.addEvent(eventR);
 			}
-			timer.schedule(new Counter(), 10000);
+			timer.schedule(new Counter(), 5000);
 		} else {
-			if(status == false){
+			for (int i = 0; i < Tower.planeCounter; i++) {
+				Socket socket = Tower.planes[i].getSocket();
+				DataOutputStream outData = new DataOutputStream(
+						socket.getOutputStream());
+				UnchokeMessage chock = new UnchokeMessage("Tour0000".getBytes(), 0,
+						0, 0);
+				chock.write(outData);
+				Event eventR = new Event(chock, "Tower",
+						"Allplanes");
+				Tower.journal.addEvent(eventR);
+			}
+			choking = false;
 			imageLabel.removeAll();
 			imageLabel.setIcon(chokeButton);}
-	}}
+	}
 	class Counter extends TimerTask {
 		public void run() {
-			status = false;
 			System.out.println("Choke finish");
 			timer.cancel();
 			timer = new Timer();
+			choking = false;
 		}
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
+		if(!choking){
 		status = !status;
+		choking = true;
 		try {
 			chokeEnabled(status);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}}else{
+			System.out.println("choking! block");
 		}
 	}
 
