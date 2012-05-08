@@ -5,13 +5,19 @@ public enum PlaneType {
 	A380(0.89, 80000, 115, 644), 
 	B787(0.85, 15000, 63, 242), 
 	CONCORDE(2.02, 120000, 461, 140), 
-	GRIPEN(2, 45000, 200, 1), 
-	CUSTOM;
+	GRIPEN(2, 45000, 200, 1);
 
 	private double machSpeed;
 	private int fuelCapacity;
 	private int consumption;
 	private int passagerCapacity;
+	
+	PlaneType (){
+		this.machSpeed = 0.89;
+		this.fuelCapacity = 80000;
+		this.consumption = 115;
+		this.passagerCapacity = 644;
+	}
 	
 	PlaneType (double machSpeed, int fuelCapacity, int consumption, int passengerCapacity){
 		this.machSpeed = machSpeed;
@@ -19,6 +25,21 @@ public enum PlaneType {
 		this.consumption = consumption;
 		this.passagerCapacity = passengerCapacity;
 	}
-	
+
+	public double getMachSpeed() {
+		return machSpeed;
+	}
+
+	public int getFuelCapacity() {
+		return fuelCapacity;
+	}
+
+	public int getConsumption() {
+		return consumption;
+	}
+
+	public int getPassagerCapacity() {
+		return passagerCapacity;
+	}
 	
 }

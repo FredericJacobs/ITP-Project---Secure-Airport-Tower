@@ -1,19 +1,35 @@
 package Plane;
 
+import generals.XYPosition;
 import Plane.PlaneType;
 
-public abstract class Plane {
-	private PlaneType planeType;
-	private float machSpeed;
-	private int fuelCapacity;
-	private int consumption;
-	private int passagerCapacity;
-
+public class Plane {
+	private PlaneType type;
+	private XYPosition position;
+	private double fuelLevel;
+	
 	Plane() {
+		this.type = PlaneType.A320;
+		this.position = new XYPosition();
+		this.fuelLevel = PlaneType.A320.getFuelCapacity();
+	}
 		
+	public void changeTypeTo (PlaneType type){
+		this.type = type;
 	}
 	
-	Plane (String planeTypeName){
-		
+	public boolean setFuelLevel (double fuelLevel){
+		if (fuelLevel < type.getFuelCapacity()){
+			this.fuelLevel = fuelLevel;
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
+
+	public XYPosition getPosition() {
+		return position;
+	}
+	
 }

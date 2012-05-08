@@ -34,7 +34,6 @@ public class TestPlane {
 	private static String planeID = "B1778000";
 	private static final int PLANE_UPDATE_INTERVAL = 100 ; 
 	private static boolean encryptionEnabledAtLaunch;
-	private static XYPosition planePosition;
 	private static File encryptionKey = null;
 	private static Socket kkSocket = null;
 	private static PrintWriter out = null;
@@ -43,6 +42,7 @@ public class TestPlane {
 	private static DataInputStream inData = null;
 	private static String towerHost = "LOCALHOST";
 	private static String towerPort = "6969";
+	private static Plane plane = new Plane ();
 	
 	
 	public static void main(String[] args) throws IOException {
@@ -108,7 +108,7 @@ public class TestPlane {
 	}
 
 	private static void init(String[] args) {
-		planePosition = new XYPosition();
+		
 		for (int i = 0; i< args.length; i++){
 			
 			if (args[i].equals("--encryption-enabled")){
@@ -133,11 +133,48 @@ public class TestPlane {
 			}
 			
 			if (args[i].equals("--initialX")){
-				planePosition.setPosx(Integer.parseInt(args[++i]));
+				plane.getPosition().setPosx(Integer.parseInt(args[++i]));
+			}
+		
+			if (args[i].equals("--initialY")){
+				plane.getPosition().setPosy(Integer.parseInt(args[++i]));
 			}
 			
-			if (args[i].equals("--initialY")){
-				planePosition.setPosy(Integer.parseInt(args[++i]));
+			if (args[i].equals("--planeType")){
+				
+				String planeTypeString = args [++i];
+				
+				if (planeTypeString.equalsIgnoreCase("A380")){
+					plane.changeTypeTo(PlaneType.A380);
+				}
+				
+				if (planeTypeString.equalsIgnoreCase("A320")){
+					plane.changeTypeTo(PlaneType.A320);
+				}
+				
+				if (planeTypeString.equalsIgnoreCase("B787")){
+					plane.changeTypeTo(PlaneType.B787);
+				}
+
+				if (planeTypeString.equalsIgnoreCase("CONCORDE")){
+					plane.changeTypeTo(PlaneType.CONCORDE);
+				}
+
+				if (planeTypeString.equalsIgnoreCase("GRIPEN")){
+					plane.changeTypeTo(PlaneType.GRIPEN);
+				}
+				else {
+					System.out.println("Given plane type doesn't exist. Initialized with default A320");
+				}
+			}
+			
+			if (args[i].equals("--initialFuel")){
+				
+				if (!plane.setFuelLevel(Double.parseDouble(args[++i]))){
+					System.out.println("The plane can't store that much fuel.");
+					System.exit(-1);
+				}
+				
 			}
 			
 		}
