@@ -55,49 +55,8 @@ public class TestPlane {
 			System.err.println("Couldn't get I/O for the connection to: LOCALHOST.");
 			System.exit(1);
 		}
-		
-		
-		System.out.println("This is plane B1778000 please give instructions");
-		System.out.println("0=HELLO, 1=DATA, 2=MAYDAY, 3=SENDRSA, 4=CHOKE, 5=UNCHOKE, 6=BYE,7=ROUTING, 8=KEEPALIVE, 9=LANDINGREQUEST");
-		Scanner scanner = new Scanner(System.in);
-		int i = 0;
-		while (i != 6) {
-			i = scanner.nextInt();
-			switch (i) {
-			case 0:
-				HelloMessage hello = new HelloMessage(planeID.getBytes(), 20, 10, (byte) 0);
-				hello.print();
-				hello.write(out);
-				System.out.println("----Messages from the tour-----");
-				ReadMessages.readMessage(in).print();
-				break;
-			case 1: 
-			case 2:
-			case 3: 
-				
-				// Encryption Support broken in this test. Use given planes
-				
-				SendRSAMessage sendRSA = new SendRSAMessage(planeID.getBytes(),8, 20, 10,decryptKeypair);
-				sendRSA.write(out);
-				ReadMessages.readMessage(in).print();
-				break;
-			case 6:
-				ByeMessage bye = new ByeMessage(planeID.getBytes(), 0, 20, 10);
-				bye.write(out);
-				System.out.println("----Messages from the tour-----");
-				ReadMessages.readMessage(in).print();
-				System.out.println("Bye! Bon voyage!");
-				break;
-			case 8:
-				KeepAliveMessage KeepAlive = new KeepAliveMessage(planeID.getBytes(), plane.getPosition().getPosx(), plane.getPosition().getPosy());
-				KeepAlive.write(out);
-				System.out.println("----Messages from the tour-----no return message");
-				break;
-			}
-		}
-		out.close();
-		in.close();
-		socket.close();
+		PlaneMessaging messagingThread = new PlaneMessaging();
+		messagingThread.run(in, out);
 	}
 
 	private static void init(String[] args) {
