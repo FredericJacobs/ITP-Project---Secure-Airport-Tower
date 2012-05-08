@@ -1,6 +1,8 @@
 package messaging;
 
 import java.net.*;
+import java.util.Observable;
+import java.util.Observer;
 import java.io.*;
 
 import messaging.messages.*;
@@ -13,7 +15,7 @@ import encryption.*;
  * @author Hantao Zhao
  * @author Frederic Jacobs
  */
-public class TowerThread extends Thread {
+public class TowerThread extends Thread implements Observer {
 
 	private Socket socket = null;
 	private int encryptionStatus;
@@ -39,12 +41,12 @@ public class TowerThread extends Thread {
 					socket.getOutputStream());
 			inData = new DataInputStream(
 					socket.getInputStream());
-			
 
 			TowerMessageHandler messageHandler = new TowerMessageHandler(); // create a TowerMessageHandler to respond the messages send by the planes
 			int planenumber = Tower.planeCounter;// To get a number of the planes which connect with the tour.
 			Tower.planeCounter++; //  The planeCounter ++,  for the next plane
 			Tower.planes[planenumber] = new Plane(); // Created a new plane by using the order
+			Tower.planes[planenumber].setSocket(this.socket);
 			while (true) {
 				mes = ReadMessages.readMessage(inData);
 				// read the message send by the DataInputStream
@@ -81,5 +83,23 @@ public class TowerThread extends Thread {
 			e.printStackTrace();
 		}
 
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
+		
+		System.out.println("Begin Chock mode");
+		ChokeMessage respondHelloMessage = new ChokeMessage(
+				"Tour0000".getBytes(), 0, 0, 0);
+		Event eventR = new Event(respondHelloMessage, "Tower",
+				"AllPlanes");
+		Tower.journal.addEvent(eventR);
+		try {
+			respondHelloMessage.write(outData);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		// TODO Auto-generated method stub
 	}
 }

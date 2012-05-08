@@ -36,14 +36,12 @@ public class ReadMessages {
 		
 		byte planeID[] = new byte[8];
 		message.read(planeID);
-		@SuppressWarnings("unused")
 		int length = message.readInt();
 		@SuppressWarnings("unused")
 		int priority = message.readInt();
 		int posX = message.readInt();
 		int posY = message.readInt();
 		int messageType = message.readInt();
-
 		// Plane ID
 		/**
 		 * After all the basic parameters of the Message have been saved, we
@@ -56,7 +54,7 @@ public class ReadMessages {
 		case 1://DataMessage
 			byte[] hash = new byte[20];
 			byte[] format = new byte[4]; // 4 octets (4 bytes)
-			byte[] payload = new byte[4];
+			byte[] payload = new byte[length];
 			message.read(hash);
 			int continuation = message.readInt();
 			message.read(format);
@@ -91,7 +89,7 @@ public class ReadMessages {
 			int TypeM = message.readInt();
 			byte[] payloadOfRouting = new byte[20];
 			message.read(payloadOfRouting);
-			return new RoutingMessage(planeID, payloadOfRouting.length, posX,
+			return new RoutingMessage(planeID, posX,
 					posY, routingMessageType.routingMessageTypeName(TypeR),
 					moveType.moveMessageTypeName(TypeM), payloadOfRouting);
 		case 8://KeepAliveMessage

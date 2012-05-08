@@ -1,6 +1,7 @@
 package GUI;
 
 import java.awt.BorderLayout;
+import java.io.IOException;
 
 import javax.swing.JFrame;
 
@@ -18,7 +19,7 @@ public class AirportGUI extends JFrame {
 	private static JournalGUI journalGUI;
 	private static Choker choker;
 	
-	public AirportGUI() {
+	public AirportGUI() throws IOException {
 		
 		// Create a window. The program will exit when the window is closed.
 		// See http://docs.oracle.com/javase/tutorial/uiswing/components/frame.html
@@ -50,8 +51,9 @@ public class AirportGUI extends JFrame {
 		new Thread(Tower.getInstance()).start();
 	}
 	
-	/** This method starts a standalone GUI, for testing purposes. */
-	public static void main(String[] args) {
+	/** This method starts a standalone GUI, for testing purposes. 
+	 * @throws IOException */
+	public static void main(String[] args) throws IOException {
 		new AirportGUI();
 	}
 

@@ -76,54 +76,35 @@ public class TowerMessageHandler {
 		case 1:
 			System.out.println("Gotcha Part");
 			if (towerDataFile == null){
-				try {
-					towerDataFile = new DataFile ("testfile", (DataMessage) message);
-				} catch (NoSuchAlgorithmException e) {
-					System.err.println("Error : DataFile shouldn't be this one");
-				}
+				towerDataFile = new DataFile ("testfile", (DataMessage) message);
 				return 0;
 			}
-			
-			try {
-				towerDataFile.writePacket((DataMessage) message);
-			} catch (NoSuchAlgorithmException e) {
-				
-			}
+	//		towerDataFile.writePacket((DataMessage) message);
 			
 			return 0;
 			
 		case 2:
 			Circle.landingUrgent(plane,outData);
-			return 0;// Mayday, future issue
+			return 0;// Mayday
 		case 3:// SendRSA, unfinished for the keypair
 			Tower.planes[planenumber].setKeypair(message.getPublicKey());
 			return 2;
 			// case 4,5,7 shouldnt happen to the tour
 		case 6:
+			
 			if (Tower.landingRoute.size() != 0) {
 				Tower.landingRoute.remove(0);
-			}
-			if(Tower.longCircle.size() != 0){
-				Tower.longCircle.remove(0);
-			}else if(Tower.middleCircle.size() != 0){
-				Tower.middleCircle.remove(0);				
-			}else if(Tower.smallCircle.size() != 0){
-				Tower.smallCircle.remove(0);				
-			}			
+			}	
 			System.out.println("Connection terminated");
 			return 0;
 		case 8:
 			plane.setPosx(((KeepAliveMessage) message).keepaliveX());
 			plane.setPosy(((KeepAliveMessage) message).keepaliveY());
 			return 0;
-		case 9:
-
+		case 9:// Landing request
 			// Handle the landing message
 			Circle.answerLandingRequest(plane, outData);
-
-			// System.out.println("To be done in the future, sorry for your lost...");
 			return 0;
-			// Landing request, future issue
 		default:
 			return 0;
 		}

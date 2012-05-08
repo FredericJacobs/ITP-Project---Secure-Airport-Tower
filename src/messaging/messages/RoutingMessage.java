@@ -57,9 +57,9 @@ public class RoutingMessage extends Message {
 	moveType TypeM;
 	byte[] payload;
 
-	public RoutingMessage(byte[] planeID, int length, int posx, int posy,
+	public RoutingMessage(byte[] planeID, int posx, int posy,
 			routingMessageType typeR, moveType typeM, byte[] payload) {
-		super(planeID, length, 2, posx, posy, MessageType.ROUTING);
+		super(planeID, payload.length, 2, posx, posy, MessageType.ROUTING);
 		TypeR = typeR;
 		TypeM = typeM;
 		this.payload = payload;

@@ -1,5 +1,7 @@
 package messaging;
 
+import java.net.Socket;
+
 import messaging.messages.Message;
 
 import encryption.KeyPair;
@@ -25,6 +27,7 @@ public class Plane {
 	private int messageNo = 0;
 	private int posX;
 	private int posY;
+	private Socket socket = null;
 
 	public Plane() {
 	}
@@ -35,10 +38,19 @@ public class Plane {
 	 * @param mes The message that should be saved
 	 * @return void
 	 **/
+	
 	public void addMessage(Message mes) { // Unfinished , cant be used, We can't
 											// initialize the abstract message
 		messages[messageNo] = mes;
 		messageNo++;
+	}
+
+	public Socket getSocket() {
+		return socket;
+	}
+
+	public void setSocket(Socket socket) {
+		this.socket = socket;
 	}
 
 	/**

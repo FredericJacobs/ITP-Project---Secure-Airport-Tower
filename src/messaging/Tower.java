@@ -53,7 +53,7 @@ public class Tower implements Runnable {
 
 	public static PriorityQueue<Message> inQueue;//
 	private static KeyPair decryptKeypair;// the KeyPair for the tour
-	public static Plane planes[] = new Plane[100];
+	public static Plane planes[] = new Plane[200];
 	public static int planeCounter = 0;
 	public static Journal journal = new Journal();
 	
@@ -62,24 +62,24 @@ public class Tower implements Runnable {
 	public static ArrayList <Plane>landingRoute = new ArrayList<Plane>();
 	public static ArrayList <Plane>smallCircle = new ArrayList<Plane>();
 	
-	public static int smallPointX;
-	public static int smallPointY;
-	public static int smallAngle;
+	public static int smallPointX = 100;
+	public static int smallPointY = 100;
+	public static int smallAngle = 180;
 
 	
 	public static ArrayList <Plane>middleCircle = new ArrayList<Plane>();
-	public static int middlePointX;
-	public static int middlePointY;
-	public static int middleAngle;
+	public static int middlePointX= 200;
+	public static int middlePointY= 200;
+	public static int middleAngle= 180;
 	
 	public static ArrayList <Plane>longCircle = new ArrayList<Plane>();
 	
-	public static int longPointX;
-	public static int longPointY;
-	public static int longAngle;
+	public static int longPointX= 300;
+	public static int longPointY= 300;
+	public static int longAngle= 180;
 	
-	public static int straightX;
-	public static int straightY;
+	public static int straightX=400;
+	public static int straightY=166;
 
 
 
@@ -191,7 +191,7 @@ public class Tower implements Runnable {
 			CloneNotSupportedException {
 		ServerSocket serverSocket = null;
 		// Begin to connect by the net work socket , using the port "LOCALHOST",
-		// 6900
+		// 6969
 		try {
 			serverSocket = new ServerSocket(6969);
 		} catch (IOException e) {
