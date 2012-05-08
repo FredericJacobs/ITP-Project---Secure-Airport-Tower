@@ -1,7 +1,5 @@
 package Plane;
 
-import java.io.BufferedReader;
-
 import messaging.ReadMessages;
 import messaging.messages.*;
 
@@ -9,15 +7,12 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Scanner;
 
 import encryption.KeyGenerator;
 import encryption.KeyPair;
-import generals.XYPosition;
 
 
 /**
@@ -35,11 +30,9 @@ public class TestPlane {
 	private static final int PLANE_UPDATE_INTERVAL = 100 ; 
 	private static boolean encryptionEnabledAtLaunch;
 	private static File encryptionKey = null;
-	private static Socket kkSocket = null;
-	private static PrintWriter out = null;
-	private static BufferedReader in = null;
-	private static DataOutputStream outData = null;
-	private static DataInputStream inData = null;
+	private static Socket socket = null;
+	public static DataOutputStream out = null;
+	public static DataInputStream in = null;
 	private static String towerHost = "LOCALHOST";
 	private static String towerPort = "6969";
 	private static Plane plane = new Plane ();
@@ -48,16 +41,13 @@ public class TestPlane {
 	public static void main(String[] args) throws IOException {
 		
 		init(args);
-		// Begin to connect by the net work socket , using the port "LOCALHOST",
-		// 6900
+		
 		try {
-			kkSocket = new Socket(towerHost, Integer.parseInt(towerPort));
-			out = new PrintWriter(kkSocket.getOutputStream(), true);
-			in = new BufferedReader(new InputStreamReader(
-					kkSocket.getInputStream()));
-
-			outData = new DataOutputStream(kkSocket.getOutputStream());
-			inData = new DataInputStream(kkSocket.getInputStream());
+			socket = new Socket(towerHost, Integer.parseInt(towerPort));
+			out = new DataOutputStream(
+					socket.getOutputStream());
+			in = new DataInputStream(
+					socket.getInputStream());
 		} catch (UnknownHostException e) {
 			System.err.println("Don't know about host: LOCALHOST.");
 			System.exit(1);
@@ -65,7 +55,8 @@ public class TestPlane {
 			System.err.println("Couldn't get I/O for the connection to: LOCALHOST.");
 			System.exit(1);
 		}
-		// begin to transfer messages
+		
+		
 		System.out.println("This is plane B1778000 please give instructions");
 		System.out.println("0=HELLO, 1=DATA, 2=MAYDAY, 3=SENDRSA, 4=CHOKE, 5=UNCHOKE, 6=BYE,7=ROUTING, 8=KEEPALIVE, 9=LANDINGREQUEST");
 		Scanner scanner = new Scanner(System.in);
@@ -76,35 +67,37 @@ public class TestPlane {
 			case 0:
 				HelloMessage hello = new HelloMessage(planeID.getBytes(), 20, 10, (byte) 0);
 				hello.print();
-				hello.write(outData);
+				hello.write(out);
 				System.out.println("----Messages from the tour-----");
-				ReadMessages.readMessage(inData).print();
+				ReadMessages.readMessage(in).print();
 				break;
 			case 1: 
 			case 2:
 			case 3: 
+				
 				// Encryption Support broken in this test. Use given planes
+				
 				SendRSAMessage sendRSA = new SendRSAMessage(planeID.getBytes(),8, 20, 10,decryptKeypair);
-				sendRSA.write(outData);
-				ReadMessages.readMessage(inData).print();
+				sendRSA.write(out);
+				ReadMessages.readMessage(in).print();
 				break;
 			case 6:
 				ByeMessage bye = new ByeMessage(planeID.getBytes(), 0, 20, 10);
-				bye.write(outData);
+				bye.write(out);
 				System.out.println("----Messages from the tour-----");
-				ReadMessages.readMessage(inData).print();
+				ReadMessages.readMessage(in).print();
 				System.out.println("Bye! Bon voyage!");
 				break;
 			case 8:
-				KeepAliveMessage KeepAlive = new KeepAliveMessage(planeID.getBytes(), 20, 10);
-				KeepAlive.write(outData);
+				KeepAliveMessage KeepAlive = new KeepAliveMessage(planeID.getBytes(), plane.getPosition().getPosx(), plane.getPosition().getPosy());
+				KeepAlive.write(out);
 				System.out.println("----Messages from the tour-----no return message");
 				break;
 			}
 		}
 		out.close();
 		in.close();
-		kkSocket.close();
+		socket.close();
 	}
 
 	private static void init(String[] args) {

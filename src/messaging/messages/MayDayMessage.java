@@ -15,8 +15,8 @@ public class MayDayMessage extends Message {
 	public String getCause() {
 		return cause;
 	}
-	/** Getter to see if the hello message requires Crypted communication or not
-	 * @return boolean: true for Crypted and false for not Crypted
+	/** Getter to see if the hello message requires encrypted communication or not
+	 * @return boolean: true for encrypted and false for not encrypted
 	**/
 	public void write(DataOutputStream out) throws IOException {
 		super.write(out);
