@@ -26,7 +26,8 @@ public class ReadMessages {
 	 * @throws IOException
 	 */
 	
-	public static Message readMessage(DataInputStream message){
+	public static Message readMessage(DataInputStream message)
+			throws IOException {
 
 		/**
 		 * to read the DataInputStream in the same order with the
@@ -34,7 +35,6 @@ public class ReadMessages {
 		 */
 		
 		byte planeID[] = new byte[8];
-		try {
 		message.read(planeID);
 		int length = message.readInt();
 		@SuppressWarnings("unused")
@@ -63,7 +63,7 @@ public class ReadMessages {
 			return new DataMessage(planeID, continuation, posX, posY, hash,
 					format, fileSize, payload);
 		case 2://MayDayMessage
-			String cause = message.readUTF();
+			String cause = message.readLine();
 			return new MayDayMessage(planeID, cause.length(), posX, posY, cause);
 		case 3://SendRSAMessage
 			
@@ -93,16 +93,14 @@ public class ReadMessages {
 					posY, routingMessageType.routingMessageTypeName(TypeR),
 					moveType.moveMessageTypeName(TypeM), payloadOfRouting);
 		case 8://KeepAliveMessage
+			System.out.println("Keep alive X = " + posX);
+			System.out.println("Keep alive Y = " + posY);
 			return new KeepAliveMessage(planeID, posX, posY);
 		case 9://LandingMessage
 			return new LandingMessage(planeID, 0, posX, posY);
 		default://ByeMessage
 			System.out.println("message not created");
-			return null;// If the messagetype doesnt match then we break the link by sending a Bye
-		}} catch (IOException e) {
-			e.printStackTrace();
-			return null;// If the messagetype doesnt match then we break the link by sending a Bye;
-
+			return new ByeMessage("Bye".getBytes(), 0, posX, posY);// If the messagetype doesnt match then we break the link by sending a Bye
 		}
 	}
 }

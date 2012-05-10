@@ -48,8 +48,7 @@ public class TowerThread extends Thread implements Observer {
 			Tower.planes[planenumber] = new Plane(); // Created a new plane by using the order
 			Tower.planes[planenumber].setSocket(this.socket);
 			while (true) {
-					mes = ReadMessages.readMessage(inData);
-
+				mes = ReadMessages.readMessage(inData);
 				// read the message send by the DataInputStream
 				Tower.addMessageToIncomingQueue(mes);// Add it into the incomingQueue				
 			
