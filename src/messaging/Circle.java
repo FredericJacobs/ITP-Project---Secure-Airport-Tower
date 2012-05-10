@@ -11,8 +11,6 @@ public class Circle {
 	public static void answerLandingRequest(Plane plane,
 			DataOutputStream outData) throws IOException {
 		if (Tower.landingRoute.size() == 0) {
-			System.out
-					.println("Tower tries to give a direct landing instruction");
 			Tower.landingRoute.add(plane);
 			RoutingMessage respondLanding = new RoutingMessage(
 					"Tour0000".getBytes(), Tower.landingPointX,
@@ -20,8 +18,6 @@ public class Circle {
 					moveType.LANDING, int2bytes(0));
 			respondLanding.write(outData);
 		} else if (Tower.smallCircle.size() < 3) {
-			System.out
-					.println("Tower tries to give a small circle to the seconde landing plane");
 			Tower.smallCircle.add(plane);
 			RoutingMessage respondLanding0 = new RoutingMessage(
 					"Tour0000".getBytes(), 400, 150,
