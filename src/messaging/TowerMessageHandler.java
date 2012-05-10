@@ -2,15 +2,11 @@ package messaging;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-
 import DataFile.DataFile;
-
-import messaging.messages.DataMessage;
-import messaging.messages.HelloMessage;
-import messaging.messages.KeepAliveMessage;
+import GUI.AirportGUI;
 import messaging.messages.*;
-
+import messaging.messages.RoutingMessage.moveType;
+import messaging.messages.RoutingMessage.routingMessageType;
 
 /**
  * This class help the Tour to handle different type of messages
@@ -19,9 +15,9 @@ import messaging.messages.*;
  * @author Frederic Jacobs
  */
 public class TowerMessageHandler {
-	
+
 	DataFile towerDataFile = null;
-	
+
 	public TowerMessageHandler() {
 	}
 
@@ -73,26 +69,24 @@ public class TowerMessageHandler {
 
 		case 1:
 			System.out.println("Gotcha Part");
-			if (towerDataFile == null){
-				towerDataFile = new DataFile ("testfile", (DataMessage) message);
+			if (towerDataFile == null) {
+				towerDataFile = new DataFile("testfile", (DataMessage) message);
 				return 0;
 			}
-	//		towerDataFile.writePacket((DataMessage) message);
-			
+			// towerDataFile.writePacket((DataMessage) message);
+
 			return 0;
-			
+
 		case 2:
-			Circle.landingUrgent(plane,outData);
+			AirportGUI.choker.chokeEnabled(true);
+			Circle.landingUrgent(plane, outData);
 			return 0;// Mayday
 		case 3:// SendRSA, unfinished for the keypair
 			Tower.planes[planenumber].setKeypair(message.getPublicKey());
 			return 2;
 			// case 4,5,7 shouldnt happen to the tour
 		case 6:
-			
-			if (Tower.landingRoute.size() != 0) {
-				Tower.landingRoute.remove(0);
-			}	
+			changeCircle();
 			System.out.println("Connection terminated");
 			return 0;
 		case 7:
@@ -105,11 +99,75 @@ public class TowerMessageHandler {
 			plane.setPosy(((KeepAliveMessage) message).keepaliveY());
 			return 0;
 		case 9:// Landing request
-			// Handle the landing message
+				// Handle the landing message
 			Circle.answerLandingRequest(plane, outData);
 			return 0;
 		default:
 			return 0;
+		}
+	}
+
+	public void changeCircle() {
+		Tower.landingRoute.remove(0);
+		if (Tower.smallCircle.size() != 0) {
+			Plane planeSmall = Tower.smallCircle.remove(0);
+			Tower.landingRoute.add(planeSmall);
+			try {
+				DataOutputStream outData = new DataOutputStream(planeSmall
+						.getSocket().getOutputStream());
+				RoutingMessage respondLanding = new RoutingMessage(
+						"Tour0000".getBytes(), Tower.landingPointX,
+						Tower.landingPointY, routingMessageType.REPLACEALL,
+						moveType.LANDING, Circle.int2bytes(0));
+				respondLanding.write(outData);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			if (Tower.middleCircle.size() != 0) {
+				Plane planeMiddle = Tower.middleCircle.remove(0);
+				Tower.smallCircle.add(planeMiddle);
+				try {
+					DataOutputStream outData = new DataOutputStream(planeMiddle
+							.getSocket().getOutputStream());
+					RoutingMessage respondLanding0 = new RoutingMessage(
+							"Tour0000".getBytes(), 400, 150,
+							routingMessageType.REPLACEALL, moveType.STRAIGHT,
+							Circle.int2bytes(0));
+					respondLanding0.write(outData);
+					RoutingMessage respondLanding1 = new RoutingMessage(
+							"Tour0000".getBytes(), Tower.smallPointX,
+							Tower.smallPointY, routingMessageType.LAST,
+							moveType.CIRCULAR, Circle.int2bytes(Tower.middleAngle));
+					respondLanding1.write(outData);
+					
+					
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				if (Tower.longCircle.size() != 0) {
+					Plane planeLong = Tower.longCircle.remove(0);
+					Tower.middleCircle.add(planeLong);
+
+					try {
+						DataOutputStream outData = new DataOutputStream(
+								planeLong.getSocket().getOutputStream());
+						RoutingMessage respondLanding0 = new RoutingMessage(
+								"Tour0000".getBytes(), 300, 650,
+								routingMessageType.REPLACEALL, moveType.STRAIGHT,
+								Circle.int2bytes(0));
+						respondLanding0.write(outData);
+						RoutingMessage respondLanding1 = new RoutingMessage(
+								"Tour0000".getBytes(), Tower.middlePointX,
+								Tower.middlePointY, routingMessageType.LAST,
+								moveType.CIRCULAR,
+								Circle.int2bytes(Tower.middleAngle));
+						respondLanding1.write(outData);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+
 		}
 	}
 

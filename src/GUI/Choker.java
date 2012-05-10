@@ -37,7 +37,7 @@ public class Choker extends JFrame implements MouseListener {
 	boolean status = false;
 	boolean choking = false;
 	Timer timer = new Timer();
-	public Choker() throws IOException {
+	public Choker() {
 		chokeButton = new ImageIcon("src" + File.separator + "GUI"
 				+ File.separator + "img" + File.separator + "Choke_Button.png");
 		unChokeButton = new ImageIcon("src" + File.separator + "GUI"
@@ -61,33 +61,46 @@ public class Choker extends JFrame implements MouseListener {
 		// Getting Choke Events from the tower
 	}
 
-	private void chokeEnabled(boolean status) throws IOException {
+	public void chokeEnabled(boolean status)  {
 		if (status) {
 			imageLabel.removeAll();
 			imageLabel.setIcon(unChokeButton);
 			for (int i = 0; i < Tower.planeCounter; i++) {
 				Socket socket = Tower.planes[i].getSocket();
-				DataOutputStream outData = new DataOutputStream(
-						socket.getOutputStream());
+				DataOutputStream outData;
+				try {
+					outData = new DataOutputStream(
+							socket.getOutputStream());
+				
 				ChokeMessage chock = new ChokeMessage("Tour0000".getBytes(), 0,
 						0, 0);
 				chock.write(outData);
 				Event eventR = new Event(chock, "Tower",
 						"Allplanes");
 				Tower.journal.addEvent(eventR);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
-			timer.schedule(new Counter(), 5000);
+			timer.schedule(new Counter(), 300000);
 		} else {
 			for (int i = 0; i < Tower.planeCounter; i++) {
 				Socket socket = Tower.planes[i].getSocket();
-				DataOutputStream outData = new DataOutputStream(
-						socket.getOutputStream());
+				DataOutputStream outData;
+				try {
+					outData = new DataOutputStream(
+							socket.getOutputStream());
+				
 				UnchokeMessage chock = new UnchokeMessage("Tour0000".getBytes(), 0,
 						0, 0);
 				chock.write(outData);
 				Event eventR = new Event(chock, "Tower",
 						"Allplanes");
-				Tower.journal.addEvent(eventR);
+				Tower.journal.addEvent(eventR);} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 			choking = false;
 			imageLabel.removeAll();
@@ -107,12 +120,7 @@ public class Choker extends JFrame implements MouseListener {
 		if(!choking){
 		status = !status;
 		choking = true;
-		try {
-			chokeEnabled(status);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}}else{
+		chokeEnabled(status);}else{
 			System.out.println("choking! block");
 		}
 	}

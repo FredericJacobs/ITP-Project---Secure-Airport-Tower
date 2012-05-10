@@ -19,46 +19,46 @@ public class Circle {
 					Tower.landingPointY, routingMessageType.REPLACEALL,
 					moveType.LANDING, int2bytes(0));
 			respondLanding.write(outData);
-			Event eventR = new Event(respondLanding, "Tower",
-					plane.getPlaneID());
-			Tower.journal.addEvent(eventR);
-
-		} else if (Tower.smallCircle.size() <= 3) {
+		} else if (Tower.smallCircle.size() < 3) {
 			System.out
 					.println("Tower tries to give a small circle to the seconde landing plane");
 			Tower.smallCircle.add(plane);
-			RoutingMessage respondLanding = new RoutingMessage(
+			RoutingMessage respondLanding0 = new RoutingMessage(
+					"Tour0000".getBytes(), 400, 150,
+					routingMessageType.REPLACEALL, moveType.STRAIGHT,
+					int2bytes(0));
+			respondLanding0.write(outData);
+			RoutingMessage respondLanding1 = new RoutingMessage(
 					"Tour0000".getBytes(), Tower.smallPointX,
-					Tower.smallPointY, routingMessageType.REPLACEALL,
+					Tower.smallPointY, routingMessageType.LAST,
 					moveType.CIRCULAR, int2bytes(Tower.smallAngle));
-			respondLanding.write(outData);
-			Event eventR = new Event(respondLanding, "Tower",
-					plane.getPlaneID());
-			Tower.journal.addEvent(eventR);
-		} else if (Tower.middleCircle.size() <= 10) {
+			respondLanding1.write(outData);
+
+		} else if (Tower.middleCircle.size() < 10) {
 			Tower.middleCircle.add(plane);
-			RoutingMessage respondLanding = new RoutingMessage(
+			RoutingMessage respondLanding0 = new RoutingMessage(
+					"Tour0000".getBytes(), 300, 650,
+					routingMessageType.REPLACEALL, moveType.STRAIGHT,
+					int2bytes(0));
+			respondLanding0.write(outData);
+			RoutingMessage respondLanding1 = new RoutingMessage(
 					"Tour0000".getBytes(), Tower.middlePointX,
-					Tower.middlePointY, routingMessageType.NEWFIRST,
+					Tower.middlePointY, routingMessageType.LAST,
 					moveType.CIRCULAR, int2bytes(Tower.middleAngle));
-			respondLanding.write(outData);
-		} else if (Tower.longCircle.size() <= 100) {
+			respondLanding1.write(outData);
+
+		} else if (Tower.longCircle.size() < 100) {
 			Tower.longCircle.add(plane);
 			RoutingMessage respondLanding1 = new RoutingMessage(
-					"Tour0000".getBytes(), Tower.longPointX, Tower.longPointY,
-					routingMessageType.NEWFIRST, moveType.CIRCULAR,
-					int2bytes(Tower.longAngle));
-			RoutingMessage respondLanding2 = new RoutingMessage(
-					"Tour0000".getBytes(), Tower.straightX, Tower.straightY,
-					routingMessageType.NEWFIRST, moveType.STRAIGHT,
+					"Tour0000".getBytes(), 800, 300,
+					routingMessageType.REPLACEALL, moveType.STRAIGHT,
 					int2bytes(0));
-			RoutingMessage respondLanding3 = new RoutingMessage(
-					"Tour0000".getBytes(), Tower.landingPointX,
-					Tower.landingPointY, routingMessageType.LAST,
-					moveType.LANDING, int2bytes(0));
+			RoutingMessage respondLanding2 = new RoutingMessage(
+					"Tour0000".getBytes(), Tower.longPointX, Tower.longPointY,
+					routingMessageType.LAST, moveType.CIRCULAR,
+					int2bytes(Tower.longAngle));
 			respondLanding1.write(outData);
 			respondLanding2.write(outData);
-			respondLanding3.write(outData);
 		} else {
 			RoutingMessage respondLanding = new RoutingMessage(
 					"Tour0000".getBytes(), Tower.landingPointX,
@@ -84,7 +84,7 @@ public class Circle {
 	}
 
 	// Transfer int to byte[]
-	private static byte[] int2bytes(int num) {
+	public static byte[] int2bytes(int num) {
 		byte[] b = new byte[4];
 		for (int i = 0; i < 4; i++) {
 			b[i] = (byte) (num >>> (24 - i * 8));
