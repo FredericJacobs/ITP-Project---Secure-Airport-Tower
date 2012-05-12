@@ -43,6 +43,13 @@ public class PlaneMessaging implements Runnable {
 			} catch (IOException e) {
 				e.printStackTrace();
 				}
+			KeepAliveMessage keepAlive = new KeepAliveMessage (TestPlane.getPlaneID(), Plane.getPosX(), Plane.getPosY());
+			try {
+				keepAlive.write(out);
+			} catch (IOException e) {
+				System.out.println("Connection with Tower got interrupted");
+				System.exit(-1);
+			}	
 		}
 	}
 }

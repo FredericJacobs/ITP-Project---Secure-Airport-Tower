@@ -40,9 +40,6 @@ public class PlaneMessageHandler {
 		
 		switch (type) {
 		
-		case 0:
-			
-			
 		case 1:
 			if (towerDataFile == null){
 				towerDataFile = new DataFile ("testfile", (DataMessage) message);

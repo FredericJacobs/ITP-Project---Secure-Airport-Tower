@@ -25,8 +25,8 @@ public class Plane {
 	private KeyPair keypair;
 	private Message messages[];
 	private int messageNo = 0;
-	private int posX;
-	private int posY;
+	private static int posX;
+	private static int posY;
 	private Socket socket = null;
 
 	public Plane() {
@@ -94,18 +94,18 @@ public class Plane {
 	 * @param keyPair The KeyPairthat should be saved
 	 */
 	public void setPosx(int posx) {
-		this.posX=posx;
+		Plane.posX=posx;
 	}
 
 	public void setPosy(int posy) {
-		this.posY = posy;
+		Plane.posY = posy;
 	}
 
-	public int getPosX() {
+	public static int getPosX() {
 		return posX;
 	}
 
-	public int getPosY() {
+	public static int getPosY() {
 		return posY;
 	}
 

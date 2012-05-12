@@ -101,11 +101,11 @@ public class TestPlane {
 			}
 			
 			if (args[i].equals("--initialX")){
-				plane.getPosition().setPosx(Integer.parseInt(args[++i]));
+				Plane.getPosition().setPosx(Integer.parseInt(args[++i]));
 			}
 		
 			if (args[i].equals("--initialY")){
-				plane.getPosition().setPosy(Integer.parseInt(args[++i]));
+				Plane.getPosition().setPosy(Integer.parseInt(args[++i]));
 			}
 			
 			if (args[i].equals("--planeType")){

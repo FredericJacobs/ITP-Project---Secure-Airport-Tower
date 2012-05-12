@@ -1,18 +1,20 @@
 package Plane;
 
+import java.io.IOException;
+
 import messaging.messages.MayDayMessage;
 import generals.XYPosition;
 import Plane.PlaneType;
 
 public class Plane implements Runnable {
 	private PlaneType type;
-	private XYPosition position;
+	static private XYPosition position;
 	private double fuelLevel;
 	private double fuelAlertLevel;
 	
 	Plane() {
 		this.type = PlaneType.A320;
-		this.position = new XYPosition();
+		Plane.position = new XYPosition();
 		this.fuelLevel = PlaneType.A320.getFuelCapacity();
 		this.fuelAlertLevel = PlaneType.A320.getFuelCapacity()*0.2;
 	}
@@ -31,7 +33,7 @@ public class Plane implements Runnable {
 		}
 	}
 
-	public XYPosition getPosition() {
+	static public XYPosition getPosition() {
 		return position;
 	}
 
@@ -41,6 +43,11 @@ public class Plane implements Runnable {
 			if (fuelLevel < fuelAlertLevel){
 				String alertMessage = "Running low on fuel. Need quick landing";
 				MayDayMessage mayDay = new MayDayMessage (TestPlane.getPlaneID(), alertMessage.length(), position.getPosx(), position.getPosy(),alertMessage);
+				try {
+					mayDay.write(TestPlane.getOut());
+				} catch (IOException e) {
+					System.exit(-1);
+				}
 			}
 		}
 		
