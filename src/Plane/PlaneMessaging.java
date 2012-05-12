@@ -2,57 +2,47 @@ package Plane;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.IOException;
+
+import encryption.RsaInputStream;
+import encryption.RsaOutputStream;
+import messaging.Plane;
 import messaging.ReadMessages;
+import messaging.Tower;
+import messaging.TowerMessageHandler;
 import messaging.messages.ByeMessage;
 import messaging.messages.HelloMessage;
 import messaging.messages.KeepAliveMessage;
+import messaging.messages.Message;
 import messaging.messages.SendRSAMessage;
 
 
 public class PlaneMessaging implements Runnable {
-
-	public void run(DataInputStream in, DataOutputStream out) {
-		while (true){
-			
-			
-
-		case 0:
-			HelloMessage hello = new HelloMessage(planeID.getBytes(), 20, 10, (byte) 0);
-			hello.print();
-			hello.write(out);
-			System.out.println("----Messages from the tour-----");
-			ReadMessages.readMessage(in).print();
-			break;
-		case 1: 
-		case 2:
-		case 3: 
-			
-			// Encryption Support broken in this test. Use given planes
-			SendRSAMessage sendRSA = new SendRSAMessage(planeID.getBytes(),8, 20, 10,decryptKeypair);
-			sendRSA.write(out);
-			ReadMessages.readMessage(in).print();
-			break;
-			
-		case 6:
-			ByeMessage bye = new ByeMessage(planeID.getBytes(), 0, 20, 10);
-			bye.write(out);
-			System.out.println("----Messages from the tour-----");
-			ReadMessages.readMessage(in).print();
-			System.out.println("Bye! Bon voyage!");
-			break;
-		case 8:
-			KeepAliveMessage KeepAlive = new KeepAliveMessage(planeID.getBytes(), plane.getPosition().getPosx(), plane.getPosition().getPosy());
-			KeepAlive.write(out);
-			System.out.println("----Messages from the tour-----no return message");
-			break;
-		
-	}
+	private PlaneMessageHandler messageHandler = new PlaneMessageHandler(); // create a TowerMessageHandler to respond the messages send by the planes
+	private Message mes = null;
+	private DataInputStream in;
+	private DataOutputStream out;
 	
-}
+	@Override		
+	public void run() {	
 
-	@Override
-	public void run() {
-		// TODO Auto-generated method stub
+		in = TestPlane.getIn();
+		out = TestPlane.getOut();
+		HelloMessage HelloMessage = new HelloMessage(TestPlane.getPlaneID(), 0, 0, TestPlane.isEncryptionEnabledAtLaunch() ? (byte) (1 << 4):(byte) 0);
+		try {
+			HelloMessage.write(out);
+		} catch (IOException e1) {
+			
+		}
 		
+		while (true){
+			try {
+				mes = ReadMessages.readMessage(in);
+				TestPlane.addMessageToIncomingQueue(mes);
+				messageHandler.respond(TestPlane.getNextMessageIncomingQueue(), out);
+			} catch (IOException e) {
+				e.printStackTrace();
+				}
+		}
 	}
 }

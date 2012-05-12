@@ -9,6 +9,8 @@ import java.io.File;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.Comparator;
+import java.util.PriorityQueue;
 import java.util.Scanner;
 
 import encryption.KeyGenerator;
@@ -36,9 +38,23 @@ public class TestPlane {
 	private static String towerHost = "LOCALHOST";
 	private static String towerPort = "6969";
 	private static Plane plane = new Plane ();
+	private static PriorityQueue<Message> inQueue;
 	
+	public static void addMessageToIncomingQueue(Message message) {
+		inQueue.offer(message);
+	}
+	
+	public static Message getNextMessageIncomingQueue() {
+		return inQueue.poll();
+	}
 	
 	public static void main(String[] args) throws IOException {
+		
+		inQueue = new PriorityQueue<Message>(6, new Comparator<Message>() {
+			public int compare(Message a, Message b) {
+				return a.compareTo(b);
+			}
+		});
 		
 		init(args);
 		
@@ -56,7 +72,7 @@ public class TestPlane {
 			System.exit(1);
 		}
 		PlaneMessaging messagingThread = new PlaneMessaging();
-		messagingThread.run(in, out);
+		messagingThread.run();
 	}
 
 	private static void init(String[] args) {
@@ -131,4 +147,22 @@ public class TestPlane {
 			
 		}
 	}
+	
+	public static boolean isEncryptionEnabledAtLaunch() {
+		return encryptionEnabledAtLaunch;
+	}
+	
+	public static byte[] getPlaneID () {
+		return planeID.getBytes();
+	}
+
+
+	public static DataOutputStream getOut() {
+		return out;
+	}
+
+	public static DataInputStream getIn() {
+		return in;
+	}
+	
 }

@@ -40,8 +40,7 @@ public class Plane implements Runnable {
 		while (true){
 			if (fuelLevel < fuelAlertLevel){
 				String alertMessage = "Running low on fuel. Need quick landing";
-				String planeID = "B1778000";
-				MayDayMessage mayDay = new MayDayMessage (planeID.getBytes(), alertMessage.length(), position.getPosx(), position.getPosy(),alertMessage);
+				MayDayMessage mayDay = new MayDayMessage (TestPlane.getPlaneID(), alertMessage.length(), position.getPosx(), position.getPosy(),alertMessage);
 			}
 		}
 		
