@@ -164,5 +164,10 @@ public class TestPlane {
 	public static DataInputStream getIn() {
 		return in;
 	}
+
+	public static int getPlaneUpdateInterval() {
+		return PLANE_UPDATE_INTERVAL;
+	}
+	
 	
 }

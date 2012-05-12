@@ -36,6 +36,10 @@ public class Plane implements Runnable {
 	static public XYPosition getPosition() {
 		return position;
 	}
+	
+	static public void setPosition(XYPosition newPosition){
+		Plane.position = newPosition;
+	}
 
 	@Override
 	public void run() {
