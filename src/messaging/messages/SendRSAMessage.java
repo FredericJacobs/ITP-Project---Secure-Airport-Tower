@@ -27,6 +27,7 @@ public class SendRSAMessage extends Message {
 		out.writeInt(publicKey.getKeySize());
 		out.writeInt(publicKey.getModulus().length);
 		out.write(publicKey.getModulus());
+		out.write(publicKey.getPublicKey().length);
 		out.write(publicKey.getPublicKey());
 	}
 }
