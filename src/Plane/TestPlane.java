@@ -28,7 +28,7 @@ public class TestPlane {
 	 * @param args
 	 */
 	private static KeyPair decryptKeypair= KeyGenerator.generateRSAKeyPair(256);
-	private static String planeID = "B1778000";
+	private static String planeID = "B1778000"; //Fixed for debugging purposes
 	private static final int PLANE_UPDATE_INTERVAL = 100 ; 
 	private static boolean encryptionEnabledAtLaunch;
 	private static File encryptionKey = null;
@@ -168,6 +168,5 @@ public class TestPlane {
 	public static int getPlaneUpdateInterval() {
 		return PLANE_UPDATE_INTERVAL;
 	}
-	
 	
 }

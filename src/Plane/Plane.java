@@ -7,20 +7,20 @@ import generals.XYPosition;
 import Plane.PlaneType;
 
 public class Plane implements Runnable {
-	private PlaneType type;
+	static private PlaneType type;
 	static private XYPosition position;
 	private double fuelLevel;
 	private double fuelAlertLevel;
 	
 	Plane() {
-		this.type = PlaneType.A320;
+		Plane.type = PlaneType.A320;
 		Plane.position = new XYPosition();
 		this.fuelLevel = PlaneType.A320.getFuelCapacity();
 		this.fuelAlertLevel = PlaneType.A320.getFuelCapacity()*0.2;
 	}
 		
 	public void changeTypeTo (PlaneType type){
-		this.type = type;
+		Plane.type = type;
 	}
 	
 	public boolean setFuelLevel (double fuelLevel){
@@ -39,6 +39,10 @@ public class Plane implements Runnable {
 	
 	static public void setPosition(XYPosition newPosition){
 		Plane.position = newPosition;
+	}
+	
+	static public double getPlaneSpeed (){
+		return type.getMachSpeed();
 	}
 
 	@Override

@@ -3,6 +3,8 @@ package Plane;
 import generals.XYPosition;
 
 public class PlaneNavigation implements Runnable {
+	
+	double planeSpeed = Plane.getPlaneSpeed();
 
 	@Override
 	public void run() {
