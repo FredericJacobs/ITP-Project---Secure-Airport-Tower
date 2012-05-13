@@ -40,3 +40,10 @@ Each MongoDB document contains the plane-type, current fuel level and position i
 BSON could have been used but we chose JSON for better handeling on the front-end side.
 
 There is no specific scheme. More to come
+
+### Demo Link 
+
+It's running on a [VPS](http://itp.fredericjacobs.com)
+
+Just run the tower and it should automatically connect ! 
+
