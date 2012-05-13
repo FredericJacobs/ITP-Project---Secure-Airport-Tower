@@ -56,28 +56,29 @@ public class Tower implements Runnable {
 	public static Plane planes[] = new Plane[200];
 	public static int planeCounter = 0;
 	public static Journal journal = new Journal();
-	
+
 	public final static int landingPointX = 533;
 	public final static int landingPointY = 437;
 	public static ArrayList <Plane>landingRoute = new ArrayList<Plane>();
 	public static ArrayList <Plane>smallCircle = new ArrayList<Plane>();
-	
-	public static int smallPointX = 100;
-	public static int smallPointY = 100;
-	public static int smallAngle = 180;
 
-	
+	public static int smallPointX = 350;
+	public static int smallPointY = 100;
+	public static int smallAngle = 3600;
+
+
 	public static ArrayList <Plane>middleCircle = new ArrayList<Plane>();
 	public static int middlePointX= 200;
-	public static int middlePointY= 200;
-	public static int middleAngle= 180;
-	
+	public static int middlePointY= 550;
+	public static int middleAngle= 3600;
+
+
 	public static ArrayList <Plane>longCircle = new ArrayList<Plane>();
-	
-	public static int longPointX= 300;
-	public static int longPointY= 300;
-	public static int longAngle= 180;
-	
+
+	public static int longPointX= 700;
+	public static int longPointY= 200;
+	public static int longAngle= 3600;
+
 	public static int straightX=400;
 	public static int straightY=166;
 
@@ -143,7 +144,7 @@ public class Tower implements Runnable {
 
 	public void run (){
 		decryptKeypair = KeyGenerator.generateRSAKeyPair(256);
-		
+
 		File outputFile = new File ("MyKey");
 		outputFile.delete() ;
 		FileOutputStream publicKeyFile;
@@ -167,7 +168,7 @@ public class Tower implements Runnable {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * The main method of the tour. It will create a inqueue, open a socket
 	 * sever connection and generates a decryptKeypair
@@ -176,7 +177,7 @@ public class Tower implements Runnable {
 	 * @throws IOException
 	 * @throws CloneNotSupportedException
 	 */
-	 
+
 	public static void main(String[] args) throws IOException, CloneNotSupportedException {
 		 (new Thread(new Tower())).start();	
 		}

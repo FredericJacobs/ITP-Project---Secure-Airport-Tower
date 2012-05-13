@@ -17,10 +17,10 @@ public class AirportGUI extends JFrame {
 	private static final long serialVersionUID = -6319538639673860639L;
 	private DownloadGUI downloadGUI;
 	private static JournalGUI journalGUI;
-	private static Choker choker;
-	
-	public AirportGUI() throws IOException {
-		
+	public static Choker choker;
+
+	public AirportGUI() {
+
 		// Create a window. The program will exit when the window is closed.
 		// See http://docs.oracle.com/javase/tutorial/uiswing/components/frame.html
 		super("Airport");
@@ -30,7 +30,7 @@ public class AirportGUI extends JFrame {
 		journalGUI = new JournalGUI();
 		downloadGUI = new DownloadGUI();
 		choker = new Choker();
-		
+
 		// Create an airport panel, add it to this window
 		setLayout(new BorderLayout());
 		AirportPanel airport = new AirportPanel();
@@ -43,14 +43,14 @@ public class AirportGUI extends JFrame {
 		downloadGUI.setVisible(true);
 		choker.setVisible(true);
 
-		// TODO: this is how the GUI interfaces with the tower, to get the
+		// this is how the GUI interfaces with the tower, to get the
 		// journal and the list of downloaded files. 
 		// Add here the observers to he appropriate classes
-		
+
 		// Run the tower
 		new Thread(Tower.getInstance()).start();
 	}
-	
+
 	/** This method starts a standalone GUI, for testing purposes. 
 	 * @throws IOException */
 	public static void main(String[] args) throws IOException {

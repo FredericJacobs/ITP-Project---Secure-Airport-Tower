@@ -7,7 +7,7 @@ public class ByeMessage extends Message {
 	
 	public ByeMessage (byte[] planeID, int length, int posx,
 			int posy) {
-		super (planeID, length, 4, posx, posy, MessageType.BYE );
+		super (planeID, length, 3, posx, posy, MessageType.BYE );
 	}
 	public void write(DataOutputStream out) throws IOException{
 		super.write(out);

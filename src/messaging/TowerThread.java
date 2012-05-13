@@ -27,7 +27,7 @@ public class TowerThread extends Thread implements Observer {
 	public TowerThread(Socket socket) {
 		super("TourMultiServerThread");
 		this.socket = socket;
-		 
+
 	}
 
 	/**
@@ -48,22 +48,23 @@ public class TowerThread extends Thread implements Observer {
 			Tower.planes[planenumber] = new Plane(); // Created a new plane by using the order
 			Tower.planes[planenumber].setSocket(this.socket);
 			while (true) {
-				mes = ReadMessages.readMessage(inData);
+					mes = ReadMessages.readMessage(inData);
+
 				// read the message send by the DataInputStream
 				Tower.addMessageToIncomingQueue(mes);// Add it into the incomingQueue				
-			
+
 				if (mes.getType() != 6) {            // Handle the message , if the messageType isnt Bye, then go to the next
-					
+
 					encryptionStatus = (messageHandler.respond(Tower.planes[planenumber], planenumber , Tower.getNextMessageIncomingQueue(), outData));
 					switch (encryptionStatus){	
 					case 0: break; 
 					case 1: inData = new DataInputStream( new RsaInputStream(socket.getInputStream(), Tower.getDecryptKeypair()));System.out.println("DECRYPTING"); break;
 					case 2: outData = new DataOutputStream(new RsaOutputStream(socket.getOutputStream(), Tower.planes[planenumber].getKeypair())); System.out.println("ENCRYPTING"); break;
 					}
-					
+
 				} else {
 					// Handle the bye message and stop reading from the plane
-					
+
 					messageHandler.respond(Tower.planes[planenumber],
 							planenumber, Tower.getNextMessageIncomingQueue(), outData);
 					System.out.println("Bye! Bon voyage");
@@ -87,7 +88,7 @@ public class TowerThread extends Thread implements Observer {
 
 	@Override
 	public void update(Observable o, Object arg) {
-		
+
 		System.out.println("Begin Chock mode");
 		ChokeMessage respondHelloMessage = new ChokeMessage(
 				"Tour0000".getBytes(), 0, 0, 0);
