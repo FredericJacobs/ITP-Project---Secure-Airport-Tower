@@ -22,8 +22,21 @@ The API is powering the web interface and hence we thought we could document it 
 
 ## How does it all work together ? 
 
-The Java Program that the tower is running sending all updates to a MongoDB database. This allows the airport to have a safe, off-site history. Why did we choose MongoDB ? We hate SQL so much. MongoDB offers drivers for a wide variety of language and is so JSON-friendly. 
+The Java Program that the tower is running sending all updates to a MongoDB database. This allows the airport to have a safe, off-site history. Why did we choose MongoDB ? We hate SQL so much. MongoDB offers drivers for a wide variety of language and is so JSON-friendly. Moreover, it has a distributed, fault-tolerant architecture
 We thought pushing updates to the database was also safer in terms of security and stability of the tower. The tower has no incomming traffic for the web interface at all. It's only sending to the MongoDB database.
 
 From there on, we simply use JavaScript to display it to the end-user.
 
+## Database Architecture
+
+MongoDB is a schemeless NoSQL and is a document-oriented database. We choose to have separate databases for the positions and the logging. I would have used an extra Redis-server for the position update to improve scalabilty/speed of the program. But since this is project will never be run "for real" and our time is very limited, I just sticked to MongoDB for everything.
+
+### Planes position
+
+Each MongoDB document contains the plane-type, current fuel level and position information.
+
+### Logging
+
+BSON could have been used but we chose JSON for better handeling on the front-end side.
+
+There is no specific scheme. More to come
