@@ -11,8 +11,6 @@ public class Circle {
 	public static void answerLandingRequest(Plane plane,
 			DataOutputStream outData) throws IOException {
 		if (Tower.landingRoute.size() == 0) {
-			System.out
-					.println("Tower tries to give a direct landing instruction");
 			Tower.landingRoute.add(plane);
 			RoutingMessage respondLanding = new RoutingMessage(
 					"Tour0000".getBytes(), Tower.landingPointX,
@@ -20,8 +18,6 @@ public class Circle {
 					moveType.LANDING, int2bytes(0));
 			respondLanding.write(outData);
 		} else if (Tower.smallCircle.size() < 3) {
-			System.out
-					.println("Tower tries to give a small circle to the seconde landing plane");
 			Tower.smallCircle.add(plane);
 			RoutingMessage respondLanding0 = new RoutingMessage(
 					"Tour0000".getBytes(), 400, 150,
@@ -70,17 +66,27 @@ public class Circle {
 
 	public static void landingUrgent(Plane plane, DataOutputStream outData)
 			throws IOException {
-		Tower.landingRoute.removeAll(null);
+		Plane lastlandingPlane = Tower.landingRoute.remove(0);
+		
 		Tower.landingRoute.add(plane);
 		RoutingMessage respondLanding = new RoutingMessage(
 				"Tour0000".getBytes(), Tower.landingPointX,
 				Tower.landingPointY, routingMessageType.REPLACEALL,
 				moveType.LANDING, int2bytes(0));
 		respondLanding.write(outData);
-		/*
-		 * for(int i = 0;i<Tower.planes.length;i++){
-		 * answerLandingRequest(Tower.planes[i],outData);
-		 */
+		
+		Tower.smallCircle.add(lastlandingPlane);
+		DataOutputStream outDataLastlandingPlane = new DataOutputStream(lastlandingPlane.getSocket().getOutputStream());
+		RoutingMessage respondLanding0 = new RoutingMessage(
+				"Tour0000".getBytes(), 400, 150,
+				routingMessageType.REPLACEALL, moveType.STRAIGHT,
+				int2bytes(0));
+		respondLanding0.write(outDataLastlandingPlane);
+		RoutingMessage respondLanding1 = new RoutingMessage(
+				"Tour0000".getBytes(), Tower.smallPointX,
+				Tower.smallPointY, routingMessageType.LAST,
+				moveType.CIRCULAR, int2bytes(Tower.smallAngle));
+		respondLanding1.write(outDataLastlandingPlane);
 	}
 
 	// Transfer int to byte[]

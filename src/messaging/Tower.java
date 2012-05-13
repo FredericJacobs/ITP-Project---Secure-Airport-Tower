@@ -51,7 +51,7 @@ public class Tower implements Runnable {
 	 */
 	private static Tower instance;
 
-	public static PriorityQueue<Message> inQueue;//
+	private  static PriorityQueue<Message> inQueue;//
 	private static KeyPair decryptKeypair;// the KeyPair for the tour
 	public static Plane planes[] = new Plane[200];
 	public static int planeCounter = 0;
@@ -95,12 +95,7 @@ public class Tower implements Runnable {
 		return instance;
 	}
 
-	public Tower() {
-		inQueue = new PriorityQueue<Message>(6, new Comparator<Message>() {
-			public int compare(Message a, Message b) {
-				return a.compareTo(b);
-			}
-		});
+	private Tower() {
 	}
 
 	/**
@@ -149,6 +144,7 @@ public class Tower implements Runnable {
 		outputFile.delete() ;
 		FileOutputStream publicKeyFile;
 		try {
+			//TowerMessageHandler messageHandler = new TowerMessageHandler();
 			publicKeyFile = new FileOutputStream("MyKey");
 			DataOutputStream publicKey = new DataOutputStream(publicKeyFile);
 			publicKey.writeInt(decryptKeypair.getKeySize());
@@ -158,12 +154,31 @@ public class Tower implements Runnable {
 			publicKey.write(decryptKeypair.getPublicKey());
 			creatPriorityQueue();
 			TourNetwork();
+			/*while(true){
+				if(inQueue.size()!=0){
+				Message mes = inQueue.remove();
+				if (mes.getType() != 6) {            // Handle the message , if the messageType isnt Bye, then go to the next
+
+					encryptionStatus = (messageHandler.respond(Tower.planes[planenumber], planenumber , Tower.getNextMessageIncomingQueue(), outData));
+					switch (encryptionStatus){	
+					case 0: break; 
+					case 1: inData = new DataInputStream( new RsaInputStream(socket.getInputStream(), Tower.getDecryptKeypair()));System.out.println("DECRYPTING"); break;
+					case 2: outData = new DataOutputStream(new RsaOutputStream(socket.getOutputStream(), Tower.planes[planenumber].getKeypair())); System.out.println("ENCRYPTING"); break;
+					}
+
+				} else {
+					// Handle the bye message and stop reading from the plane
+
+					messageHandler.respond(Tower.planes[planenumber],
+							planenumber, Tower.getNextMessageIncomingQueue(), outData);
+					System.out.println("Bye! Bon voyage");
+					break;
+				}
+			
+			}}*/
 		} catch (FileNotFoundException e) {
 			System.out.println("Key Not Found");
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (CloneNotSupportedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -188,8 +203,8 @@ public class Tower implements Runnable {
 	 * @throws IOException
 	 * @throws CloneNotSupportedException
 	 */
-	public static void TourNetwork() throws IOException,
-			CloneNotSupportedException {
+	public static void TourNetwork()
+	{
 		ServerSocket serverSocket = null;
 		// Begin to connect by the net work socket , using the port "LOCALHOST",
 		// 6969
@@ -200,7 +215,12 @@ public class Tower implements Runnable {
 			System.exit(1);
 		}
 		while (true) {
-			new TowerThread(serverSocket.accept()).start();// call the
+			try {
+				new TowerThread(serverSocket.accept()).start();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}// call the
 															// TourThread
 															// class
 		}

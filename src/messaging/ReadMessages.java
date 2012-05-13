@@ -63,6 +63,8 @@ public class ReadMessages {
 			return new DataMessage(planeID, continuation, posX, posY, hash,
 					format, fileSize, payload);
 		case 2://MayDayMessage
+			
+			System.out.println("Mayday message recieved!");
 			String cause = message.readUTF();
 			return new MayDayMessage(planeID, cause.length(), posX, posY, cause);
 		case 3://SendRSAMessage
@@ -87,11 +89,11 @@ public class ReadMessages {
 		case 7://RoutingMessage
 			int TypeR = message.readInt();
 			int TypeM = message.readInt();
-			byte[] payloadOfRouting = new byte[20];
+			byte[] payloadOfRouting = new byte[length];
 			message.read(payloadOfRouting);
 			return new RoutingMessage(planeID, posX,
-					posY, routingMessageType.routingMessageTypeName(TypeR),
-					moveType.moveMessageTypeName(TypeM), payloadOfRouting);
+					posY, routingMessageType.values()[TypeR],
+					moveType.values()[TypeM], payloadOfRouting);
 		case 8://KeepAliveMessage
 			return new KeepAliveMessage(planeID, posX, posY);
 		case 9://LandingMessage

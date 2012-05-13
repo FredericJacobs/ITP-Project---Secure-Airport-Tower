@@ -13,7 +13,7 @@ public class RoutingMessage extends Message {
 		 * 
 		 * @return routingMessageType
 		 **/
-		public static routingMessageType routingMessageTypeName(int i) {
+		/*public static routingMessageType routingMessageTypeName(int i) {
 			routingMessageType TypeR = null;
 			switch (i) {
 			case 0:
@@ -24,7 +24,7 @@ public class RoutingMessage extends Message {
 				TypeR = REPLACEALL;
 			}
 			return TypeR;
-		}
+		}*/
 	}
 
 	public enum moveType {
@@ -35,7 +35,7 @@ public class RoutingMessage extends Message {
 		 * 
 		 * @return moveType
 		 **/
-		public static moveType moveMessageTypeName(int i) {
+		/*public static moveType moveMessageTypeName(int i) {
 			moveType TypeM = null;
 			switch (i) {
 			case 0:
@@ -50,12 +50,12 @@ public class RoutingMessage extends Message {
 				TypeM = DESTRUCTION;
 			}
 			return TypeM;
-		}
+		}*/
 	}
 
-	routingMessageType TypeR;
-	moveType TypeM;
-	byte[] payload;
+	 private routingMessageType TypeR;
+	 private moveType TypeM;
+	 private byte[] payload;
 
 	public RoutingMessage(byte[] planeID, int posx, int posy,
 			routingMessageType typeR, moveType typeM, byte[] payload) {

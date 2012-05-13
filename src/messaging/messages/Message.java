@@ -33,6 +33,7 @@ public abstract class Message implements Comparable<Message>, Cloneable {
 	protected int posy;
 	protected MessageType type;
 	protected KeyPair aKeyPair;
+	public long timeCreated;
 
 	/**
 	 * Message is an abstract constructor. It defines what Message will have to
@@ -62,6 +63,7 @@ public abstract class Message implements Comparable<Message>, Cloneable {
 		this.posx = posx;
 		this.posy = posy;
 		this.type = type;
+		this.timeCreated = System.currentTimeMillis(); 
 	}
 
 	/** Getter of the Priority
@@ -78,11 +80,16 @@ public abstract class Message implements Comparable<Message>, Cloneable {
 	 **/
 	public int compareTo(Message msg) {
 		if (this.priority < msg.getPriority())
-			return 1;
-		else if (this.priority > msg.getPriority())
 			return -1;
+		else if (this.priority > msg.getPriority())
+			return 1;
+		// If the priority is the same then we compare the time the message is created
 		else {
-			return 0;
+			if(this.timeCreated < msg.getPriority()){
+				return -1;
+			}else {
+				return 1;
+			}
 		}
 	}
 
@@ -120,10 +127,6 @@ public abstract class Message implements Comparable<Message>, Cloneable {
 	public int getType() {
 		return type.ordinal();
 	}
-	
-	public KeyPair getPublicKey() {
-		return null;
-	}
 
 	/**
 	 * To send the message through DataOutputStream, in a given order
@@ -138,16 +141,6 @@ public abstract class Message implements Comparable<Message>, Cloneable {
 		out.writeInt(posy);
 		out.writeInt(type.ordinal());
 	}
-
-	/**
-	 * Clone method in case of deep copy of some message.
-	 * 
-	 * @return the cloned message
-	 **/
-	public Message clone() throws CloneNotSupportedException {
-		return (Message) super.clone();
-	}
-	
 	public static String messageTypeName(int i) {
 		String Type = null;
 		switch (i) {

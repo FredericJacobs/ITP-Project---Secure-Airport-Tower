@@ -8,7 +8,7 @@ public class MayDayMessage extends Message {
 
 	public MayDayMessage(byte[] planeID, int length, int posx, int posy,
 			String cause) {
-		super(planeID, length, 0, posx, posy, MessageType.MAYDAY);
+		super(planeID, cause.length(), 0, posx, posy, MessageType.MAYDAY);
 		this.cause = cause;
 	}
 
@@ -20,7 +20,6 @@ public class MayDayMessage extends Message {
 	**/
 	public void write(DataOutputStream out) throws IOException {
 		super.write(out);
-		out.writeInt(length);
 		out.write(cause.getBytes());
 	}
 
