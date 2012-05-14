@@ -21,7 +21,7 @@ import messaging.messages.RoutingMessage.routingMessageType;
 public class TowerMessageHandler {
 
 	DataFile towerDataFile = null;
-	int fileCount=0;
+	static int fileCount=0;
 	int continuation = 0;
 	DataMessage[] messages = new DataMessage[10];
 	int [] numberForHash = new int [10];

@@ -7,6 +7,8 @@ import java.util.ArrayList;
 
 import javax.swing.JFrame;
 
+import database.DBSync;
+
 import messaging.*;
 
 /**
@@ -51,6 +53,7 @@ public class AirportGUI extends JFrame {
 
 		// Run the tower
 		new Thread(Tower.getInstance()).start();
+		(new Thread(new DBSync())).start();
 	}
 
 	/** This method starts a standalone GUI, for testing purposes. 
