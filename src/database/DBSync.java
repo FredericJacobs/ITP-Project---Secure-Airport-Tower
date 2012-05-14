@@ -23,14 +23,15 @@ public class DBSync implements Runnable  {
 			mongoDB = new Mongo( "itp.fredericjacobs.com" , 27017 );
 			mongoDB.dropDatabase("towerDB");
 			
-			DB db = mongoDB.getDB( "mydb" );
+			DB db = mongoDB.getDB( "towerDB" );
+			
+			db.authenticate("fred", "fj326400".toCharArray());
 			
 			DBCollection positionsCollection = db.getCollection("positions");
 			DBCollection logCollection = db.getCollection("logs");
-			
-			for (int i=0; i < 100; i++) {
-			    positionsCollection.insert(new BasicDBObject().append("i", i));
-			}	
+
+			this.updatePositions();
+			this.updateLogs();
 			
 		} catch (UnknownHostException e) {
 			System.out.println("Unknown Host");
@@ -38,6 +39,16 @@ public class DBSync implements Runnable  {
 			System.out.println("MongoDB bug");
 		}
 		
+		
+	}
+
+	private void updateLogs() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void updatePositions() {
+		// TODO Auto-generated method stub
 		
 	}
 
