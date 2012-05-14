@@ -1,4 +1,4 @@
-package Plane;
+package plane;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;

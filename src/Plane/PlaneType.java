@@ -1,4 +1,4 @@
-package Plane;
+package plane;
 
 public enum PlaneType {
 	A320(0.78, 10000, 60, 179), 

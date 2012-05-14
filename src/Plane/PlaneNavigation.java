@@ -1,4 +1,4 @@
-package Plane;
+package plane;
 
 import generals.XYPosition;
 

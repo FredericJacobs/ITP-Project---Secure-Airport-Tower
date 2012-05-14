@@ -1,4 +1,4 @@
-package Plane;
+package plane;
 
 import messaging.ReadMessages;
 import messaging.messages.*;

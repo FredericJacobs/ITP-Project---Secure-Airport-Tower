@@ -1,4 +1,4 @@
-package Plane;
+package plane;
 
 import java.io.DataOutputStream;
 import java.io.IOException;

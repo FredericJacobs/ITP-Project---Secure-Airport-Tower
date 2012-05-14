@@ -1,10 +1,11 @@
-package Plane;
+package plane;
 
 import java.io.IOException;
 
+import plane.PlaneType;
+
 import messaging.messages.MayDayMessage;
 import generals.XYPosition;
-import Plane.PlaneType;
 
 public class Plane implements Runnable {
 	static private PlaneType type;
