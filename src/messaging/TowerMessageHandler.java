@@ -21,7 +21,7 @@ import messaging.messages.RoutingMessage.routingMessageType;
 public class TowerMessageHandler {
 
 	DataFile towerDataFile = null;
-	static int fileCount=0;
+	int fileCount=0;
 	int continuation = 0;
 	DataMessage[] messages = new DataMessage[10];
 	int [] numberForHash = new int [10];
@@ -62,6 +62,8 @@ public class TowerMessageHandler {
 				Event eventR = new Event(respondHelloMessage, "Tower",
 						message.getPlaneID());
 				Tower.journal.addEvent(eventR);
+				plane.setInitialTime(System.currentTimeMillis()); 
+				System.out.println("initial time: "+System.currentTimeMillis());
 				return 1;
 			}
 
@@ -73,12 +75,14 @@ public class TowerMessageHandler {
 				Event eventR = new Event(respondHelloMessage, "Tower",
 						message.getPlaneID());
 				Tower.journal.addEvent(eventR);
+				plane.setInitialTime(System.currentTimeMillis()); 
+				System.out.println("initial time: "+System.currentTimeMillis());
 				return 0;
 			}
 
 		case 1:
 		  
-			towerDataFile = new DataFile("downloads"+ File.separator +"ReceivedFile" + fileCount , (DataMessage) message);
+			towerDataFile = new DataFile("downloads"+ File.separator +plane.getPlaneID()+"-"+ fileCount , (DataMessage) message);
 			if (towerDataFile.isComplete()){
 				fileCount ++;
 				listOfDownloads.add(towerDataFile);
@@ -98,6 +102,8 @@ public class TowerMessageHandler {
 		case 6:
 			changeCircle();
 			System.out.println("Connection terminated");
+			plane.setlandingTimeTotal(System.currentTimeMillis()-plane.getInitialTime()); 
+			System.out.println("Arrive time: "+System.currentTimeMillis());
 			return 0;
 		case 7:
 			Tower.landingRoute.remove(0);

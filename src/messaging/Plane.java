@@ -19,7 +19,7 @@ import encryption.KeyPair;
  ** @author Hantao Zhao
  ** @author Frederic Jacobs
  **/
-public class Plane {
+public class Plane{
 
 	private String planeID = "";
 	private KeyPair keypair;
@@ -28,6 +28,26 @@ public class Plane {
 	private static int posX;
 	private static int posY;
 	private Socket socket = null;
+	private String planeType = null;
+	private long initialTime;
+	private long landingTimeTotal;
+	private double consommation; 
+	private int passager;
+	public String getPlaneType() {
+		return planeType;
+	}
+
+	public void setPlaneType(String planeType) {
+		this.planeType = planeType;
+	}
+
+	public long getlandingTimeTotal() {
+		return landingTimeTotal;
+	}
+
+	public void setlandingTimeTotal(long landingTimeTotal) {
+		this.landingTimeTotal = landingTimeTotal;
+	}
 
 	public Plane() {
 	}
@@ -112,5 +132,30 @@ public class Plane {
 	public boolean hasCrashed() {
 		return false;
 	}
+
+	public long getInitialTime() {
+		return initialTime;
+	}
+
+	public void setInitialTime(long initialTime) {
+		this.initialTime = initialTime;
+	}
+
+	public double getConsommation() {
+		return consommation;
+	}
+
+	public void setConsommation(double consommation) {
+		this.consommation = consommation;
+	}
+
+	public int getPassager() {
+		return passager;
+	}
+
+	public void setPassager(int passager) {
+		this.passager = passager;
+	}
+
 
 }

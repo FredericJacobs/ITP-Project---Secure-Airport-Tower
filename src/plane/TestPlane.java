@@ -113,23 +113,23 @@ public class TestPlane {
 				String planeTypeString = args [++i];
 				
 				if (planeTypeString.equalsIgnoreCase("A380")){
-					plane.changeTypeTo(PlaneType.A380);
+					plane.changeTypeTo(plane.A380);
 				}
 				
 				if (planeTypeString.equalsIgnoreCase("A320")){
-					plane.changeTypeTo(PlaneType.A320);
+					plane.changeTypeTo(plane.A320);
 				}
 				
 				if (planeTypeString.equalsIgnoreCase("B787")){
-					plane.changeTypeTo(PlaneType.B787);
+					plane.changeTypeTo(plane.B787);
 				}
 
 				if (planeTypeString.equalsIgnoreCase("CONCORDE")){
-					plane.changeTypeTo(PlaneType.CONCORDE);
+					plane.changeTypeTo(plane.CONCORDE);
 				}
 
 				if (planeTypeString.equalsIgnoreCase("GRIPEN")){
-					plane.changeTypeTo(PlaneType.GRIPEN);
+					plane.changeTypeTo(plane.GRIPEN);
 				}
 				else {
 					System.out.println("Given plane type doesn't exist. Initialized with default A320");
