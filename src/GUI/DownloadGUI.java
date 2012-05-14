@@ -160,7 +160,7 @@ public class DownloadGUI extends JFrame implements ActionListener /* , Observer 
 			rowFileName.add(lblName);
 			rowFileName.add(Box.createHorizontalGlue());
 
-			rowDownload.add(panIcon);
+			//rowDownload.add(panIcon);
 			rowDownload.add(Box.createHorizontalStrut(5));
 			rowDownload.add(rowFileName);
 			rowDownload.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));

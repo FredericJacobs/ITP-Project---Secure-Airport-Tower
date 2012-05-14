@@ -1,4 +1,4 @@
-package DataFile;
+package dataFile;
 
 import java.io.BufferedInputStream;
 import java.io.DataOutputStream;
@@ -94,6 +94,7 @@ public class DataFile extends File {
 	public boolean isComplete() {
 
 		if (Arrays.equals(this.computeHash(), this.hash)) {
+			
 			return true;
 		}
 		return false;
@@ -119,7 +120,7 @@ public class DataFile extends File {
 			System.err.println("SHA-1 is not installed");
 			hasher = null;
 		}
-		byte[] dataBytes = new byte[1024];
+		byte[] dataBytes = new byte[PACKETSIZE];
 
         int nread = 0; 
         try {
@@ -181,10 +182,10 @@ public class DataFile extends File {
 	**/
 	
 	public void writePacket(DataMessage block) {
-		
-		if (!Arrays.equals(hash, block.getHash()))
-			throw new IllegalArgumentException("Wrong fichier.");
 
+		if (!Arrays.equals(hash, block.getHash()))
+			throw new IllegalArgumentException("Wrong hash");
+		
 		if (!isValideSize(block))
 			throw new IllegalArgumentException("Bad size.");
 		
@@ -251,14 +252,13 @@ public class DataFile extends File {
 	 */
 	@Override
 	public String getName(){
-		if (numberOfPacketsReceived == 0){
-			return super.getName();
-		}
-		else {
+		if(!(super.getName().contains("."))) {
 			String fileFormatString = new String (fileFormat);
 			fileFormatString = fileFormatString.replaceAll("\\s","");
 			return (super.getName() + "." +fileFormatString);
 		}
+		else 
+			return super.getName();
 	}
 	
 	/**

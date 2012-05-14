@@ -1,8 +1,12 @@
 package messaging;
 
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.IOException;
-import DataFile.DataFile;
+import java.util.ArrayList;
+import java.util.logging.FileHandler;
+
+import dataFile.DataFile;
 import GUI.AirportGUI;
 import messaging.messages.*;
 import messaging.messages.RoutingMessage.moveType;
@@ -17,6 +21,11 @@ import messaging.messages.RoutingMessage.routingMessageType;
 public class TowerMessageHandler {
 
 	DataFile towerDataFile = null;
+	int fileCount=0;
+	int continuation = 0;
+	DataMessage[] messages = new DataMessage[10];
+	int [] numberForHash = new int [10];
+	ArrayList <File> listOfDownloads = new ArrayList<File> ();
 
 	public TowerMessageHandler() {
 	}
@@ -68,14 +77,15 @@ public class TowerMessageHandler {
 			}
 
 		case 1:
-			if (towerDataFile == null) {
-				towerDataFile = new DataFile("testfile", (DataMessage) message);
-				return 0;
+		  
+			towerDataFile = new DataFile("downloads"+ File.separator +"ReceivedFile" + fileCount , (DataMessage) message);
+			if (towerDataFile.isComplete()){
+				fileCount ++;
+				listOfDownloads.add(towerDataFile);
+				AirportGUI.updateDownloads(listOfDownloads);
 			}
-			// towerDataFile.writePacket((DataMessage) message);
-
-			return 0;
-
+		  return 0;
+		  
 		case 2:
 			System.out.println("Try to handle the mayday message");
 			AirportGUI.choker.chokeEnabled(true);

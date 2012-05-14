@@ -1,7 +1,9 @@
 package GUI;
 
 import java.awt.BorderLayout;
+import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.swing.JFrame;
 
@@ -15,7 +17,7 @@ import messaging.*;
 public class AirportGUI extends JFrame {
 
 	private static final long serialVersionUID = -6319538639673860639L;
-	private DownloadGUI downloadGUI;
+	private static DownloadGUI downloadGUI;
 	private static JournalGUI journalGUI;
 	public static Choker choker;
 
@@ -59,5 +61,9 @@ public class AirportGUI extends JFrame {
 
 	public static JournalGUI getJournalGUI() {
 		return journalGUI;
+	}
+	
+	public static void updateDownloads (ArrayList <File> downloadList){
+		downloadGUI.addFilesToDownloadBox(downloadList);
 	}
 }

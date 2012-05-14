@@ -137,12 +137,26 @@ public class Tower implements Runnable {
 		});
 	}
 
+	public static void deleteDir(File dir) {
+	    if (dir.isDirectory()) {
+	        String[] children = dir.list();
+	        for (int i=0; i<children.length; i++) {
+	        	(new File ("downloads"+ File.separator + children[i])).delete();
+	        }
+	    }
+
+	}
+	
 	public void run (){
 		decryptKeypair = KeyGenerator.generateRSAKeyPair(256);
 
 		File outputFile = new File ("MyKey");
 		outputFile.delete() ;
+		File downloads = new File("downloads");
+		deleteDir(downloads);
+		
 		FileOutputStream publicKeyFile;
+		
 		try {
 			//TowerMessageHandler messageHandler = new TowerMessageHandler();
 			publicKeyFile = new FileOutputStream("MyKey");
@@ -183,19 +197,6 @@ public class Tower implements Runnable {
 			e.printStackTrace();
 		}
 	}
-
-	/**
-	 * The main method of the tour. It will create a inqueue, open a socket
-	 * sever connection and generates a decryptKeypair
-	 * 
-	 * @param args
-	 * @throws IOException
-	 * @throws CloneNotSupportedException
-	 */
-
-	public static void main(String[] args) throws IOException, CloneNotSupportedException {
-		 (new Thread(new Tower())).start();	
-		}
 
 	/**
 	 * TourNetwork is a method to open a socket connection server
