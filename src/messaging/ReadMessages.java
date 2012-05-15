@@ -26,7 +26,7 @@ public class ReadMessages {
 	 * @throws IOException
 	 */
 
-	public static Message readMessage(DataInputStream message){
+	public static Message readMessage(DataInputStream message) throws IOException{
 
 		/**
 		 * to read the DataInputStream in the same order with the
@@ -34,7 +34,6 @@ public class ReadMessages {
 		 */
 
 		byte planeID[] = new byte[8];
-		try {
 		message.read(planeID);
 		int length = message.readInt();
 		@SuppressWarnings("unused")
@@ -101,10 +100,6 @@ public class ReadMessages {
 		default://ByeMessage
 			System.out.println("message not created");
 			return null;// If the messagetype doesnt match then we break the link by sending a Bye
-		}} catch (IOException e) {
-			e.printStackTrace();
-			return null;// If the messagetype doesnt match then we break the link by sending a Bye;
-
 		}
 	}
 }

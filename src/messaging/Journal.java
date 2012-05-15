@@ -13,7 +13,7 @@ public class Journal extends Observable {
 	public static ArrayList<Event> list = new ArrayList<Event>();
 	public ArrayList<PlanePosition> positions = new ArrayList<PlanePosition>();
 
-	public void addEvent(Event e) {
+	public synchronized void addEvent(Event e) {
 		list.add(e);
 		setChanged();
 		notifyObservers(list);

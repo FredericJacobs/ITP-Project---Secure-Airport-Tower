@@ -51,11 +51,12 @@ public class Tower implements Runnable {
 	 */
 	private static Tower instance;
 
-	private  static PriorityQueue<Message> inQueue;//
+	private static PriorityQueue<Message> inQueue;//
 	private static KeyPair decryptKeypair;// the KeyPair for the tour
-	public static Plane planes[] = new Plane[200];
+	public static ArrayList <Plane> planes = new ArrayList<Plane>();
 	public static int planeCounter = 0;
 	public static Journal journal = new Journal();
+	public static double consumption;
 
 	public final static int landingPointX = 533;
 	public final static int landingPointY = 437;
@@ -231,6 +232,14 @@ public class Tower implements Runnable {
 	public Plane[] getPlanes() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public double getConsumption() {
+		return consumption;
+	}
+
+	public void setConsumption(double consumption) {
+		this.consumption += consumption;
 	}
 
 }

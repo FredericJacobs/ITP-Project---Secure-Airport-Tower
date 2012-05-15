@@ -43,10 +43,10 @@ public class TowerThread extends Thread implements Observer {
 					socket.getInputStream());
 
 			TowerMessageHandler messageHandler = new TowerMessageHandler(); // create a TowerMessageHandler to respond the messages send by the planes
-			int planenumber = Tower.planeCounter;// To get a number of the planes which connect with the tour.
-			Tower.planeCounter++; //  The planeCounter ++,  for the next plane
-			Tower.planes[planenumber] = new Plane(); // Created a new plane by using the order
-			Tower.planes[planenumber].setSocket(this.socket);
+			int planenumber = Tower.planes.size();// To get a number of the planes which connect with the tour.
+			Plane plane = new Plane();
+			Tower.planes.add(plane); // Created a new plane by using the order
+			Tower.planes.get(planenumber).setSocket(this.socket);
 
 			while (true) {
 				mes = ReadMessages.readMessage(inData);
@@ -55,17 +55,17 @@ public class TowerThread extends Thread implements Observer {
 
 				if (mes.getType() != 6) {            // Handle the message , if the messageType isnt Bye, then go to the next
 
-					encryptionStatus = (messageHandler.respond(Tower.planes[planenumber], planenumber , Tower.getNextMessageIncomingQueue(), outData));
+					encryptionStatus = (messageHandler.respond(plane, planenumber , Tower.getNextMessageIncomingQueue(), outData));
 					switch (encryptionStatus){	
 					case 0: break; 
 					case 1: inData = new DataInputStream( new RsaInputStream(socket.getInputStream(), Tower.getDecryptKeypair()));System.out.println("DECRYPTING"); break;
-					case 2: outData = new DataOutputStream(new RsaOutputStream(socket.getOutputStream(), Tower.planes[planenumber].getKeypair())); System.out.println("ENCRYPTING"); break;
+					case 2: outData = new DataOutputStream(new RsaOutputStream(socket.getOutputStream(), Tower.planes.get(planenumber).getKeypair())); System.out.println("ENCRYPTING"); break;
 					}
 
 				} else {
 					// Handle the bye message and stop reading from the plane
 
-					messageHandler.respond(Tower.planes[planenumber],
+					messageHandler.respond(Tower.planes.get(planenumber),
 							planenumber, Tower.getNextMessageIncomingQueue(), outData);
 					System.out.println("Bye! Bon voyage");
 					break;

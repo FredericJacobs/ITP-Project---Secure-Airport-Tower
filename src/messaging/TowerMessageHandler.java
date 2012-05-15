@@ -2,9 +2,14 @@ package messaging;
 
 import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.FileHandler;
+
+import java.util.Scanner;
 
 import dataFile.DataFile;
 import GUI.AirportGUI;
@@ -21,11 +26,11 @@ import messaging.messages.RoutingMessage.routingMessageType;
 public class TowerMessageHandler {
 
 	DataFile towerDataFile = null;
-	int fileCount=0;
+	int fileCount = 0;
 	int continuation = 0;
 	DataMessage[] messages = new DataMessage[10];
-	int [] numberForHash = new int [10];
-	ArrayList <File> listOfDownloads = new ArrayList<File> ();
+	int[] numberForHash = new int[10];
+	ArrayList<File> listOfDownloads = new ArrayList<File>();
 
 	public TowerMessageHandler() {
 	}
@@ -62,8 +67,7 @@ public class TowerMessageHandler {
 				Event eventR = new Event(respondHelloMessage, "Tower",
 						message.getPlaneID());
 				Tower.journal.addEvent(eventR);
-				plane.setInitialTime(System.currentTimeMillis()); 
-				System.out.println("initial time: "+System.currentTimeMillis());
+				plane.setInitialTime(System.currentTimeMillis());
 				return 1;
 			}
 
@@ -75,35 +79,59 @@ public class TowerMessageHandler {
 				Event eventR = new Event(respondHelloMessage, "Tower",
 						message.getPlaneID());
 				Tower.journal.addEvent(eventR);
-				plane.setInitialTime(System.currentTimeMillis()); 
-				System.out.println("initial time: "+System.currentTimeMillis());
+				plane.setInitialTime(System.currentTimeMillis());
 				return 0;
 			}
 
 		case 1:
-		  
-			towerDataFile = new DataFile("downloads"+ File.separator +plane.getPlaneID()+"-"+ fileCount , (DataMessage) message);
-			if (towerDataFile.isComplete()){
-				fileCount ++;
+
+			towerDataFile = new DataFile("downloads" + File.separator
+					+ plane.getPlaneID() + "-" + fileCount,
+					(DataMessage) message);
+			if (towerDataFile.isComplete()) {
+				fileCount++;
 				listOfDownloads.add(towerDataFile);
 				AirportGUI.updateDownloads(listOfDownloads);
+				try {
+					Scanner scanner = new Scanner(new FileInputStream("F:\\Java\\NewProject\\ITP-Project---Secure-Airport-Tower\\downloads\\"+plane.getPlaneID()+"-0.txt"));
+					
+					String delimiters = "[=]"; 
+					String[ ] tokens = scanner.nextLine().split(delimiters);
+					plane.setPlaneID(tokens[1]);					
+				} catch (FileNotFoundException e) {
+					System.out.println("File was not found");
+				}
+				// plane.setPlaneType();
 			}
-		  return 0;
-		  
+
+			return 0;
+
 		case 2:
 			System.out.println("Try to handle the mayday message");
 			AirportGUI.choker.chokeEnabled(true);
 			Circle.landingUrgent(plane, outData);
 			return 0;// Mayday
 		case 3:// SendRSA, unfinished for the keypair
-		//	Tower.planes[planenumber].setKeypair(message.getPublicKey());
+			// Tower.planes[planenumber].setKeypair(message.getPublicKey());
 			return 2;
 			// case 4,5,7 shouldnt happen to the tour
 		case 6:
 			changeCircle();
 			System.out.println("Connection terminated");
-			plane.setlandingTimeTotal(System.currentTimeMillis()-plane.getInitialTime()); 
-			System.out.println("Arrive time: "+System.currentTimeMillis());
+			plane.setlandingTimeTotal(System.currentTimeMillis()
+					- plane.getInitialTime());
+			try {
+				Scanner scanner = new Scanner(new FileInputStream("F:\\Java\\NewProject\\ITP-Project---Secure-Airport-Tower\\downloads\\"+plane.getPlaneID()+"-1.txt"));
+				String delimiters = "[=]"; 
+				String[ ] tokens = scanner.nextLine().split(delimiters);
+				String delimiters2 = "[;]"; 
+				String[ ] tokens2 = tokens[1].split(delimiters2);
+				int consumptionPlane =  Integer.valueOf(tokens2[0]).intValue(); 
+				Tower.consumption += consumptionPlane;
+			} catch (FileNotFoundException e) {
+				System.out.println("File was not found");
+			}		
+			Tower.planes.remove(plane);
 			return 0;
 		case 7:
 			Tower.landingRoute.remove(0);
@@ -153,9 +181,9 @@ public class TowerMessageHandler {
 					RoutingMessage respondLanding1 = new RoutingMessage(
 							"Tour0000".getBytes(), Tower.smallPointX,
 							Tower.smallPointY, routingMessageType.LAST,
-							moveType.CIRCULAR, Circle.int2bytes(Tower.middleAngle));
+							moveType.CIRCULAR,
+							Circle.int2bytes(Tower.middleAngle));
 					respondLanding1.write(outData);
-
 
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -169,8 +197,8 @@ public class TowerMessageHandler {
 								planeLong.getSocket().getOutputStream());
 						RoutingMessage respondLanding0 = new RoutingMessage(
 								"Tour0000".getBytes(), 300, 650,
-								routingMessageType.REPLACEALL, moveType.STRAIGHT,
-								Circle.int2bytes(0));
+								routingMessageType.REPLACEALL,
+								moveType.STRAIGHT, Circle.int2bytes(0));
 						respondLanding0.write(outData);
 						RoutingMessage respondLanding1 = new RoutingMessage(
 								"Tour0000".getBytes(), Tower.middlePointX,
@@ -186,5 +214,4 @@ public class TowerMessageHandler {
 
 		}
 	}
-
 }
