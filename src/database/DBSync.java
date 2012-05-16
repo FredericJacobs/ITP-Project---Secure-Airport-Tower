@@ -38,11 +38,10 @@ public class DBSync implements Runnable  {
 			while (true){
 				DBObject position = new BasicDBObject();
 			
-				for (int i=0; i< (Tower.planes.size()+1); i++){
+				for (int i=0; i< (Tower.planes.size()); i++){
 				position.put("planeid", Tower.planes.get(i).getPlaneID());
 				position.put("positionX", Tower.planes.get(i).getPosX());
 				position.put("positionY", Tower.planes.get(i).getPosY());
-				
 				}
 			}
 			
