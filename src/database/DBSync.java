@@ -2,6 +2,8 @@ package database;
 
 import java.net.UnknownHostException;
 
+import messaging.Tower;
+
 import com.mongodb.Mongo;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
@@ -32,6 +34,17 @@ public class DBSync implements Runnable  {
 
 			this.updatePositions();
 			this.updateLogs();
+			
+			while (true){
+				DBObject position = new BasicDBObject();
+			
+				for (int i=0; i< (Tower.planes.size()+1); i++){
+				position.put("planeid", Tower.planes.get(i).getPlaneID());
+				position.put("positionX", Tower.planes.get(i).getPosX());
+				position.put("positionY", Tower.planes.get(i).getPosY());
+				
+				}
+			}
 			
 		} catch (UnknownHostException e) {
 			System.out.println("Unknown Host");
