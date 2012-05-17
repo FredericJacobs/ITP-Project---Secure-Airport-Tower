@@ -64,12 +64,11 @@ public class DBSync implements Runnable  {
 			}
 
 		} catch (UnknownHostException e) {
-			System.out.println("Unknown Host");
+			System.out.println("Probably issues connecting. You may have connection issue or the server may be down");
 		} catch (MongoException e) {
 			System.out.println("MongoDB bug");
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.exit(0);
 		}
 
 
@@ -83,9 +82,11 @@ public class DBSync implements Runnable  {
 	private void updatePositions() {
 
 		for (int i=0; i< (Tower.journal.positions.size()); i++){
+			//oldPosition is used to query the DB with the planeid to search for current records
 			oldPosition[i] = new BasicDBObject().append("planeid", Tower.journal.positions.get(i).getPlaneID()) ;
 			newPosition[i] = new BasicDBObject().append("planeid", Tower.journal.positions.get(i).getPlaneID()).append("positionX", Tower.journal.positions.get(i).getPosition().getPosx()).append("positionY", Tower.journal.positions.get(i).getPosition().getPosy());
 
+			//If this planeid is not yet in the database, we add it
 			if (positionsCollection.count(new BasicDBObject().append("planeid", Tower.journal.positions.get(i).getPlaneID()))<1){	
 				positionsCollection.insert(newPosition[i]);
 				cachedPosition[i] = new XYPosition();
@@ -94,11 +95,11 @@ public class DBSync implements Runnable  {
 			}
 
 			else{
+				//Let's only update the position if it is truly required.
 				if ((cachedPosition[i].getPosx() != Tower.journal.positions.get(i).getPosition().getPosx())  && (cachedPosition[i].getPosy() != Tower.journal.positions.get(i).getPosition().getPosy())){
 					positionsCollection.update(oldPosition[i], newPosition[i]);
 					cachedPosition[i].setPosx(Tower.journal.positions.get(i).getPosition().getPosx());
 					cachedPosition[i].setPosy(Tower.journal.positions.get(i).getPosition().getPosy());
-					System.out.println("Updated"+ " Tower X Pos : "+  Tower.journal.positions.get(i).getPosition().getPosx() + cachedPosition[i].getPosx() + Tower.journal.positions.get(i).getPosition().getPosy() + cachedPosition[i].getPosy());
 				}
 			}
 
