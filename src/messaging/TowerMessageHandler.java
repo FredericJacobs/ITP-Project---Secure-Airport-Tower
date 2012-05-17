@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Observable;
 import java.util.logging.FileHandler;
 
 import java.util.Scanner;
@@ -23,7 +24,7 @@ import messaging.messages.RoutingMessage.routingMessageType;
  * @author Hantao Zhao
  * @author Frederic Jacobs
  */
-public class TowerMessageHandler {
+public class TowerMessageHandler extends Observable {
 
 	DataFile towerDataFile = null;
 	int fileCount = 0;
@@ -33,6 +34,7 @@ public class TowerMessageHandler {
 	ArrayList<File> listOfDownloads = new ArrayList<File>();
 
 	public TowerMessageHandler() {
+		addObserver(AirportGUI.getModesGUI());
 	}
 
 	/**
@@ -48,7 +50,7 @@ public class TowerMessageHandler {
 	 *            The DataOutputStream where we send the feed back message
 	 * @throws IOException
 	 */
-	public int respond(Plane plane, int planenumber, Message message,
+	public int respond(Plane plane, Message message,
 			DataOutputStream outData) throws IOException {
 		int type = message.getType();
 		Event event = new Event(message, message.getPlaneID(), "Tower");
@@ -117,9 +119,13 @@ public class TowerMessageHandler {
 			// case 4,5,7 shouldnt happen to the tour
 		case 6:
 			changeCircle();
+	
 			System.out.println("Connection terminated");
 			plane.setlandingTimeTotal(System.currentTimeMillis()
 					- plane.getInitialTime());
+			Tower.passgerNumber += plane.getPassager();
+			setChanged();
+			notifyObservers(Tower.passgerNumber);
 			try {
 				Scanner scanner = new Scanner(new FileInputStream("F:\\Java\\NewProject\\ITP-Project---Secure-Airport-Tower\\downloads\\"+plane.getPlaneID()+"-1.txt"));
 				String delimiters = "[=]"; 

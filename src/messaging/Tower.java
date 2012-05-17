@@ -57,6 +57,8 @@ public class Tower implements Runnable {
 	public static int planeCounter = 0;
 	public static Journal journal = new Journal();
 	public static double consumption;
+	public static int passgerNumber;
+
 
 	public final static int landingPointX = 533;
 	public final static int landingPointY = 437;
@@ -239,7 +241,7 @@ public class Tower implements Runnable {
 	}
 
 	public void setConsumption(double consumption) {
-		this.consumption += consumption;
+		Tower.consumption += consumption;
 	}
 
 }

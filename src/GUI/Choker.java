@@ -65,7 +65,7 @@ public class Choker extends JFrame implements MouseListener {
 		if (status) {
 			imageLabel.removeAll();
 			imageLabel.setIcon(unChokeButton);
-			for (int i = 0; i < Tower.planeCounter; i++) {
+			for (int i = 0; i < Tower.planes.size(); i++) {
 				Socket socket = Tower.planes.get(i).getSocket();
 				DataOutputStream outData;
 				try {
