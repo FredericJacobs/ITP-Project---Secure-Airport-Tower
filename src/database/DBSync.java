@@ -1,5 +1,7 @@
 package database;
 
+import generals.XYPosition;
+
 import java.net.UnknownHostException;
 
 import messaging.Tower;
@@ -14,6 +16,12 @@ import com.mongodb.MongoException;
 
 public class DBSync implements Runnable  {
 
+	DBCollection positionsCollection;
+	DBCollection logCollection ;	
+	DBObject[] newPosition ;
+	DBObject[] oldPosition ;
+	XYPosition[] cachedPosition;
+	
 	@Override
 	public void run() {
 		
@@ -29,26 +37,27 @@ public class DBSync implements Runnable  {
 			
 			db.authenticate("fred", "fj326400".toCharArray());
 			
-			DBCollection positionsCollection = db.getCollection("positions");
-			DBCollection logCollection = db.getCollection("logs");
-
-			this.updatePositions();
-			this.updateLogs();
+			positionsCollection = db.getCollection("positions");
+			logCollection = db.getCollection("logs");			
+			newPosition = new BasicDBObject [100];
+			oldPosition = new BasicDBObject[100];
+			cachedPosition = new XYPosition[100];
 			
 			while (true){
-				DBObject position = new BasicDBObject();
-			
-				for (int i=0; i< (Tower.planes.size()); i++){
-				position.put("planeid", Tower.planes.get(i).getPlaneID());
-				position.put("positionX", Tower.planes.get(i).getPosX());
-				position.put("positionY", Tower.planes.get(i).getPosY());
-				}
+		
+				updatePositions();
+				// Updating Positions every second
+				Thread.sleep(1000);
+				
 			}
 			
 		} catch (UnknownHostException e) {
 			System.out.println("Unknown Host");
 		} catch (MongoException e) {
 			System.out.println("MongoDB bug");
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
 		
@@ -60,7 +69,28 @@ public class DBSync implements Runnable  {
 	}
 
 	private void updatePositions() {
-		// TODO Auto-generated method stub
+		
+		for (int i=0; i< (Tower.journal.positions.size()); i++){
+			oldPosition[i] = new BasicDBObject().append("planeid", Tower.journal.positions.get(i).getPlaneID()) ;
+			newPosition[i] = new BasicDBObject().append("planeid", Tower.journal.positions.get(i).getPlaneID()).append("positionX", Tower.journal.positions.get(i).getPosition().getPosx()).append("positionY", Tower.journal.positions.get(i).getPosition().getPosy());
+				
+				if (positionsCollection.count(new BasicDBObject().append("planeid", Tower.journal.positions.get(i).getPlaneID()))<1){	
+					positionsCollection.insert(newPosition[i]);
+					cachedPosition[i] = new XYPosition();
+					cachedPosition[i].setPosx(Tower.journal.positions.get(i).getPosition().getPosx());
+					cachedPosition[i].setPosy(Tower.journal.positions.get(i).getPosition().getPosy());
+				}
+			
+				else{
+					if ((cachedPosition[i].getPosx() != Tower.journal.positions.get(i).getPosition().getPosx())  && (cachedPosition[i].getPosy() != Tower.journal.positions.get(i).getPosition().getPosy())){
+						positionsCollection.update(oldPosition[i], newPosition[i]);
+						cachedPosition[i].setPosx(Tower.journal.positions.get(i).getPosition().getPosx());
+						cachedPosition[i].setPosy(Tower.journal.positions.get(i).getPosition().getPosy());
+						System.out.println("Updated"+ " Tower X Pos : "+  Tower.journal.positions.get(i).getPosition().getPosx() + cachedPosition[i].getPosx() + Tower.journal.positions.get(i).getPosition().getPosy() + cachedPosition[i].getPosy());
+					}
+				}
+			
+			}
 		
 	}
 
