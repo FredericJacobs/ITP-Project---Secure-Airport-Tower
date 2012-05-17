@@ -19,25 +19,25 @@ public final class KeyGenerator
 	 */
 	private static final SecureRandom random = new SecureRandom();
 	private static final BigInteger e = BigInteger.valueOf(65537);
-	
+
 	/** 
-	* This is the method used to generate a KeyPair of length N. 
-	* @param N The length of the keys in bits.
-	* @return A Keypair object containing both public and private keys of length N.
-	**/
-	
+	 * This is the method used to generate a KeyPair of length N. 
+	 * @param N The length of the keys in bits.
+	 * @return A Keypair object containing both public and private keys of length N.
+	 **/
+
 	public static KeyPair generateRSAKeyPair(int N)
 	{
 		//Let's see if the user's input matches our expectations and is a multiple of a byte (8 bits)
 		if (N % 8 != 0 || N <= 0){
 			throw new IllegalArgumentException("N is not a multiple of 8");
 		}
-		
+
 		BigInteger p, q, n, phi, d;
 
 		while (true)
 		{
-		
+
 			p = BigInteger.probablePrime(N / 2, random);
 			q = BigInteger.probablePrime(N / 2, random);
 			if (!p.equals(q))
@@ -49,7 +49,7 @@ public final class KeyGenerator
 				if (n.bitLength() == N)
 				{
 					phi = p.subtract(BigInteger.ONE).multiply(q.subtract(BigInteger.ONE));
-					
+
 					if (e.gcd(phi).equals(BigInteger.ONE))
 					{
 						try
@@ -60,16 +60,16 @@ public final class KeyGenerator
 						{
 							continue;
 						}
-					
+
 						KeyPair key = new KeyPair(n, e, d, N);
-					
+
 						BigInteger message = randomBigInteger(N);
 						BigInteger cryptedMessage = key.encrypt(message);
-						
+
 						BigInteger decryptedMessage = key.decrypt(cryptedMessage);
 						if (decryptedMessage.equals(message)){
 							return key;
-							
+
 						}
 					}
 				}
@@ -79,10 +79,10 @@ public final class KeyGenerator
 
 
 	/** 
-	* This method is required to generate a randomBigInteger for testing purposes
-	* @param N The size of the key in bits
-	* @return A random message within the capabilities of our RSA encryption method
-	**/
+	 * This method is required to generate a randomBigInteger for testing purposes
+	 * @param N The size of the key in bits
+	 * @return A random message within the capabilities of our RSA encryption method
+	 **/
 	private static BigInteger randomBigInteger(int N)
 	{	
 		byte[] buffer = new byte[N / 8];

@@ -25,7 +25,7 @@ public class RsaOutputStream extends OutputStream
 	private int bufferLength = 0;
 	private byte[] buffer;
 	private SecureRandom rand = null;
-	
+
 	/**
 	 * Create a new RSA output stream.
 	 * 
@@ -39,17 +39,17 @@ public class RsaOutputStream extends OutputStream
 		// Checking if the arguments are valid
 		if (key == null)
 			throw new IllegalArgumentException(
-			        "Key must contains at least one byte!");
+					"Key must contains at least one byte!");
 		if (key.getPublicKey() == null)
 			throw new IllegalArgumentException(
-			        "E value of key must be specified!");
+					"E value of key must be specified!");
 		if (output == null)
 			throw new IllegalArgumentException(
-			        "An input stream must be specified!");
+					"An input stream must be specified!");
 		// Since these arguments are valid, we are setting the key and input.
 		this.key = key;
 		this.output = output;
-		
+
 		rand = new SecureRandom();
 
 		blockSize = (key.getKeySize() / 8) + 1;
@@ -108,7 +108,7 @@ public class RsaOutputStream extends OutputStream
 		flush(); 
 		output.close();
 	}
-	
+
 	@Override
 	public void write(int b) throws IOException {
 		buffer[bufferLength++] = (byte) (b & 0xff);
@@ -116,5 +116,5 @@ public class RsaOutputStream extends OutputStream
 		if(bufferLength >= bufferSize)
 			flush();
 	}
-	
+
 }

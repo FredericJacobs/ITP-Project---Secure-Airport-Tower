@@ -11,8 +11,14 @@ import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
-import com.mongodb.DBCursor;
 import com.mongodb.MongoException;
+
+/** Description of DBSync 
+ * DB Sync is a separate thread that is taking care for updating the MongoDB database.
+ * @author Frederic Jacobs
+ * @author Hantao Zhao 
+ * @version 1.0
+ */
 
 public class DBSync implements Runnable  {
 
@@ -21,36 +27,42 @@ public class DBSync implements Runnable  {
 	DBObject[] newPosition ;
 	DBObject[] oldPosition ;
 	XYPosition[] cachedPosition;
-	
+
 	@Override
 	public void run() {
-		
-		//Initialize Database, clearing old records for the positions and logs
-		
+
+		/** MongoDB is a No-SQL document-oriented database.
+		 * We start by connecting to it directly (potentially unsafe). And drop all previous information from older executions we don't need.
+		 * The goal here is to store a single execution of the tower. 
+		 */
 		Mongo mongoDB;
 		try {
-			
+
 			mongoDB = new Mongo( "itp.fredericjacobs.com" , 27017 );
 			mongoDB.dropDatabase("towerDB");
-			
+
 			DB db = mongoDB.getDB( "towerDB" );
-			
+
 			db.authenticate("fred", "fj326400".toCharArray());
+
+			//Collections are the equivalent of what tables are in relational databases.
 			
 			positionsCollection = db.getCollection("positions");
 			logCollection = db.getCollection("logs");			
 			newPosition = new BasicDBObject [100];
 			oldPosition = new BasicDBObject[100];
 			cachedPosition = new XYPosition[100];
-			
+
 			while (true){
-		
+
 				updatePositions();
-				// Updating Positions every second
-				Thread.sleep(1000);
-				
-			}
 			
+				// Updating Positions every second
+				
+				Thread.sleep(1000);
+
+			}
+
 		} catch (UnknownHostException e) {
 			System.out.println("Unknown Host");
 		} catch (MongoException e) {
@@ -59,39 +71,39 @@ public class DBSync implements Runnable  {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
+
+
 	}
 
 	private void updateLogs() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	private void updatePositions() {
-		
+
 		for (int i=0; i< (Tower.journal.positions.size()); i++){
 			oldPosition[i] = new BasicDBObject().append("planeid", Tower.journal.positions.get(i).getPlaneID()) ;
 			newPosition[i] = new BasicDBObject().append("planeid", Tower.journal.positions.get(i).getPlaneID()).append("positionX", Tower.journal.positions.get(i).getPosition().getPosx()).append("positionY", Tower.journal.positions.get(i).getPosition().getPosy());
-				
-				if (positionsCollection.count(new BasicDBObject().append("planeid", Tower.journal.positions.get(i).getPlaneID()))<1){	
-					positionsCollection.insert(newPosition[i]);
-					cachedPosition[i] = new XYPosition();
+
+			if (positionsCollection.count(new BasicDBObject().append("planeid", Tower.journal.positions.get(i).getPlaneID()))<1){	
+				positionsCollection.insert(newPosition[i]);
+				cachedPosition[i] = new XYPosition();
+				cachedPosition[i].setPosx(Tower.journal.positions.get(i).getPosition().getPosx());
+				cachedPosition[i].setPosy(Tower.journal.positions.get(i).getPosition().getPosy());
+			}
+
+			else{
+				if ((cachedPosition[i].getPosx() != Tower.journal.positions.get(i).getPosition().getPosx())  && (cachedPosition[i].getPosy() != Tower.journal.positions.get(i).getPosition().getPosy())){
+					positionsCollection.update(oldPosition[i], newPosition[i]);
 					cachedPosition[i].setPosx(Tower.journal.positions.get(i).getPosition().getPosx());
 					cachedPosition[i].setPosy(Tower.journal.positions.get(i).getPosition().getPosy());
+					System.out.println("Updated"+ " Tower X Pos : "+  Tower.journal.positions.get(i).getPosition().getPosx() + cachedPosition[i].getPosx() + Tower.journal.positions.get(i).getPosition().getPosy() + cachedPosition[i].getPosy());
 				}
-			
-				else{
-					if ((cachedPosition[i].getPosx() != Tower.journal.positions.get(i).getPosition().getPosx())  && (cachedPosition[i].getPosy() != Tower.journal.positions.get(i).getPosition().getPosy())){
-						positionsCollection.update(oldPosition[i], newPosition[i]);
-						cachedPosition[i].setPosx(Tower.journal.positions.get(i).getPosition().getPosx());
-						cachedPosition[i].setPosy(Tower.journal.positions.get(i).getPosition().getPosy());
-						System.out.println("Updated"+ " Tower X Pos : "+  Tower.journal.positions.get(i).getPosition().getPosx() + cachedPosition[i].getPosx() + Tower.journal.positions.get(i).getPosition().getPosy() + cachedPosition[i].getPosy());
-					}
-				}
-			
 			}
-		
+
+		}
+
 	}
 
 }

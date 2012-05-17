@@ -35,17 +35,17 @@ public class RsaInputStream extends InputStream
 		// Checking if the arguments are valid
 		if (key == null)
 			throw new IllegalArgumentException(
-			        "Key must contains at least one byte!");
+					"Key must contains at least one byte!");
 		if (key.getPrivateKey() == null)
 			throw new IllegalArgumentException(
-			        "D value of key must be specified!");
+					"D value of key must be specified!");
 		if (input == null)
 			throw new IllegalArgumentException(
-			        "An input stream must be specified!");
+					"An input stream must be specified!");
 		// Since these arguments are valid, we are setting the key and input.
 		this.key = key;
 		this.input = input;
-		
+
 		blockSize = (key.getKeySize() / 8) + 1;
 		bufferSize = blockSize - 4;
 
@@ -55,14 +55,14 @@ public class RsaInputStream extends InputStream
 	public int available() throws IOException {
 		return bufferLength - bufferPosition;
 	}
-	
+
 	protected void load() throws IOException {
 		byte[] block = new byte[blockSize];
 
 		for(int i = 0; i < blockSize; i++) {
 			block[i] = (byte) (input.read());
 		}
-		
+
 
 
 		block = key.decrypt(new BigInteger(block)).toByteArray();
