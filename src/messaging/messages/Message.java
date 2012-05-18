@@ -3,6 +3,8 @@ package messaging.messages;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+import messaging.Visitor;
+
 import encryption.KeyPair;
 import generals.XYPosition;
 
@@ -127,7 +129,6 @@ public abstract class Message implements Comparable<Message>, Cloneable {
 	public int getType() {
 		return type.ordinal();
 	}
-
 	/**
 	 * To send the message through DataOutputStream, in a given order
 	 * 

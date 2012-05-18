@@ -58,6 +58,7 @@ public class Tower implements Runnable {
 	public static Journal journal = new Journal();
 	public static double consumption;
 	public static int passgerNumber;
+	public static int landingTimeTotal;
 
 
 	public final static int landingPointX = 533;

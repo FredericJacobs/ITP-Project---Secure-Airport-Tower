@@ -117,6 +117,7 @@ public class Plane {
 	 */
 	public void setPlaneID(String planeID) {
 		this.planeID = planeID;
+		setPlaneType(planeID);
 	}
 
 	public String getPlaneID() {

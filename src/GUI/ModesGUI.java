@@ -16,26 +16,31 @@ public class ModesGUI extends JFrame implements ActionListener, Observer {
 	static String FUEL = "FUEL";
 	static String TIME = "TIME";
 	public Modes modes;
-	JTextField textF = new JTextField("0");
+	JTextField textP = new JTextField("0");
+	JTextField textC = new JTextField("0");
+	JTextField textT = new JTextField("0");
+
 	JLabel passageLabel = new JLabel("The total number of passagers");
 	JLabel fuelLabel = new JLabel("The total number of fuel consumption");
 	JLabel timeLabel = new JLabel("The waiting time of per passager");
 
 	public ModesGUI() {
 		JLabel board = new JLabel();
-		board.setLayout(new BorderLayout());
+		board.setLayout(new GridLayout(3,2));
 		board.add(passageLabel);
+		textP.setSize(0, 80);
+		board.add(textP);
 		board.add(fuelLabel);
-		board.add(timeLabel);
+		board.add(textC);
 
-		this.setName("Modes");
+		board.add(timeLabel);
+		board.add(textT);
+
+		this.setTitle("Modes");
 		this.setLayout(new BorderLayout());
 		JPanel mainPanel = (JPanel) this.getContentPane();
-		mainPanel.setLayout(new BorderLayout());
-		textF.setSize(0, 20);
-		mainPanel.add(passageLabel, BorderLayout.WEST);
-		mainPanel.add(textF, BorderLayout.EAST);
-
+		mainPanel.setLayout(new GridLayout (2,1));
+		mainPanel.add(board);
 		// Create the buttons.
 		JRadioButton chronosButton = new JRadioButton(CHRONOS);
 		chronosButton.setSelected(true);
@@ -58,9 +63,9 @@ public class ModesGUI extends JFrame implements ActionListener, Observer {
 		radioPanel.add(fuelButton);
 		radioPanel.add(timeButton);
 
-		mainPanel.add(radioPanel, BorderLayout.SOUTH);
+		mainPanel.add(radioPanel);
 		mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-		// basePanel.setVisible(true);
+		this.setPreferredSize(new Dimension(500,300) );
 		this.pack();
 		this.setVisible(true);
 
@@ -79,7 +84,9 @@ public class ModesGUI extends JFrame implements ActionListener, Observer {
 
 	@Override
 	public void update(Observable arg0, Object arg1) {
-		 textF.setText(Tower.passgerNumber+" ");
+		 textP.setText(Tower.passgerNumber+" ");
+		 textC.setText(Tower.consumption+" ");
+		 textT.setText((double)Tower.landingTimeTotal/Tower.passgerNumber+" ");
 		// TODO Auto-generated method stub
 	}
 }

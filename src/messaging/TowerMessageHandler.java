@@ -119,13 +119,12 @@ public class TowerMessageHandler extends Observable {
 			// case 4,5,7 shouldnt happen to the tour
 		case 6:
 			changeCircle();
-	
 			System.out.println("Connection terminated");
 			plane.setlandingTimeTotal(System.currentTimeMillis()
 					- plane.getInitialTime());
 			Tower.passgerNumber += plane.getPassager();
-			setChanged();
-			notifyObservers(Tower.passgerNumber);
+			Tower.landingTimeTotal += plane.getlandingTimeTotal();
+
 			try {
 				Scanner scanner = new Scanner(new FileInputStream("F:\\Java\\NewProject\\ITP-Project---Secure-Airport-Tower\\downloads\\"+plane.getPlaneID()+"-1.txt"));
 				String delimiters = "[=]"; 
@@ -133,11 +132,15 @@ public class TowerMessageHandler extends Observable {
 				String delimiters2 = "[;]"; 
 				String[ ] tokens2 = tokens[1].split(delimiters2);
 				int consumptionPlane =  Integer.valueOf(tokens2[0]).intValue(); 
+				System.out.println("consumptionPlane" + consumptionPlane);
 				Tower.consumption += consumptionPlane;
 			} catch (FileNotFoundException e) {
 				System.out.println("File was not found");
 			}		
 			Tower.planes.remove(plane);
+			System.out.println("Passage =" + Tower.passgerNumber  + "Time = " + plane.getlandingTimeTotal());
+			setChanged();
+			notifyObservers();
 			return 0;
 		case 7:
 			Tower.landingRoute.remove(0);

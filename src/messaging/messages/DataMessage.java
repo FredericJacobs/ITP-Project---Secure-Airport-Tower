@@ -3,7 +3,9 @@ package messaging.messages;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class DataMessage extends Message {
+import messaging.Visitor;
+
+public class DataMessage extends Message implements VisitorMessage{
 	public static final int MAX_PACKET_SIZE = 1024; 
 	byte[] hash; // 20 octets (20 bytes) 
 	int continuation;
@@ -46,5 +48,9 @@ public class DataMessage extends Message {
 		out.write(format);
 		out.writeInt(fileSize);
 		out.write(payload);
+	}
+	@Override
+	public void accept(Visitor visitor) {
+		 visitor.visit(this);				
 	}
 }

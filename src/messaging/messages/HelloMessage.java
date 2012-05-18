@@ -3,7 +3,9 @@ package messaging.messages;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class HelloMessage extends Message {
+import messaging.Visitor;
+
+public class HelloMessage extends Message implements VisitorMessage{
 	private byte reserved;
 	public HelloMessage (byte[] planeID, int posx,
 			int posy, byte reserved) {
@@ -26,5 +28,9 @@ public class HelloMessage extends Message {
 	public void write(DataOutputStream out) throws IOException{
 		super.write(out);
 		out.write(reserved);
+	}
+	@Override
+	public void accept(Visitor visitor) {
+		 visitor.visit(this);						
 	}
 }
