@@ -3,7 +3,10 @@ package messaging.messages;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class MayDayMessage extends Message {
+import messaging.Plane;
+import messaging.Visitor;
+
+public class MayDayMessage extends Message implements VisitorMessage{
 	private String cause;
 
 	public MayDayMessage(byte[] planeID, int length, int posx, int posy,
@@ -21,6 +24,11 @@ public class MayDayMessage extends Message {
 	public void write(DataOutputStream out) throws IOException {
 		super.write(out);
 		out.write(cause.getBytes());
+	}
+
+	@Override
+	public int accept(Visitor visitor,Plane plane,DataOutputStream outData){
+		 return visitor.visit(plane,this,outData);						
 	}
 
 }

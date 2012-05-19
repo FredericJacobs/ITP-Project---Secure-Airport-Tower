@@ -3,54 +3,17 @@ package messaging.messages;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class RoutingMessage extends Message {
+import messaging.Plane;
+import messaging.Visitor;
+
+public class RoutingMessage extends Message  implements VisitorMessage{
 	public enum routingMessageType {
 		NEWFIRST, LAST, REPLACEALL;
-
-		/**
-		 * The method to return the routingMessage name by getting the integer
-		 * ordinal()
-		 * 
-		 * @return routingMessageType
-		 **/
-		/*public static routingMessageType routingMessageTypeName(int i) {
-			routingMessageType TypeR = null;
-			switch (i) {
-			case 0:
-				TypeR = NEWFIRST;
-			case 1:
-				TypeR = LAST;
-			case 2:
-				TypeR = REPLACEALL;
-			}
-			return TypeR;
-		}*/
 	}
 
 	public enum moveType {
 		STRAIGHT, CIRCULAR, LANDING, NONE, DESTRUCTION;
-		/**
-		 * The method to return the moveType name by getting the integer
-		 * ordinal()
-		 * 
-		 * @return moveType
-		 **/
-		/*public static moveType moveMessageTypeName(int i) {
-			moveType TypeM = null;
-			switch (i) {
-			case 0:
-				TypeM = STRAIGHT;
-			case 1:
-				TypeM = CIRCULAR;
-			case 2:
-				TypeM = LANDING;
-			case 3:
-				TypeM = NONE;
-			case 4:
-				TypeM = DESTRUCTION;
-			}
-			return TypeM;
-		}*/
+
 	}
 
 	 private routingMessageType TypeR;
@@ -73,6 +36,11 @@ public class RoutingMessage extends Message {
 		out.writeInt(TypeR.ordinal());
 		out.writeInt(TypeM.ordinal());
 		out.write(payload);
+	}
+
+	@Override
+	public int accept(Visitor visitor,Plane plane,DataOutputStream outData){
+		 return visitor.visit(plane,this,outData);						
 	}
 	
 	

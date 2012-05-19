@@ -3,6 +3,7 @@ package messaging.messages;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+import messaging.Plane;
 import messaging.Visitor;
 
 import encryption.KeyPair;
@@ -15,8 +16,6 @@ enum MessageType {
 	// MessageType.DATA.ordinal(); To obtain the order number of MessageType
 }
 
-
-
 /**
  * Message is the file which contains the main class Message. By using the
  * abstract class Message we build all the type of Message we'll send between
@@ -27,7 +26,8 @@ enum MessageType {
  * @author Frederic Jacobs
  * @version 1.0
  */
-public abstract class Message implements Comparable<Message>, Cloneable {
+public abstract class Message implements Comparable<Message>, Cloneable,
+		VisitorMessage {
 	protected byte[] planeID;
 	protected int length;
 	protected int priority;
@@ -65,12 +65,14 @@ public abstract class Message implements Comparable<Message>, Cloneable {
 		this.posx = posx;
 		this.posy = posy;
 		this.type = type;
-		this.timeCreated = System.currentTimeMillis(); 
+		this.timeCreated = System.currentTimeMillis();
 	}
 
-	/** Getter of the Priority
+	/**
+	 * Getter of the Priority
+	 * 
 	 * @return void
-	**/
+	 **/
 	public int getPriority() {
 		return this.priority;
 	}
@@ -85,11 +87,12 @@ public abstract class Message implements Comparable<Message>, Cloneable {
 			return -1;
 		else if (this.priority > msg.getPriority())
 			return 1;
-		// If the priority is the same then we compare the time the message is created
+		// If the priority is the same then we compare the time the message is
+		// created
 		else {
-			if(this.timeCreated < msg.getPriority()){
+			if (this.timeCreated < msg.getPriority()) {
 				return -1;
-			}else {
+			} else {
 				return 1;
 			}
 		}
@@ -117,10 +120,10 @@ public abstract class Message implements Comparable<Message>, Cloneable {
 	 * 
 	 * @return void
 	 **/
-	public XYPosition getPosition (){
-		return new XYPosition (posx, posy);
+	public XYPosition getPosition() {
+		return new XYPosition(posx, posy);
 	}
-	
+
 	public String getPlaneID() {
 		String str = new String(planeID);
 		return str;
@@ -129,6 +132,7 @@ public abstract class Message implements Comparable<Message>, Cloneable {
 	public int getType() {
 		return type.ordinal();
 	}
+
 	/**
 	 * To send the message through DataOutputStream, in a given order
 	 * 
@@ -142,30 +146,47 @@ public abstract class Message implements Comparable<Message>, Cloneable {
 		out.writeInt(posy);
 		out.writeInt(type.ordinal());
 	}
+
 	public static String messageTypeName(int i) {
 		String Type = null;
 		switch (i) {
 		case 0:
-		Type = "HELLO";break;
+			Type = "HELLO";
+			break;
 		case 1:
-		Type = "DATA";break;
+			Type = "DATA";
+			break;
 		case 2:
-		Type = "MAYDAY";break;
+			Type = "MAYDAY";
+			break;
 		case 3:
-		Type = "SENDRSA";	break;
+			Type = "SENDRSA";
+			break;
 		case 4:
-		Type = "CHOKE";	break;
+			Type = "CHOKE";
+			break;
 		case 5:
-		Type = "UNCHOKE";	break;
+			Type = "UNCHOKE";
+			break;
 		case 6:
-		Type = "BYE";	break;
+			Type = "BYE";
+			break;
 		case 7:
-		Type = "ROUTING";	break;
+			Type = "ROUTING";
+			break;
 		case 8:
-		Type = "KEEPALIVE";	break;
+			Type = "KEEPALIVE";
+			break;
 		case 9:
-		Type = "LANDINGREQUEST";	break;
+			Type = "LANDINGREQUEST";
+			break;
 		}
 		return Type;
-		}
+	}
+
+	public int accept(Visitor visitor, Plane plane,
+			DataOutputStream outData) {
+				return 0;
+	}
+
 }

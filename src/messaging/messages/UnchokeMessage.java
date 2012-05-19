@@ -3,12 +3,20 @@ package messaging.messages;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class UnchokeMessage extends Message {
-	public UnchokeMessage(byte[] planeID, int length, int posx,
-			int posy) {
-		super (planeID, length, 4, posx, posy, MessageType.UNCHOKE);
+import messaging.Plane;
+import messaging.Visitor;
+
+public class UnchokeMessage extends Message implements VisitorMessage {
+	public UnchokeMessage(byte[] planeID, int length, int posx, int posy) {
+		super(planeID, length, 4, posx, posy, MessageType.UNCHOKE);
 	}
-	public void write(DataOutputStream out) throws IOException{
+
+	public void write(DataOutputStream out) throws IOException {
 		super.write(out);
+	}
+
+	@Override
+	public int accept(Visitor visitor,Plane plane,DataOutputStream outData){
+		 return visitor.visit(plane,this,outData);						
 	}
 }

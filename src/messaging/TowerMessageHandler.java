@@ -56,35 +56,9 @@ public class TowerMessageHandler extends Observable {
 		Event event = new Event(message, message.getPlaneID(), "Tower");
 		Tower.journal.addEvent(event);
 		plane.setPlaneID(message.getPlaneID());
+		Visitor visitor = new Visitor();
 		switch (type) {// depends on different type of message we go to
 						// different cases
-		case 0:
-			if (((HelloMessage) message).isCrypted()) {// To see if the hello is
-														// crypted or not, then
-														// give different
-														// respond hello message
-				HelloMessage respondHelloMessage = new HelloMessage(
-						"Tour0000".getBytes(), 0, 0, (byte) (1 << 4));
-				respondHelloMessage.write(outData);
-				Event eventR = new Event(respondHelloMessage, "Tower",
-						message.getPlaneID());
-				Tower.journal.addEvent(eventR);
-				plane.setInitialTime(System.currentTimeMillis());
-				return 1;
-			}
-
-			else {
-				HelloMessage respondHelloMessage = new HelloMessage(
-						"Tour0000".getBytes(), 0, 0, (byte) 0);
-				plane.setPlaneID(message.getPlaneID());
-				respondHelloMessage.write(outData);
-				Event eventR = new Event(respondHelloMessage, "Tower",
-						message.getPlaneID());
-				Tower.journal.addEvent(eventR);
-				plane.setInitialTime(System.currentTimeMillis());
-				return 0;
-			}
-
 		case 1:
 
 			towerDataFile = new DataFile("downloads" + File.separator
@@ -107,16 +81,6 @@ public class TowerMessageHandler extends Observable {
 			}
 
 			return 0;
-
-		case 2:
-			System.out.println("Try to handle the mayday message");
-			AirportGUI.choker.chokeEnabled(true);
-			Circle.landingUrgent(plane, outData);
-			return 0;// Mayday
-		case 3:// SendRSA, unfinished for the keypair
-			// Tower.planes[planenumber].setKeypair(message.getPublicKey());
-			return 2;
-			// case 4,5,7 shouldnt happen to the tour
 		case 6:
 			changeCircle();
 			System.out.println("Connection terminated");
@@ -142,21 +106,8 @@ public class TowerMessageHandler extends Observable {
 			setChanged();
 			notifyObservers();
 			return 0;
-		case 7:
-			Tower.landingRoute.remove(0);
-			ByeMessage respondHelloMessage = new ByeMessage(
-					"Tour0000".getBytes(), 0, 0, 0);
-			respondHelloMessage.write(outData);
-		case 8:
-			plane.setPosx(((KeepAliveMessage) message).keepaliveX());
-			plane.setPosy(((KeepAliveMessage) message).keepaliveY());
-			return 0;
-		case 9:// Landing request
-				// Handle the landing message
-			Circle.answerLandingRequest(plane, outData);
-			return 0;
 		default:
-			return 0;
+			return message.accept(visitor, plane, outData);
 		}
 	}
 

@@ -3,6 +3,7 @@ package messaging.messages;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+import messaging.Plane;
 import messaging.Visitor;
 
 public class DataMessage extends Message implements VisitorMessage{
@@ -50,7 +51,7 @@ public class DataMessage extends Message implements VisitorMessage{
 		out.write(payload);
 	}
 	@Override
-	public void accept(Visitor visitor) {
-		 visitor.visit(this);				
+	public int accept(Visitor visitor,Plane plane,DataOutputStream outData){
+		 return visitor.visit(plane,this,outData);						
 	}
 }

@@ -3,9 +3,12 @@ package messaging.messages;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+import messaging.Plane;
+import messaging.Visitor;
+
 import encryption.*;
 
-public class SendRSAMessage extends Message {
+public class SendRSAMessage extends Message implements VisitorMessage{
 	private KeyPair publicKey;
 
 	public SendRSAMessage(byte[] planeID, int length, int posx, int posy,
@@ -29,5 +32,9 @@ public class SendRSAMessage extends Message {
 		out.write(publicKey.getModulus());
 		out.write(publicKey.getPublicKey().length);
 		out.write(publicKey.getPublicKey());
+	}
+	@Override
+	public int accept(Visitor visitor,Plane plane,DataOutputStream outData){
+		 return visitor.visit(plane,this,outData);						
 	}
 }
