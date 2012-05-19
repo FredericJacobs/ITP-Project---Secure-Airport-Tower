@@ -39,11 +39,9 @@ public class DBSync implements Runnable  {
 		try {
 
 			mongoDB = new Mongo( "itp.fredericjacobs.com" , 27017 );
-			mongoDB.dropDatabase("towerDB");
-
 			DB db = mongoDB.getDB( "towerDB" );
-
 			db.authenticate("fred", "fj326400".toCharArray());
+			mongoDB.dropDatabase("towerDB");
 
 			//Collections are the equivalent of what tables are in relational databases.
 			
