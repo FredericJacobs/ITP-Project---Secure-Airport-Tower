@@ -226,12 +226,6 @@ public class JournalGUI extends JFrame implements ActionListener  , Observer {
 		print.add(printEvent.getDestination());
 		print.add(printEvent.getDate());
 		addEvent(print);
-		// TODO Auto-generated method stub
 	}
-
-	/**
-	 * MODIFY ME: This is how the JournalGUI expects new events to be delivered
-	 * from the Tower.
-	 */
 
 }

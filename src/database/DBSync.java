@@ -4,7 +4,10 @@ import generals.XYPosition;
 
 import java.net.UnknownHostException;
 
+import messaging.Event;
+import messaging.Journal;
 import messaging.Tower;
+import messaging.messages.Message;
 
 import com.mongodb.Mongo;
 import com.mongodb.DB;
@@ -27,7 +30,7 @@ public class DBSync implements Runnable  {
 	DBObject[] newPosition ;
 	DBObject[] oldPosition ;
 	XYPosition[] cachedPosition;
-
+	
 	@Override
 	public void run() {
 
@@ -48,11 +51,12 @@ public class DBSync implements Runnable  {
 			newPosition = new BasicDBObject [100];
 			oldPosition = new BasicDBObject[100];
 			cachedPosition = new XYPosition[100];
-
+			
 			while (true){
 
 				updatePositions();			
 				// Updating Positions every second
+				updateLogs();
 				
 				Thread.sleep(1000);
 			}
@@ -68,10 +72,16 @@ public class DBSync implements Runnable  {
 
 
 	}
-
+	
 	private void updateLogs() {
-		// TODO Auto-generated method stub
-
+		
+		for (int i=0; i< (Journal.archiveList.size()); i++){
+			Event temp = Journal.archiveList.get(i);
+			logCollection.insert(new BasicDBObject().append("source", temp.getSource()).append("destination", temp.getDestination()).append("date", temp.getDate()).append("Message", Message.messageTypeName(temp.getMessage().getType())));
+		}
+		for (int i=0; i< (Journal.archiveList.size()); i++){
+			Journal.archiveList.remove(i);	
+		}
 	}
 
 	private void updatePositions() {

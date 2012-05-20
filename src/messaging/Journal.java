@@ -10,13 +10,15 @@ public class Journal extends Observable {
 		addObserver(AirportGUI.getJournalGUI());
 	}
 
-	public static ArrayList<Event> list = new ArrayList<Event>();
+	private static ArrayList<Event> list = new ArrayList<Event>();
+	public static ArrayList<Event> archiveList = new ArrayList<Event>();
 	public ArrayList<PlanePosition> positions = new ArrayList<PlanePosition>();
 
 	public synchronized void addEvent(Event e) {
-		list.add(e);
+		archiveList.add(e);
+		getList().add(e);
 		setChanged();
-		notifyObservers(list);
+		notifyObservers(getList());
 		boolean updatedPosition = false;
 		// Find Plane in Array and add it's position
 		for (int i = 0; i < positions.size(); i++) {
@@ -44,11 +46,19 @@ public class Journal extends Observable {
 	}
 
 	public Event getEvent(int i) {
-		return list.remove(0);
+		return getList().remove(0);
 	}
 
 	public int listSize() {
-		return list.size();
+		return getList().size();
+	}
+
+	public static ArrayList<Event> getList() {
+		return list;
+	}
+
+	public static void setList(ArrayList<Event> list) {
+		Journal.list = list;
 	}
 
 }
