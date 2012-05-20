@@ -66,7 +66,7 @@ public class TowerMessageHandler extends Observable {
 				listOfDownloads.add(towerDataFile);
 				AirportGUI.updateDownloads(listOfDownloads);
 				try {
-					Scanner scanner = new Scanner(new FileInputStream("F:\\Java\\NewProject\\ITP-Project---Secure-Airport-Tower\\downloads\\"+plane.getPlaneID()+"-0.txt"));
+					Scanner scanner = new Scanner(new FileInputStream("downloads"+ File.separator + plane.getPlaneID()+"-0.txt"));
 					
 					String delimiters = "[=]"; 
 					String[ ] tokens = scanner.nextLine().split(delimiters);
@@ -87,7 +87,7 @@ public class TowerMessageHandler extends Observable {
 			Tower.landingTimeTotal += plane.getlandingTimeTotal();
 
 			try {
-				Scanner scanner = new Scanner(new FileInputStream("F:\\Java\\NewProject\\ITP-Project---Secure-Airport-Tower\\downloads\\"+plane.getPlaneID()+"-1.txt"));
+				Scanner scanner = new Scanner(new FileInputStream("downloads"+ File.separator + plane.getPlaneID()+"-1.txt"));
 				String delimiters = "[=]"; 
 				String[ ] tokens = scanner.nextLine().split(delimiters);
 				String delimiters2 = "[;]"; 
