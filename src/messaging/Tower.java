@@ -107,6 +107,10 @@ public class Tower implements Runnable {
 	public static void planeHasCrashed (String planeID){
 		journal.planeHasCrashed(planeID);
 	}
+	
+	public static void planDidLandSafely (String planeID){
+		journal.planeDidLand(planeID);
+	}
 	/**
 	 * The setter and getter of the Keypair
 	 * 

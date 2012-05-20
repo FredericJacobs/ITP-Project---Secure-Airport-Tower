@@ -69,4 +69,12 @@ public class Journal extends Observable {
 		Journal.list = list;
 	}
 
+	public void planeDidLand(String planeID) {
+		for (int i=0; i < positions.size(); i++){
+			if (positions.get(i).getPlaneID().equalsIgnoreCase(planeID)){
+				positions.remove(i);
+			}
+		}
+	}
+
 }

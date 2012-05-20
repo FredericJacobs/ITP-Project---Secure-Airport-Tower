@@ -10,7 +10,7 @@ Our REST API is easily accessible through simple requests. We also provide query
 
 [Base API](http://itp.fredericjacobs.com:28017/towerDB/positions/)
 
-The base API returns every single plane position available in the map. The Tower is updating the positions every second because it would send way to many requests if it had to process every since position update. To keep the tower responsive we are only updating it every second.
+The base API returns every single plane position available in the map in a JSON format. The Tower is updating the positions every second because it would send way to many requests if it had to process every since position update. To keep the tower responsive we are only updating it every second.
 
 Special requests :
 - Limit, only a certain number of elements will be returned : BaseAPI/?limit=10
@@ -23,3 +23,10 @@ Special requests :
 BaseAPI/?filter_planeid=X&limit=10
 
 ### Logs 
+[Base API](http://itp.fredericjacobs.com:28017/towerDB/logs/)
+
+This API returns a print of the logs in a JSON format. These logs are added every second to the tower. 
+
+Here are a few interesting queries you can try :
+
+TO WRITE

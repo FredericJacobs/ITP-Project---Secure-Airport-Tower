@@ -62,9 +62,9 @@ public class TowerThread extends Thread {
 
 				} else {
 					// Handle the bye message and stop reading from the plane
-
 					messageHandler.respond(plane, mes, outData);
 					System.out.println("Bye! Bon voyage");
+					Tower.planDidLandSafely(plane.getPlaneID());
 					break;
 				}
 			}

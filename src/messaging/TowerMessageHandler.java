@@ -74,7 +74,6 @@ public class TowerMessageHandler extends Observable {
 				} catch (FileNotFoundException e) {
 					System.out.println("File was not found");
 				}
-				// plane.setPlaneType();
 			}
 
 			return 0;
