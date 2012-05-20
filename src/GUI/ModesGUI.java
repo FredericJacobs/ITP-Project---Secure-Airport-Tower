@@ -12,6 +12,10 @@ import messaging.Modes;
 import messaging.Tower;
 
 public class ModesGUI extends JFrame implements ActionListener, Observer {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	static String CHRONOS = "CHRONOS";
 	static String FUEL = "FUEL";
 	static String TIME = "TIME";

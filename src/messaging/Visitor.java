@@ -77,6 +77,7 @@ public class Visitor {
 	}
 
 	public int visit(Plane plane, ByeMessage message, DataOutputStream outData) {
+		
 		return 0;
 	}
 

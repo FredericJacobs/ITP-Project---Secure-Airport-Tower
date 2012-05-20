@@ -4,12 +4,9 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Observable;
-import java.util.logging.FileHandler;
-
 import java.util.Scanner;
 
 import dataFile.DataFile;

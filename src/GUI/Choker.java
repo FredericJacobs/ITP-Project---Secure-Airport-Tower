@@ -1,23 +1,16 @@
 package GUI;
 
 import java.awt.LayoutManager;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.image.BufferedImage;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.net.Socket;
-import java.util.Observable;
-import java.util.Observer;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import javax.swing.AbstractButton;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -79,7 +72,7 @@ public class Choker extends JFrame implements MouseListener {
 						"Allplanes");
 				Tower.journal.addEvent(eventR);
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
+					// 
 					e.printStackTrace();
 				}
 			}
@@ -98,7 +91,6 @@ public class Choker extends JFrame implements MouseListener {
 				Event eventR = new Event(chock, "Tower",
 						"Allplanes");
 				Tower.journal.addEvent(eventR);} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}

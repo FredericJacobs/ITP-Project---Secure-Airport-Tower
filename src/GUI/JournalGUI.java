@@ -5,7 +5,6 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.Event;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DateFormat;
@@ -57,8 +56,8 @@ public class JournalGUI extends JFrame implements ActionListener  , Observer {
 	private JButton btnClose, btnFilter;
 	private Container container;
 	private JTextField tfFilter;
+	@SuppressWarnings("rawtypes")
 	private JComboBox cbFilter;
-	private Vector vector;
 
 	public JournalGUI() {
 		init();
@@ -81,6 +80,7 @@ public class JournalGUI extends JFrame implements ActionListener  , Observer {
 		repaint();
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void buildButtons() {
 		JPanel pan = new JPanel();
 		pan.setLayout(new BoxLayout(pan, BoxLayout.X_AXIS));
@@ -124,7 +124,7 @@ public class JournalGUI extends JFrame implements ActionListener  , Observer {
 	 * format as source) java.util.Date data the date and time when the message
 	 * arrived
 	 */
-	public void addEvent(Vector v) {
+	public void addEvent(@SuppressWarnings("rawtypes") Vector<Comparable> v) {
 		model.addRow(v);
 	}
 
@@ -214,9 +214,11 @@ public class JournalGUI extends JFrame implements ActionListener  , Observer {
 
 	}
 
+	@SuppressWarnings({ "unchecked", "static-access" })
 	@Override
 	public void update(Observable o, Object arg) {
 		messaging.Event printEvent = Tower.journal.getEvent(0);
+		@SuppressWarnings("rawtypes")
 		Vector print = new Vector();
 		print.add(printEvent.getMessage().getPriority());
 		print.add(printEvent.getMessage().messageTypeName(printEvent.getMessage().getType()));
