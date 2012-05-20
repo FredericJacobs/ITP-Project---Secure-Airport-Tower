@@ -76,7 +76,8 @@ public class Choker extends JFrame implements MouseListener {
 					e.printStackTrace();
 				}
 			}
-			timer.schedule(new Counter(), 300000);
+			// Block the chock function for 10 minutes
+			timer.schedule(new Counter(), 600000);
 		} else {
 			for (int i = 0; i < Tower.planes.size(); i++) {
 				Socket socket = Tower.planes.get(i).getSocket();

@@ -46,6 +46,10 @@ public class Modes {
 
 	public static void reOrganiseChronos() {
 		Collections.sort(Tower.planes, comparatorChronos);
+		Tower.landingRoute.clear();
+		Tower.smallCircle.clear();
+		Tower.middleCircle.clear();
+		Tower.longCircle.clear();
 		for (int i = 0; i < Tower.planes.size(); i++) {
 			Plane plane = Tower.planes.get(i);
 			DataOutputStream outData;
@@ -60,6 +64,10 @@ public class Modes {
 	}
 	//The action when the button FUEL is clicked 
 	public static void reOrganiseFuel() {
+		Tower.landingRoute.clear();
+		Tower.smallCircle.clear();
+		Tower.middleCircle.clear();
+		Tower.longCircle.clear();
 		Collections.sort(Tower.planes, comparatorFuel);
 		for (int i = 0; i < Tower.planes.size(); i++) {
 			Plane plane = Tower.planes.get(i);
@@ -75,6 +83,10 @@ public class Modes {
 	}
 	//The action when the button TIME is clicked 
 	public static void reOrganiseTime() {
+		Tower.landingRoute.clear();
+		Tower.smallCircle.clear();
+		Tower.middleCircle.clear();
+		Tower.longCircle.clear();
 		Collections.sort(Tower.planes, comparatorTime);
 		for (int i = 0; i < Tower.planes.size(); i++) {
 			Plane plane = Tower.planes.get(i);

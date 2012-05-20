@@ -48,11 +48,12 @@ public class TowerThread extends Thread {
 			while (true) {
 				mes = ReadMessages.readMessage(inData);
 				// read the message send by the DataInputStream
-				Tower.addMessageToIncomingQueue(mes);// Add it into the incomingQueue
+				//Tower.addMessageToIncomingQueue(mes);// Add it into the incomingQueue
 
-				if (mes.getType() != 6) {            // Handle the message , if the messageType isnt Bye, then go to the next
+				if (mes.getType() != 6) {            
+					// Handle the message , if the messageType isnt Bye, then go to the next;Tower.getNextMessageIncomingQueue()
 
-					encryptionStatus = (messageHandler.respond(plane, Tower.getNextMessageIncomingQueue(), outData));
+					encryptionStatus = (messageHandler.respond(plane, mes, outData));
 					switch (encryptionStatus){	
 					case 0: break; 
 					case 1: inData = new DataInputStream( new RsaInputStream(socket.getInputStream(), Tower.getDecryptKeypair()));System.out.println("DECRYPTING"); break;
@@ -62,7 +63,7 @@ public class TowerThread extends Thread {
 				} else {
 					// Handle the bye message and stop reading from the plane
 
-					messageHandler.respond(plane, Tower.getNextMessageIncomingQueue(), outData);
+					messageHandler.respond(plane, mes, outData);
 					System.out.println("Bye! Bon voyage");
 					break;
 				}

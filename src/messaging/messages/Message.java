@@ -83,19 +83,13 @@ public abstract class Message implements Comparable<Message>, Cloneable,
 	 * @return int
 	 **/
 	public int compareTo(Message msg) {
-		if (this.priority < msg.getPriority())
-			return -1;
-		else if (this.priority > msg.getPriority())
-			return 1;
+		if (this.getPriority() != msg.getPriority())
+			return this.getPriority() - msg.getPriority();
 		// If the priority is the same then we compare the time the message is
 		// created
-		else {
-			if (this.timeCreated < msg.getPriority()) {
-				return -1;
-			} else {
-				return 1;
-			}
-		}
+		else
+			return (int) (this.timeCreated - msg.timeCreated);
+
 	}
 
 	/**
@@ -184,9 +178,8 @@ public abstract class Message implements Comparable<Message>, Cloneable,
 		return Type;
 	}
 
-	public int accept(Visitor visitor, Plane plane,
-			DataOutputStream outData) {
-				return 0;
+	public int accept(Visitor visitor, Plane plane, DataOutputStream outData) {
+		return 0;
 	}
 
 }

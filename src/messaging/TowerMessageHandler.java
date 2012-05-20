@@ -116,9 +116,14 @@ public class TowerMessageHandler extends Observable {
 			try {
 				DataOutputStream outData = new DataOutputStream(planeSmall
 						.getSocket().getOutputStream());
+				RoutingMessage respondLanding0 = new RoutingMessage(
+						"Tour0000".getBytes(), 420, 166,
+						routingMessageType.REPLACEALL, moveType.STRAIGHT,
+						Circle.int2bytes(0));
+				respondLanding0.write(outData);
 				RoutingMessage respondLanding = new RoutingMessage(
 						"Tour0000".getBytes(), Tower.landingPointX,
-						Tower.landingPointY, routingMessageType.REPLACEALL,
+						Tower.landingPointY, routingMessageType.LAST,
 						moveType.LANDING, Circle.int2bytes(0));
 				respondLanding.write(outData);
 			} catch (IOException e) {

@@ -146,13 +146,13 @@ public class AirportPanel extends JPanel {
 		for (int i=0; i < Tower.journal.positions.size() ; i++) {
 			String planeId = new String(Tower.journal.positions.get(i).getPlaneID());
 			CircularBuffer<Point> previousPos = previousPositions.get(planeId);
-			if(previousPos.size()!=0){
+
 			for (int j = 1; j < previousPos.size(); j++) {
 				Point p1 = previousPos.get(j);
 				Point p2 = previousPos.get(j - 1);
 				if (p2.getX() >= 0 && p2.getY() >= 0)
 					g2d.drawLine(p1.x, p1.y, p2.x, p2.y);
-			}}
+			}
 		}
 
 		// Draw the planes themselves

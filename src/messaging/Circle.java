@@ -12,9 +12,14 @@ public class Circle {
 			DataOutputStream outData) throws IOException {
 		if (Tower.landingRoute.size() == 0) {
 			Tower.landingRoute.add(plane);
+			RoutingMessage respondLanding0 = new RoutingMessage(
+					"Tour0000".getBytes(), 420, 166,
+					routingMessageType.REPLACEALL, moveType.STRAIGHT,
+					int2bytes(0));
+			respondLanding0.write(outData);
 			RoutingMessage respondLanding = new RoutingMessage(
 					"Tour0000".getBytes(), Tower.landingPointX,
-					Tower.landingPointY, routingMessageType.REPLACEALL,
+					Tower.landingPointY, routingMessageType.LAST,
 					moveType.LANDING, int2bytes(0));
 			respondLanding.write(outData);
 		} else if (Tower.smallCircle.size() < 3) {
@@ -66,30 +71,37 @@ public class Circle {
 
 	public static void landingUrgent(Plane plane, DataOutputStream outData)
 			throws IOException {
-		Plane lastlandingPlane = Tower.landingRoute.remove(0);
-		
+		Tower.landingRoute.clear();
 		Tower.landingRoute.add(plane);
-		RoutingMessage respondLanding = new RoutingMessage(
-				"Tour0000".getBytes(), Tower.landingPointX,
-				Tower.landingPointY, routingMessageType.REPLACEALL,
-				moveType.LANDING, int2bytes(0));
-		respondLanding.write(outData);
-		
-		Tower.smallCircle.add(lastlandingPlane);
-		DataOutputStream outDataLastlandingPlane = new DataOutputStream(lastlandingPlane.getSocket().getOutputStream());
+
+		// The following allows the Mayday-plane to land as soon as possible
 		RoutingMessage respondLanding0 = new RoutingMessage(
-				"Tour0000".getBytes(), 400, 150,
+				"Tour0000".getBytes(), 420, 166,
 				routingMessageType.REPLACEALL, moveType.STRAIGHT,
 				int2bytes(0));
-		respondLanding0.write(outDataLastlandingPlane);
-		RoutingMessage respondLanding1 = new RoutingMessage(
-				"Tour0000".getBytes(), Tower.smallPointX,
-				Tower.smallPointY, routingMessageType.LAST,
-				moveType.CIRCULAR, int2bytes(Tower.smallAngle));
-		respondLanding1.write(outDataLastlandingPlane);
+		respondLanding0.write(outData);
+		RoutingMessage respondLanding = new RoutingMessage(
+				"Tour0000".getBytes(), Tower.landingPointX,
+				Tower.landingPointY, routingMessageType.LAST,
+				moveType.LANDING, int2bytes(0));
+		respondLanding.write(outData);
+		Tower.smallCircle.clear();
+		Tower.middleCircle.clear();
+		Tower.longCircle.clear();
+		for (int i = 0; i < Tower.planes.size(); i++) {
+			Plane planelist = Tower.planes.get(i);
+			DataOutputStream outDataList;
+			try {
+				outDataList = new DataOutputStream(planelist.getSocket()
+						.getOutputStream());
+				Circle.answerLandingRequest(planelist, outDataList);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
-	// Transfer int to byte[]
+	// Transfer int to byte[], when we need to send a routingmessage
 	public static byte[] int2bytes(int num) {
 		byte[] b = new byte[4];
 		for (int i = 0; i < 4; i++) {

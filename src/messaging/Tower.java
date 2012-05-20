@@ -2,6 +2,7 @@ package messaging;
 
 import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -9,6 +10,7 @@ import java.net.ServerSocket;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.PriorityQueue;
+import java.util.Scanner;
 
 import encryption.*;
 
@@ -68,22 +70,22 @@ public class Tower implements Runnable {
 
 	public static int smallPointX = 350;
 	public static int smallPointY = 100;
-	public static int smallAngle = 3600;
+	public static int smallAngle = 36000;
 
 
 	public static ArrayList <Plane>middleCircle = new ArrayList<Plane>();
 	public static int middlePointX= 200;
 	public static int middlePointY= 550;
-	public static int middleAngle= 3600;
+	public static int middleAngle= 36000;
 
 
 	public static ArrayList <Plane>longCircle = new ArrayList<Plane>();
 
 	public static int longPointX= 700;
 	public static int longPointY= 200;
-	public static int longAngle= 3600;
+	public static int longAngle= 36000;
 
-	public static int straightX=400;
+	public static int straightX=420;
 	public static int straightY=166;
 
 
@@ -152,6 +154,11 @@ public class Tower implements Runnable {
 	}
 	
 	public void run (){
+		setCircle("landing");
+		setCircle("smallcircle");
+		setCircle("middlecircle");
+		setCircle("longcircle");
+
 		decryptKeypair = KeyGenerator.generateRSAKeyPair(256);
 
 		File outputFile = new File ("MyKey");
@@ -172,28 +179,7 @@ public class Tower implements Runnable {
 			publicKey.write(decryptKeypair.getPublicKey());
 			creatPriorityQueue();
 			TourNetwork();
-			/*while(true){
-				if(inQueue.size()!=0){
-				Message mes = inQueue.remove();
-				if (mes.getType() != 6) {            // Handle the message , if the messageType isnt Bye, then go to the next
 
-					encryptionStatus = (messageHandler.respond(Tower.planes[planenumber], planenumber , Tower.getNextMessageIncomingQueue(), outData));
-					switch (encryptionStatus){	
-					case 0: break; 
-					case 1: inData = new DataInputStream( new RsaInputStream(socket.getInputStream(), Tower.getDecryptKeypair()));System.out.println("DECRYPTING"); break;
-					case 2: outData = new DataOutputStream(new RsaOutputStream(socket.getOutputStream(), Tower.planes[planenumber].getKeypair())); System.out.println("ENCRYPTING"); break;
-					}
-
-				} else {
-					// Handle the bye message and stop reading from the plane
-
-					messageHandler.respond(Tower.planes[planenumber],
-							planenumber, Tower.getNextMessageIncomingQueue(), outData);
-					System.out.println("Bye! Bon voyage");
-					break;
-				}
-			
-			}}*/
 		} catch (FileNotFoundException e) {
 			System.out.println("Key Not Found");
 		} catch (IOException e) {
@@ -229,6 +215,7 @@ public class Tower implements Runnable {
 															// TourThread
 															// class
 		}
+
 	}
 
 
@@ -244,5 +231,56 @@ public class Tower implements Runnable {
 	public void setConsumption(double consumption) {
 		Tower.consumption += consumption;
 	}
-
+	// This method allows the circle information to be transfered from .txt into the tower 
+	public void setCircle(String circleName){
+			Scanner scanner = null;
+			try {
+				scanner = new Scanner(new FileInputStream("Circle"+ File.separator + circleName +".txt"));
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
+			
+			
+			String tmp = scanner.nextLine();
+			String instructions[] = tmp.split(";");
+			String coordinates[] = null;
+			
+			for(String ins : instructions) {
+				coordinates = ((String) ins.subSequence(1, ins.length())).split(",");
+				switch(ins.charAt(0)) {
+				case 'S':
+					Tower.straightX= Integer.parseInt(coordinates[0]);
+					Tower.straightY = Integer.parseInt(coordinates[1]);
+				break;
+				
+				case 'C':
+					switch(circleName){
+					case "smallcircle" : 
+						Tower.smallPointX = Integer.parseInt(coordinates[0]);
+						Tower.smallPointY = Integer.parseInt(coordinates[1]);
+						Tower.smallAngle =  Integer.parseInt(coordinates[2]);
+						break;
+					case "middlecircle" : 
+						Tower.middlePointX = Integer.parseInt(coordinates[0]);
+						Tower.middlePointY = Integer.parseInt(coordinates[1]);
+						Tower.middleAngle =  Integer.parseInt(coordinates[2]);
+						break;
+					case "longcircle" : 
+						Tower.longPointX = Integer.parseInt(coordinates[0]);
+						Tower.longPointY = Integer.parseInt(coordinates[1]);
+						Tower.longAngle =  Integer.parseInt(coordinates[2]);
+						break;	
+					}
+					break;
+				
+				case 'L':
+					Tower.longPointX = Integer.parseInt(coordinates[0]);
+					Tower.longPointY = Integer.parseInt(coordinates[0]);
+					break;
+					
+				}
+			}
+			
+			
+		}
 }
