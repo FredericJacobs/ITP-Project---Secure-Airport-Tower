@@ -38,13 +38,11 @@ public class DBSync implements Runnable  {
 		Mongo mongoDB;
 		try {
 
-			mongoDB = new Mongo( "itp.fredericjacobs.com" , 27017 );
-			DB db = mongoDB.getDB( "towerDB" );
-			db.authenticate("fred", "fj326400".toCharArray());
+			mongoDB = new Mongo("itp.fredericjacobs.com", 27017);
+			DB db = mongoDB.getDB("towerDB");
 			mongoDB.dropDatabase("towerDB");
 
-			//Collections are the equivalent of what tables are in relational databases.
-			
+			// Collections are the equivalent of what tables are in relational databases
 			positionsCollection = db.getCollection("positions");
 			logCollection = db.getCollection("logs");			
 			newPosition = new BasicDBObject [100];
@@ -53,18 +51,17 @@ public class DBSync implements Runnable  {
 
 			while (true){
 
-				updatePositions();
-			
+				updatePositions();			
 				// Updating Positions every second
 				
 				Thread.sleep(1000);
-
 			}
 
 		} catch (UnknownHostException e) {
 			System.out.println("Probably issues connecting. You may have connection issue or the server may be down");
 		} catch (MongoException e) {
 			System.out.println("MongoDB bug");
+			System.out.println(e.getMessage());
 		} catch (InterruptedException e) {
 			System.exit(0);
 		}
