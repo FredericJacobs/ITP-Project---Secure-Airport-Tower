@@ -104,6 +104,9 @@ public class Tower implements Runnable {
 	private Tower() {
 	}
 
+	public static void planeHasCrashed (String planeID){
+		journal.planeHasCrashed(planeID);
+	}
 	/**
 	 * The setter and getter of the Keypair
 	 * 

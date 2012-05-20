@@ -56,6 +56,14 @@ public class Journal extends Observable {
 	public static ArrayList<Event> getList() {
 		return list;
 	}
+	
+	public void planeHasCrashed(String planeID){
+		for (int i=0; i < positions.size(); i++){
+			if (positions.get(i).getPlaneID().equalsIgnoreCase(planeID)){
+				positions.get(i).didCrash(true);
+			}
+		}
+	}
 
 	public static void setList(ArrayList<Event> list) {
 		Journal.list = list;

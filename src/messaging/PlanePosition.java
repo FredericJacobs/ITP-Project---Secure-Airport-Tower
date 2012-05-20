@@ -26,7 +26,10 @@ public class PlanePosition {
 		return position;
 	}
 	
-	// NO SETTER FOR CRASHED PLANE YET !
+	public void didCrash(boolean status){
+		hasCrashed = status;
+	}
+	
 	public boolean hasCrashed () {
 		return hasCrashed;
 	}

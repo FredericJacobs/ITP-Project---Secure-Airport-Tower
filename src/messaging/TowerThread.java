@@ -20,7 +20,7 @@ public class TowerThread extends Thread {
 	private Message mes;
 	private DataOutputStream outData;
 	private DataInputStream inData;
-
+	private Plane plane;
 
 	public TowerThread(Socket socket) {
 		super("TourMultiServerThread");
@@ -41,7 +41,7 @@ public class TowerThread extends Thread {
 					socket.getInputStream());
 
 			TowerMessageHandler messageHandler = new TowerMessageHandler(); // create a TowerMessageHandler to respond the messages send by the planes
-			Plane plane = new Plane();
+			plane = new Plane();
 			Tower.planes.add(plane); // Created a new plane by using the order
 			plane.setSocket(this.socket);
 
@@ -71,14 +71,12 @@ public class TowerThread extends Thread {
 			// finish the network and close the tunnel
 		} catch (IOException e) {
 			try {
+				Tower.planeHasCrashed(plane.getPlaneID());
 				socket.close();
 			} catch (IOException e1) {
-				// TODO Auto-generated catch block
 				System.out.println("Connection interrupted");
 				e1.printStackTrace();
 			}
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 
 	}
