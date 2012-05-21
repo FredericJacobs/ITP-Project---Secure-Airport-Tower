@@ -53,9 +53,13 @@ public class TowerMessageHandler extends Observable {
 		Event event = new Event(message, message.getPlaneID(), "Tower");
 		Tower.journal.addEvent(event);
 		plane.setPlaneID(message.getPlaneID());
+		// We answer most the messages by implementing the visitor pattern. While the Datafile and the bye message
+		// need some of the special parameter so we still keep the switch function for them.
 		Visitor visitor = new Visitor();
+		 
 		switch (type) {// depends on different type of message we go to
 						// different cases
+		// Answer the Data message 
 		case 1:
 
 			towerDataFile = new DataFile("downloads" + File.separator
@@ -65,6 +69,7 @@ public class TowerMessageHandler extends Observable {
 				fileCount++;
 				listOfDownloads.add(towerDataFile);
 				AirportGUI.updateDownloads(listOfDownloads);
+				// Read the plane type and save it in the plane class.
 				try {
 					Scanner scanner = new Scanner(new FileInputStream("downloads"+ File.separator + plane.getPlaneID()+"-0.txt"));
 					
@@ -77,6 +82,7 @@ public class TowerMessageHandler extends Observable {
 			}
 
 			return 0;
+		// Answer the Bye message 
 		case 6:
 			changeCircle();
 			System.out.println("Connection terminated");
@@ -84,7 +90,7 @@ public class TowerMessageHandler extends Observable {
 					- plane.getInitialTime());
 			Tower.passgerNumber += plane.getPassager();
 			Tower.landingTimeTotal += plane.getlandingTimeTotal();
-
+			// Read the fuel consumption and save it in the plane class and update it in the modesGUI.
 			try {
 				Scanner scanner = new Scanner(new FileInputStream("downloads"+ File.separator + plane.getPlaneID()+"-1.txt"));
 				String delimiters = "[=]"; 
@@ -92,23 +98,28 @@ public class TowerMessageHandler extends Observable {
 				String delimiters2 = "[;]"; 
 				String[ ] tokens2 = tokens[1].split(delimiters2);
 				int consumptionPlane =  Integer.valueOf(tokens2[0]).intValue(); 
-				System.out.println("consumptionPlane" + consumptionPlane);
 				Tower.consumption += consumptionPlane;
 			} catch (FileNotFoundException e) {
 				System.out.println("File was not found");
 			}		
 			Tower.planes.remove(plane);
-			System.out.println("Passage =" + Tower.passgerNumber  + "Time = " + plane.getlandingTimeTotal());
 			setChanged();
 			notifyObservers();
 			return 0;
 		default:
+			// All the other messages will be handled by the visitor pattern
 			return message.accept(visitor, plane, outData);
 		}
 	}
 
+	/* This method helps the bye message to arrange the other planes. Each time a plane has landed and the landing
+	 route is valid again, the changeCircle will call the next plane to come to land.Then it will check if there
+	is other planes are waiting;if so the waiting planes will be instructed to enter the smaller circle so that 
+	in this way we can arrange all the landing request well.
+	*/
 	public void changeCircle() {
 		Tower.landingRoute.remove(0);
+		// Check if there is other planes in the small circle, if so let them enter the landing route
 		if (Tower.smallCircle.size() != 0) {
 			Plane planeSmall = Tower.smallCircle.remove(0);
 			Tower.landingRoute.add(planeSmall);
@@ -128,6 +139,7 @@ public class TowerMessageHandler extends Observable {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+			// Check if there is other planes in the middle circle, if so let them enter the small circle
 			if (Tower.middleCircle.size() != 0) {
 				Plane planeMiddle = Tower.middleCircle.remove(0);
 				Tower.smallCircle.add(planeMiddle);
@@ -149,6 +161,7 @@ public class TowerMessageHandler extends Observable {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
+				// Check if there is other planes in the long circle, if so let them enter the middle circle
 				if (Tower.longCircle.size() != 0) {
 					Plane planeLong = Tower.longCircle.remove(0);
 					Tower.middleCircle.add(planeLong);

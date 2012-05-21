@@ -2,7 +2,14 @@ package messaging;
 
 import java.util.*;
 import messaging.messages.Message;
-
+/**
+ * This class is a part of the journal. Each time a message is created or send out, it will be saved as an Event
+ * . It contain the information such as message, source, destination and the time at which it is created.
+ * 
+ * @author Hantao Zhao 
+ * @author Frederic Jacobs
+ * * @version 1.0
+ */
 public class Event extends Vector<Object> {
 	/**
 	 * 

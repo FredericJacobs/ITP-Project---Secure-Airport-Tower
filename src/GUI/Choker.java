@@ -21,6 +21,16 @@ import messaging.Tower;
 import messaging.messages.ChokeMessage;
 import messaging.messages.UnchokeMessage;
 
+/**
+ * 
+ * This class has the function and the GUI of the Choker and Unchoker. Each time the choke button was clicked,
+ * the unchoke function will be blocked for 10 minutes, by using the timer. And when we get a mayday message, it
+ * will call the chokeEnabled method to active the choke function
+ * @author Hantao Zhao 
+ * @author Frederic Jacobs
+ * @version 1.0
+ */
+
 public class Choker extends JFrame implements MouseListener {
 	private static final long serialVersionUID = 1L;
 	private JLabel imageLabel;
@@ -30,6 +40,7 @@ public class Choker extends JFrame implements MouseListener {
 	boolean status = false;
 	boolean choking = false;
 	Timer timer = new Timer();
+	//The GUI of choker, it has two buttons- choke and unchoke
 	public Choker() {
 		chokeButton = new ImageIcon("src" + File.separator + "GUI"
 				+ File.separator + "img" + File.separator + "Choke_Button.png");
@@ -53,8 +64,10 @@ public class Choker extends JFrame implements MouseListener {
 	public void updateChoker() {
 		// Getting Choke Events from the tower
 	}
-
+	// The functional method to active the choke method. It will send a choke method to all the planes that is saved 
+	// in the tower. At the same time run the time counter and change the icon.
 	public void chokeEnabled(boolean status)  {
+		// If the choke is not active
 		if (status) {
 			imageLabel.removeAll();
 			imageLabel.setIcon(unChokeButton);
@@ -78,7 +91,10 @@ public class Choker extends JFrame implements MouseListener {
 			}
 			// Block the chock function for 10 minutes
 			timer.schedule(new Counter(), 600000);
-		} else {
+		}
+		// If the choke is already active
+		else {
+
 			for (int i = 0; i < Tower.planes.size(); i++) {
 				Socket socket = Tower.planes.get(i).getSocket();
 				DataOutputStream outData;
@@ -86,10 +102,10 @@ public class Choker extends JFrame implements MouseListener {
 					outData = new DataOutputStream(
 							socket.getOutputStream());
 
-				UnchokeMessage chock = new UnchokeMessage("Tour0000".getBytes(), 0,
+				UnchokeMessage unchock = new UnchokeMessage("Tour0000".getBytes(), 0,
 						0, 0);
-				chock.write(outData);
-				Event eventR = new Event(chock, "Tower",
+				unchock.write(outData);
+				Event eventR = new Event(unchock, "Tower",
 						"Allplanes");
 				Tower.journal.addEvent(eventR);} catch (IOException e) {
 					e.printStackTrace();
@@ -99,6 +115,7 @@ public class Choker extends JFrame implements MouseListener {
 			imageLabel.removeAll();
 			imageLabel.setIcon(chokeButton);}
 	}
+	// The class which extends the TimerTask, it can arrange the time counter and run the method after a specified time
 	class Counter extends TimerTask {
 		public void run() {
 			System.out.println("Choke finish");

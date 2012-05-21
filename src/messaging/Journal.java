@@ -5,6 +5,19 @@ import GUI.AirportGUI;
 import java.util.ArrayList;
 import java.util.Observable;
 
+/**
+ * This class is a journal which will record all the event happened during the communication. 
+ * It will also run the planeHasCrashed or planeDidLand method to help the GUI to print out the needed information.
+ * As it is a part of the observer mode, it extends the Observable to remind the journal gui when a new event is 
+ * saved in.
+ * 
+ * @author Hantao Zhao 
+ * @author Frederic Jacobs
+ * @version 1.0
+
+ *
+ */
+
 public class Journal extends Observable {
 	public Journal() {
 		addObserver(AirportGUI.getJournalGUI());
@@ -17,6 +30,7 @@ public class Journal extends Observable {
 	public synchronized void addEvent(Event e) {
 		archiveList.add(e);
 		getList().add(e);
+		// Remind the observer that a new event has come in
 		setChanged();
 		notifyObservers(getList());
 		boolean updatedPosition = false;
@@ -56,7 +70,7 @@ public class Journal extends Observable {
 	public static ArrayList<Event> getList() {
 		return list;
 	}
-	
+	// The special event such as plane has crashed
 	public void planeHasCrashed(String planeID){
 		for (int i=0; i < positions.size(); i++){
 			if (positions.get(i).getPlaneID().equalsIgnoreCase(planeID)){
@@ -68,7 +82,7 @@ public class Journal extends Observable {
 	public static void setList(ArrayList<Event> list) {
 		Journal.list = list;
 	}
-
+	// The special event such as plane has landed
 	public void planeDidLand(String planeID) {
 		for (int i=0; i < positions.size(); i++){
 			if (positions.get(i).getPlaneID().equalsIgnoreCase(planeID)){

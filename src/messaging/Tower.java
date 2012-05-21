@@ -63,8 +63,8 @@ public class Tower implements Runnable {
 	public static int landingTimeTotal;
 
 
-	public final static int landingPointX = 533;
-	public final static int landingPointY = 437;
+	public static int landingPointX = 533;
+	public  static int landingPointY = 437;
 	public static ArrayList <Plane>landingRoute = new ArrayList<Plane>();
 	public static ArrayList <Plane>smallCircle = new ArrayList<Plane>();
 
@@ -223,12 +223,6 @@ public class Tower implements Runnable {
 															// class
 		}
 
-	}
-
-
-	public Plane[] getPlanes() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	public double getConsumption() {

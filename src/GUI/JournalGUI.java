@@ -214,6 +214,7 @@ public class JournalGUI extends JFrame implements ActionListener  , Observer {
 
 	}
 
+	// This override method update() is the essential part to print the messages as vectors.
 	@SuppressWarnings({ "unchecked", "static-access" })
 	@Override
 	public void update(Observable o, Object arg) {
