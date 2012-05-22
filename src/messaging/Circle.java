@@ -23,6 +23,7 @@ import messaging.messages.RoutingMessage.routingMessageType;
 public class Circle {
 	public static void answerLandingRequest(Plane plane,
 			DataOutputStream outData) throws IOException {
+		
 		// Judge if the landing route is valid 
 		if (Tower.landingRoute.size() == 0) {
 		// Add the current plane into the arraylist
@@ -38,6 +39,9 @@ public class Circle {
 					Tower.landingPointY, routingMessageType.LAST,
 					moveType.LANDING, int2bytes(0));
 			respondLanding.write(outData);
+			Event eventR = new Event(respondLanding, "Tower",
+					plane.getPlaneID());
+			Tower.journal.addEvent(eventR);
 		} 
 		// Judge if the smallCircle route is valid 
 		else if (Tower.smallCircle.size() < 3) {
@@ -52,7 +56,9 @@ public class Circle {
 					Tower.smallPointY, routingMessageType.LAST,
 					moveType.CIRCULAR, int2bytes(Tower.smallAngle));
 			respondLanding1.write(outData);
-
+			Event eventR = new Event(respondLanding1, "Tower",
+					plane.getPlaneID());
+			Tower.journal.addEvent(eventR);
 		}
 		// Judge if the middleCircle route is valid 
 		else if (Tower.middleCircle.size() < 10) {
@@ -67,7 +73,9 @@ public class Circle {
 					Tower.middlePointY, routingMessageType.LAST,
 					moveType.CIRCULAR, int2bytes(Tower.middleAngle));
 			respondLanding1.write(outData);
-
+			Event eventR = new Event(respondLanding1, "Tower",
+					plane.getPlaneID());
+			Tower.journal.addEvent(eventR);
 		}
 		// Judge if the longCircle route is valid 
 		else if (Tower.longCircle.size() < 100) {
@@ -82,6 +90,9 @@ public class Circle {
 					int2bytes(Tower.longAngle));
 			respondLanding1.write(outData);
 			respondLanding2.write(outData);
+			Event eventR = new Event(respondLanding1, "Tower",
+					plane.getPlaneID());
+			Tower.journal.addEvent(eventR);
 		} else {
 			RoutingMessage respondLanding = new RoutingMessage(
 					"Tour0000".getBytes(), Tower.landingPointX,
