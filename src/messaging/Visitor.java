@@ -63,7 +63,11 @@ public class Visitor {
 			DataOutputStream outData) {
 		System.out.println("Try to handle the mayday message");
 		
-		Tower.getInstance().getPlanes().remove(plane);// To make sure the mayday plane is an exception now. 
+		Tower.getInstance().getPlanes().remove(plane);// To make sure the mayday plane is an exception now.
+
+		//Find match of plandID in the tower planedDB
+
+		Tower.planeDidSendMayDay(plane.getPlaneID());// To make sure the mayday plane is an exception now. 
 		
 		AirportGUI.choker.chokeEnabled(true);// Run the choke mode
 		try {

@@ -102,6 +102,10 @@ public class Tower implements Runnable {
 
 	private Tower() {
 	}
+	
+	public static void planeDidSendMayDay (String planeID){
+		journal.planeDidSendMayDay(planeID);
+	}
 
 	public static void planeHasCrashed (String planeID){
 		Tower.getInstance().getJournal().planeHasCrashed(planeID);
@@ -229,6 +233,7 @@ public class Tower implements Runnable {
 	public void setConsumption(double consumption) {
 		Tower.consumption += consumption;
 	}
+	
 	// This method allows the circle information to be transfered from .txt file into the tower 
 	public void setCircle(String circleName){
 			Scanner scanner = null;

@@ -24,6 +24,7 @@ public class Plane {
 
 	private String planeID = "";
 	private KeyPair keypair;
+	private boolean mayDay = false ;
 	private Message messages[];
 	private int messageNo = 0;
 	private static int posX;
@@ -188,5 +189,13 @@ public class Plane {
 	public void setPassager(int passager) {
 		this.passager = passager;
 	}
-
+	
+	public boolean getMayDayStatus (){
+		return mayDay;
+	}
+	
+	public void setMayDayStatus(boolean mayDayStatus){
+		mayDay = mayDayStatus;
+	}
+	
 }

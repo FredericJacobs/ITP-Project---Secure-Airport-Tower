@@ -64,8 +64,9 @@ public class ReadMessages {
 		case 2://MayDayMessage
 			
 			System.out.println("Mayday message recieved!");
-			String cause = message.readUTF();
+			String cause = message.readLine();
 			return new MayDayMessage(planeID, cause.length(), posX, posY, cause);
+		
 		case 3://SendRSAMessage
 
 			int keySize = message.readInt();
@@ -97,7 +98,7 @@ public class ReadMessages {
 			return new KeepAliveMessage(planeID, posX, posY);
 		case 9://LandingMessage
 			return new LandingMessage(planeID, 0, posX, posY);
-		default://ByeMessage
+		default:
 			System.out.println("message not created");
 			return null;// If the messagetype doesnt match then we break the link by sending a Bye
 		}
