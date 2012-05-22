@@ -56,7 +56,6 @@ public class Tower implements Runnable {
 	private static PriorityQueue<Message> inQueue;//
 	private static KeyPair decryptKeypair;// the KeyPair for the tour
 	public static ArrayList <Plane> planes = new ArrayList<Plane>();
-	public static int planeCounter = 0;
 	public static Journal journal = new Journal();
 	public static double consumption;
 	public static int passgerNumber;
@@ -232,7 +231,7 @@ public class Tower implements Runnable {
 	public void setConsumption(double consumption) {
 		Tower.consumption += consumption;
 	}
-	// This method allows the circle information to be transfered from .txt into the tower 
+	// This method allows the circle information to be transfered from .txt file into the tower 
 	public void setCircle(String circleName){
 			Scanner scanner = null;
 			try {
