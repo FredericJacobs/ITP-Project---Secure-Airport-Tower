@@ -51,7 +51,7 @@ public class TowerMessageHandler extends Observable {
 			DataOutputStream outData) throws IOException {
 		int type = message.getType();
 		Event event = new Event(message, message.getPlaneID(), "Tower");
-		Tower.journal.addEvent(event);
+		Tower.getInstance().getJournal().addEvent(event);
 		plane.setPlaneID(message.getPlaneID());
 		// We answer most the messages by implementing the visitor pattern. While the Datafile and the bye message
 		// need some of the special parameter so we still keep the switch function for them.
@@ -102,7 +102,7 @@ public class TowerMessageHandler extends Observable {
 			} catch (FileNotFoundException e) {
 				System.out.println("File was not found");
 			}		
-			Tower.planes.remove(plane);
+			Tower.getInstance().getPlanes().remove(plane);
 			setChanged();
 			notifyObservers();
 			return 0;

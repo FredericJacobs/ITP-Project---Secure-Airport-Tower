@@ -126,10 +126,10 @@ public class AirportPanel extends JPanel {
 		g2d.setTransform(AffineTransform.getRotateInstance(0));
 
 		// Store the current position of every plane in the previousPositions buffer
-		for (int i=0; i < Tower.journal.positions.size() ; i++) {
-			XYPosition newPosition = Tower.journal.positions.get(i).getPosition();
+		for (int i=0; i < Tower.getInstance().getJournal().positions.size() ; i++) {
+			XYPosition newPosition = Tower.getInstance().getJournal().positions.get(i).getPosition();
 			Point p = new Point(newPosition.getPosx(), newPosition.getPosy());
-			String planeId = new String(Tower.journal.positions.get(i).getPlaneID());
+			String planeId = new String(Tower.getInstance().getJournal().positions.get(i).getPlaneID());
 			CircularBuffer<Point> cb = previousPositions.get(planeId);
 			if (cb != null) {
 				cb.add(p);
@@ -143,8 +143,8 @@ public class AirportPanel extends JPanel {
 		
 		// Draw trails so we can see the route that the planes have taken
 		g2d.setColor(Color.CYAN);
-		for (int i=0; i < Tower.journal.positions.size() ; i++) {
-			String planeId = new String(Tower.journal.positions.get(i).getPlaneID());
+		for (int i=0; i < Tower.getInstance().getJournal().positions.size() ; i++) {
+			String planeId = new String(Tower.getInstance().getJournal().positions.get(i).getPlaneID());
 			CircularBuffer<Point> previousPos = previousPositions.get(planeId);
 
 			for (int j = 1; j < previousPos.size(); j++) {
@@ -158,15 +158,15 @@ public class AirportPanel extends JPanel {
 		// Draw the planes themselves
 		g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
 		g2d.setColor(Color.GREEN);
-		for (int i=0; i < Tower.journal.positions.size() ; i++) {
+		for (int i=0; i < Tower.getInstance().getJournal().positions.size() ; i++) {
 			
-			String planeId = new String(Tower.journal.positions.get(i).getPlaneID());
-			BufferedImage planeImg = Tower.journal.positions.get(i).hasCrashed() ? imgKboom : imgPlane; 
-			if (Tower.journal.positions.get(i).sentMayDay()){
+			String planeId = new String(Tower.getInstance().getJournal().positions.get(i).getPlaneID());
+			BufferedImage planeImg = Tower.getInstance().getJournal().positions.get(i).hasCrashed() ? imgKboom : imgPlane; 
+			if (Tower.getInstance().getJournal().positions.get(i).sentMayDay()){
 				planeImg = imgPlaneMayDay;
 			}
 			
-			XYPosition newPosition = Tower.journal.positions.get(i).getPosition();
+			XYPosition newPosition = Tower.getInstance().getJournal().positions.get(i).getPosition();
 			g2d.setTransform(AffineTransform.getRotateInstance(0, newPosition.getPosx(), newPosition.getPosy()));
 			g2d.drawString(planeId + " (" + newPosition.getPosx() + ", " + newPosition.getPosy() + ")",
 					newPosition.getPosx() + planeImg.getWidth() / 2, newPosition.getPosy());

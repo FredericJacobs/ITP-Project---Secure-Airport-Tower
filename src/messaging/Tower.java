@@ -55,8 +55,8 @@ public class Tower implements Runnable {
 
 	private static PriorityQueue<Message> inQueue;//
 	private static KeyPair decryptKeypair;// the KeyPair for the tour
-	public static ArrayList <Plane> planes = new ArrayList<Plane>();
-	public static Journal journal = new Journal();
+	private ArrayList <Plane> planes = new ArrayList<Plane>();
+	private Journal journal = new Journal();
 	public static double consumption;
 	public static int passgerNumber;
 	public static int landingTimeTotal;
@@ -104,11 +104,11 @@ public class Tower implements Runnable {
 	}
 
 	public static void planeHasCrashed (String planeID){
-		journal.planeHasCrashed(planeID);
+		Tower.getInstance().getJournal().planeHasCrashed(planeID);
 	}
 	
 	public static void planDidLandSafely (String planeID){
-		journal.planeDidLand(planeID);
+		Tower.getInstance().getJournal().planeDidLand(planeID);
 	}
 	/**
 	 * The setter and getter of the Keypair
@@ -189,7 +189,6 @@ public class Tower implements Runnable {
 		} catch (FileNotFoundException e) {
 			System.out.println("Key Not Found");
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -215,7 +214,6 @@ public class Tower implements Runnable {
 			try {
 				new TowerThread(serverSocket.accept()).start();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}// call the
 															// TourThread
@@ -283,4 +281,20 @@ public class Tower implements Runnable {
 			
 			
 		}
+
+	public Journal getJournal() {
+		return journal;
+	}
+
+	public void setJournal(Journal journal) {
+		this.journal = journal;
+	}
+
+	public ArrayList <Plane> getPlanes() {
+		return planes;
+	}
+
+	public void setPlanes(ArrayList <Plane> planes) {
+		this.planes = planes;
+	}
 }

@@ -218,7 +218,7 @@ public class JournalGUI extends JFrame implements ActionListener  , Observer {
 	@SuppressWarnings({ "unchecked", "static-access" })
 	@Override
 	public void update(Observable o, Object arg) {
-		messaging.Event printEvent = Tower.journal.getEvent(0);
+		messaging.Event printEvent = Tower.getInstance().getJournal().getEvent(0);
 		@SuppressWarnings("rawtypes")
 		Vector print = new Vector();
 		print.add(printEvent.getMessage().getPriority());

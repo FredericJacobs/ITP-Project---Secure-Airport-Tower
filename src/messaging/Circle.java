@@ -41,7 +41,7 @@ public class Circle {
 			respondLanding.write(outData);
 			Event eventR = new Event(respondLanding, "Tower",
 					plane.getPlaneID());
-			Tower.journal.addEvent(eventR);
+			Tower.getInstance().getJournal().addEvent(eventR);
 		} 
 		// Judge if the smallCircle route is valid 
 		else if (Tower.smallCircle.size() < 3) {
@@ -58,7 +58,7 @@ public class Circle {
 			respondLanding1.write(outData);
 			Event eventR = new Event(respondLanding1, "Tower",
 					plane.getPlaneID());
-			Tower.journal.addEvent(eventR);
+			Tower.getInstance().getJournal().addEvent(eventR);
 		}
 		// Judge if the middleCircle route is valid 
 		else if (Tower.middleCircle.size() < 10) {
@@ -75,7 +75,7 @@ public class Circle {
 			respondLanding1.write(outData);
 			Event eventR = new Event(respondLanding1, "Tower",
 					plane.getPlaneID());
-			Tower.journal.addEvent(eventR);
+			Tower.getInstance().getJournal().addEvent(eventR);
 		}
 		// Judge if the longCircle route is valid 
 		else if (Tower.longCircle.size() < 100) {
@@ -92,7 +92,7 @@ public class Circle {
 			respondLanding2.write(outData);
 			Event eventR = new Event(respondLanding1, "Tower",
 					plane.getPlaneID());
-			Tower.journal.addEvent(eventR);
+			Tower.getInstance().getJournal().addEvent(eventR);
 		} else {
 			RoutingMessage respondLanding = new RoutingMessage(
 					"Tour0000".getBytes(), Tower.landingPointX,
@@ -124,8 +124,8 @@ public class Circle {
 		Tower.smallCircle.clear();
 		Tower.middleCircle.clear();
 		Tower.longCircle.clear();
-		for (int i = 0; i < Tower.planes.size(); i++) {
-			Plane planelist = Tower.planes.get(i);
+		for (int i = 0; i < Tower.getInstance().getPlanes().size(); i++) {
+			Plane planelist = Tower.getInstance().getPlanes().get(i);
 			DataOutputStream outDataList;
 			try {
 				outDataList = new DataOutputStream(planelist.getSocket()

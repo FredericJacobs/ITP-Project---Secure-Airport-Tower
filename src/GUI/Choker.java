@@ -71,8 +71,8 @@ public class Choker extends JFrame implements MouseListener {
 		if (status) {
 			imageLabel.removeAll();
 			imageLabel.setIcon(unChokeButton);
-			for (int i = 0; i < Tower.planes.size(); i++) {
-				Socket socket = Tower.planes.get(i).getSocket();
+			for (int i = 0; i < Tower.getInstance().getPlanes().size(); i++) {
+				Socket socket = Tower.getInstance().getPlanes().get(i).getSocket();
 				DataOutputStream outData;
 				try {
 					outData = new DataOutputStream(
@@ -83,7 +83,7 @@ public class Choker extends JFrame implements MouseListener {
 				chock.write(outData);
 				Event eventR = new Event(chock, "Tower",
 						"Allplanes");
-				Tower.journal.addEvent(eventR);
+				Tower.getInstance().getJournal().addEvent(eventR);
 				} catch (IOException e) {
 					// 
 					e.printStackTrace();
@@ -95,8 +95,8 @@ public class Choker extends JFrame implements MouseListener {
 		// If the choke is already active
 		else {
 
-			for (int i = 0; i < Tower.planes.size(); i++) {
-				Socket socket = Tower.planes.get(i).getSocket();
+			for (int i = 0; i < Tower.getInstance().getPlanes().size(); i++) {
+				Socket socket = Tower.getInstance().getPlanes().get(i).getSocket();
 				DataOutputStream outData;
 				try {
 					outData = new DataOutputStream(
@@ -107,7 +107,7 @@ public class Choker extends JFrame implements MouseListener {
 				unchock.write(outData);
 				Event eventR = new Event(unchock, "Tower",
 						"Allplanes");
-				Tower.journal.addEvent(eventR);} catch (IOException e) {
+				Tower.getInstance().getJournal().addEvent(eventR);} catch (IOException e) {
 					e.printStackTrace();
 				}
 			}

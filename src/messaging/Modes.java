@@ -56,13 +56,13 @@ public class Modes {
 	//The action when the button CHRONOS is clicked 
 
 	public static void reOrganiseChronos() {
-		Collections.sort(Tower.planes, comparatorChronos);
+		Collections.sort(Tower.getInstance().getPlanes(), comparatorChronos);
 		Tower.landingRoute.clear();
 		Tower.smallCircle.clear();
 		Tower.middleCircle.clear();
 		Tower.longCircle.clear();
-		for (int i = 0; i < Tower.planes.size(); i++) {
-			Plane plane = Tower.planes.get(i);
+		for (int i = 0; i < Tower.getInstance().getPlanes().size(); i++) {
+			Plane plane = Tower.getInstance().getPlanes().get(i);
 			DataOutputStream outData;
 			try {
 				outData = new DataOutputStream(plane.getSocket()
@@ -79,9 +79,9 @@ public class Modes {
 		Tower.smallCircle.clear();
 		Tower.middleCircle.clear();
 		Tower.longCircle.clear();
-		Collections.sort(Tower.planes, comparatorFuel);
-		for (int i = 0; i < Tower.planes.size(); i++) {
-			Plane plane = Tower.planes.get(i);
+		Collections.sort(Tower.getInstance().getPlanes(), comparatorFuel);
+		for (int i = 0; i < Tower.getInstance().getPlanes().size(); i++) {
+			Plane plane = Tower.getInstance().getPlanes().get(i);
 			DataOutputStream outData;
 			try {
 				outData = new DataOutputStream(plane.getSocket()
@@ -98,9 +98,9 @@ public class Modes {
 		Tower.smallCircle.clear();
 		Tower.middleCircle.clear();
 		Tower.longCircle.clear();
-		Collections.sort(Tower.planes, comparatorTime);
-		for (int i = 0; i < Tower.planes.size(); i++) {
-			Plane plane = Tower.planes.get(i);
+		Collections.sort(Tower.getInstance().getPlanes(), comparatorTime);
+		for (int i = 0; i < Tower.getInstance().getPlanes().size(); i++) {
+			Plane plane = Tower.getInstance().getPlanes().get(i);
 			DataOutputStream outData;
 			try {
 				outData = new DataOutputStream(plane.getSocket()

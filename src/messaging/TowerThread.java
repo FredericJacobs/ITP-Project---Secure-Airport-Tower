@@ -42,7 +42,7 @@ public class TowerThread extends Thread {
 
 			TowerMessageHandler messageHandler = new TowerMessageHandler(); // create a TowerMessageHandler to respond the messages send by the planes
 			plane = new Plane();
-			Tower.planes.add(plane); // Created a new plane by using the order
+			Tower.getInstance().getPlanes().add(plane); // Created a new plane by using the order
 			plane.setSocket(this.socket);
 
 			while (true) {

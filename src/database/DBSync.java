@@ -86,25 +86,25 @@ public class DBSync implements Runnable  {
 
 	private void updatePositions() {
 
-		for (int i=0; i< (Tower.journal.positions.size()); i++){
-			//oldPosition is used to query the DB with the planeid to search for current records
-			oldPosition[i] = new BasicDBObject().append("planeid", Tower.journal.positions.get(i).getPlaneID()) ;
-			newPosition[i] = new BasicDBObject().append("planeid", Tower.journal.positions.get(i).getPlaneID()).append("positionX", Tower.journal.positions.get(i).getPosition().getPosx()).append("positionY", Tower.journal.positions.get(i).getPosition().getPosy());
+		for (int i=0; i< (Tower.getInstance().getJournal().positions.size()); i++){
+			//oldPosition is used to query the DB with the plane id to search for current records
+			oldPosition[i] = new BasicDBObject().append("planeid", Tower.getInstance().getJournal().positions.get(i).getPlaneID()) ;
+			newPosition[i] = new BasicDBObject().append("planeid", Tower.getInstance().getJournal().positions.get(i).getPlaneID()).append("positionX", Tower.getInstance().getJournal().positions.get(i).getPosition().getPosx()).append("positionY", Tower.getInstance().getJournal().positions.get(i).getPosition().getPosy());
 
-			//If this planeid is not yet in the database, we add it
-			if (positionsCollection.count(new BasicDBObject().append("planeid", Tower.journal.positions.get(i).getPlaneID()))<1){	
+			//If this plane id is not yet in the database, we add it
+			if (positionsCollection.count(new BasicDBObject().append("planeid", Tower.getInstance().getJournal().positions.get(i).getPlaneID()))<1){	
 				positionsCollection.insert(newPosition[i]);
 				cachedPosition[i] = new XYPosition();
-				cachedPosition[i].setPosx(Tower.journal.positions.get(i).getPosition().getPosx());
-				cachedPosition[i].setPosy(Tower.journal.positions.get(i).getPosition().getPosy());
+				cachedPosition[i].setPosx(Tower.getInstance().getJournal().positions.get(i).getPosition().getPosx());
+				cachedPosition[i].setPosy(Tower.getInstance().getJournal().positions.get(i).getPosition().getPosy());
 			}
 
 			else{
 				//Let's only update the position if it is truly required.
-				if ((cachedPosition[i].getPosx() != Tower.journal.positions.get(i).getPosition().getPosx())  && (cachedPosition[i].getPosy() != Tower.journal.positions.get(i).getPosition().getPosy())){
+				if ((cachedPosition[i].getPosx() != Tower.getInstance().getJournal().positions.get(i).getPosition().getPosx())  && (cachedPosition[i].getPosy() != Tower.getInstance().getJournal().positions.get(i).getPosition().getPosy())){
 					positionsCollection.update(oldPosition[i], newPosition[i]);
-					cachedPosition[i].setPosx(Tower.journal.positions.get(i).getPosition().getPosx());
-					cachedPosition[i].setPosy(Tower.journal.positions.get(i).getPosition().getPosy());
+					cachedPosition[i].setPosx(Tower.getInstance().getJournal().positions.get(i).getPosition().getPosx());
+					cachedPosition[i].setPosy(Tower.getInstance().getJournal().positions.get(i).getPosition().getPosy());
 				}
 			}
 

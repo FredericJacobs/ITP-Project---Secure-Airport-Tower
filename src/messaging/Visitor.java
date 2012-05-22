@@ -28,12 +28,11 @@ public class Visitor {
 			try {
 				respondHelloMessage.write(outData);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			Event eventR = new Event(respondHelloMessage, "Tower",
 					message.getPlaneID());
-			Tower.journal.addEvent(eventR);
+			Tower.getInstance().getJournal().addEvent(eventR);
 			plane.setInitialTime(System.currentTimeMillis());
 			return 1;
 		}
@@ -45,12 +44,11 @@ public class Visitor {
 			try {
 				respondHelloMessage.write(outData);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			Event eventR = new Event(respondHelloMessage, "Tower",
 					message.getPlaneID());
-			Tower.journal.addEvent(eventR);
+			Tower.getInstance().getJournal().addEvent(eventR);
 			plane.setInitialTime(System.currentTimeMillis());
 			return 0;
 		}
@@ -65,7 +63,7 @@ public class Visitor {
 			DataOutputStream outData) {
 		System.out.println("Try to handle the mayday message");
 		
-		Tower.planes.remove(plane);// To make sure the mayday plane is an exception now. 
+		Tower.getInstance().getPlanes().remove(plane);// To make sure the mayday plane is an exception now. 
 		
 		AirportGUI.choker.chokeEnabled(true);// Run the choke mode
 		try {
@@ -75,7 +73,7 @@ public class Visitor {
 		}
 		Event eventR = new Event(message, "Tower",
 				message.getPlaneID());
-		Tower.journal.addEvent(eventR);
+		Tower.getInstance().getJournal().addEvent(eventR);
 		return 0;
 	}
 	// Respond to the SendRSAMessage 
@@ -115,7 +113,6 @@ public class Visitor {
 		try {
 			Circle.answerLandingRequest(plane, outData);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return 0;
