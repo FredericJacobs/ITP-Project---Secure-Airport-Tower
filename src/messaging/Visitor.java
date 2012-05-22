@@ -75,9 +75,6 @@ public class Visitor {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		Event eventR = new Event(message, "Tower",
-				message.getPlaneID());
-		Tower.getInstance().getJournal().addEvent(eventR);
 		return 0;
 	}
 	// Respond to the SendRSAMessage 

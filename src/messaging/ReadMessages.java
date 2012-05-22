@@ -62,10 +62,10 @@ public class ReadMessages {
 			return new DataMessage(planeID, continuation, posX, posY, hash,
 					format, fileSize, payload);
 		case 2://MayDayMessage
-			
 			System.out.println("Mayday message recieved!");
-			String cause = message.readLine();
-			return new MayDayMessage(planeID, cause.length(), posX, posY, cause);
+			byte[] mayday = new byte[length]; 
+			message.read(mayday);
+			return new MayDayMessage(planeID, length, posX, posY, new String(mayday));
 		
 		case 3://SendRSAMessage
 

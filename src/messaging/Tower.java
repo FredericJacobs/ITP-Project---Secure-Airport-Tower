@@ -104,7 +104,7 @@ public class Tower implements Runnable {
 	}
 	
 	public static void planeDidSendMayDay (String planeID){
-		journal.planeDidSendMayDay(planeID);
+		Tower.getInstance().getJournal().planeDidSendMayDay(planeID);
 	}
 
 	public static void planeHasCrashed (String planeID){
