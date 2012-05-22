@@ -28,7 +28,6 @@ public class Visitor {
 			try {
 				respondHelloMessage.write(outData);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			Event eventR = new Event(respondHelloMessage, "Tower",
@@ -112,7 +111,6 @@ public class Visitor {
 		try {
 			Circle.answerLandingRequest(plane, outData);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return 0;
