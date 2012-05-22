@@ -64,7 +64,7 @@ public class ReadMessages {
 		case 2://MayDayMessage
 			
 			System.out.println("Mayday message recieved!");
-			String cause = message.readLine();//readUTF()
+			String cause = message.readUTF();
 			return new MayDayMessage(planeID, cause.length(), posX, posY, cause);
 		case 3://SendRSAMessage
 
