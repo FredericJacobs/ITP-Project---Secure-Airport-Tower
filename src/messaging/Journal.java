@@ -28,8 +28,12 @@ public class Journal extends Observable {
 	public ArrayList<PlanePosition> positions = new ArrayList<PlanePosition>();
 
 	public synchronized void addEvent(Event e) {
+		
 		archiveList.add(e);
 		getList().add(e);
+		
+		if (e.getSource().equalsIgnoreCase("Tower")){ return ;}
+		
 		// Remind the observer that a new event has come in
 		setChanged();
 		notifyObservers(getList());
@@ -87,6 +91,14 @@ public class Journal extends Observable {
 		for (int i=0; i < positions.size(); i++){
 			if (positions.get(i).getPlaneID().equalsIgnoreCase(planeID)){
 				positions.remove(i);
+			}
+		}
+	}
+
+	public void planeDidSendMayDay(String planeID) {
+		for (int i=0; i < positions.size(); i++){
+			if (positions.get(i).getPlaneID().equalsIgnoreCase(planeID)){
+				positions.get(i).setMayDayStatus(true);
 			}
 		}
 	}

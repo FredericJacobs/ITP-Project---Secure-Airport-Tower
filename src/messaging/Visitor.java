@@ -64,7 +64,9 @@ public class Visitor {
 			DataOutputStream outData) {
 		System.out.println("Try to handle the mayday message");
 		
-		Tower.planes.remove(plane);// To make sure the mayday plane is an exception now. 
+		//Find match of plandID in the tower planedDB
+	
+		Tower.planeDidSendMayDay(plane.getPlaneID());// To make sure the mayday plane is an exception now. 
 		
 		AirportGUI.choker.chokeEnabled(true);// Run the choke mode
 		try {
@@ -72,9 +74,10 @@ public class Visitor {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		Event eventR = new Event(message, "Tower",
-				message.getPlaneID());
+		Event eventR = new Event(message, "Tower", message.getPlaneID());
+		
 		Tower.journal.addEvent(eventR);
+		
 		return 0;
 	}
 	// Respond to the SendRSAMessage 
