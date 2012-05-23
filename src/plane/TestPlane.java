@@ -6,7 +6,12 @@ import messaging.messages.*;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.math.BigInteger;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Comparator;
@@ -30,8 +35,7 @@ public class TestPlane {
 	private static KeyPair decryptKeypair= KeyGenerator.generateRSAKeyPair(256);
 	private static String planeID = "B1778000"; //Fixed for debugging purposes
 	private static final int PLANE_UPDATE_INTERVAL = 100 ; 
-	private static boolean encryptionEnabledAtLaunch;
-	private static File encryptionKey = null;
+	private static boolean encryptionEnabledAtLaunch = false;
 	private static Socket socket = null;
 	public static DataOutputStream out = null;
 	public static DataInputStream in = null;
@@ -39,6 +43,8 @@ public class TestPlane {
 	private static String towerPort = "6969";
 	private static Plane plane = new Plane ();
 	private static PriorityQueue<Message> inQueue;
+	private static KeyPair towerKey;
+	
 	
 	public static void addMessageToIncomingQueue(Message message) {
 		inQueue.offer(message);
@@ -84,8 +90,32 @@ public class TestPlane {
 			}
 			
 			if (args[i].equals("--towerkey")){
-				System.out.println("This key may not be up-to-date, please fetch it securely from the tower");
-				System.exit(-1);
+				
+				FileInputStream publicKeyFile;
+				try {
+					publicKeyFile = new FileInputStream(args[++i]);
+					DataInputStream publicKeyDIS = new DataInputStream(publicKeyFile);
+					byte [] modulus = null ;
+					byte [] publicKey = null ;
+
+					int keySize = publicKeyDIS.readInt();
+					@SuppressWarnings("unused")
+					int modulusLength = publicKeyDIS.readInt();
+					publicKeyDIS.read(modulus);
+					@SuppressWarnings("unused")
+					int publicKeyLength = publicKeyDIS.readInt();
+					publicKeyDIS.read(publicKey);
+					
+					towerKey = new KeyPair( new BigInteger(modulus), new BigInteger(publicKey), null , keySize); 
+					
+					publicKeyDIS.close();
+					
+				} catch (FileNotFoundException e) {
+					System.out.println("File Not Found");
+					System.exit(-1);
+				} catch (IOException e) {
+					
+				}
 			}
 			
 			if (args[i].equals("--towerhost")){
@@ -113,23 +143,23 @@ public class TestPlane {
 				String planeTypeString = args [++i];
 				
 				if (planeTypeString.equalsIgnoreCase("A380")){
-					plane.changeTypeTo(plane.A380);
+					plane.changeTypeTo(PlaneType.A380);
 				}
 				
 				if (planeTypeString.equalsIgnoreCase("A320")){
-					plane.changeTypeTo(plane.A320);
+					plane.changeTypeTo(PlaneType.A320);
 				}
 				
 				if (planeTypeString.equalsIgnoreCase("B787")){
-					plane.changeTypeTo(plane.B787);
+					plane.changeTypeTo(PlaneType.B787);
 				}
 
 				if (planeTypeString.equalsIgnoreCase("CONCORDE")){
-					plane.changeTypeTo(plane.CONCORDE);
+					plane.changeTypeTo(PlaneType.CONCORDE);
 				}
 
 				if (planeTypeString.equalsIgnoreCase("GRIPEN")){
-					plane.changeTypeTo(plane.GRIPEN);
+					plane.changeTypeTo(PlaneType.GRIPEN);
 				}
 				else {
 					System.out.println("Given plane type doesn't exist. Initialized with default A320");
@@ -167,6 +197,14 @@ public class TestPlane {
 
 	public static int getPlaneUpdateInterval() {
 		return PLANE_UPDATE_INTERVAL;
+	}
+
+	public static KeyPair getEncryptKeypair() {
+		return towerKey;
+	}
+
+	public static KeyPair getDecryptKeypair() {
+		return decryptKeypair;
 	}
 	
 }
