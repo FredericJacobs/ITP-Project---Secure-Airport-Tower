@@ -47,9 +47,6 @@ public class Tower implements Runnable {
 	 *            The journal of the tour
 	 * @param planes
 	 *            [] The array of the planes connected with the tour
-	 * @param planeCounter
-	 *            The static integer to count the number of the plane. Once a
-	 *            plane is connected, it will plus 1.
 	 */
 	private static Tower instance;
 
@@ -57,35 +54,35 @@ public class Tower implements Runnable {
 	private static KeyPair decryptKeypair;// the KeyPair for the tour
 	private ArrayList <Plane> planes = new ArrayList<Plane>();
 	private Journal journal = new Journal();
-	public static double consumption;
-	public static int passgerNumber;
-	public static int landingTimeTotal;
+	private double consumption;
+	private int passgerNumber;
+	private int landingTimeTotal;
 
 
-	public static int landingPointX = 533;
-	public  static int landingPointY = 437;
-	public static ArrayList <Plane>landingRoute = new ArrayList<Plane>();
-	public static ArrayList <Plane>smallCircle = new ArrayList<Plane>();
+	private int landingPointX;
+	private int landingPointY ;
+	private ArrayList <Plane>landingRoute = new ArrayList<Plane>();
+	private ArrayList <Plane>smallCircle = new ArrayList<Plane>();
 
-	public static int smallPointX = 350;
-	public static int smallPointY = 100;
-	public static int smallAngle = 36000;
-
-
-	public static ArrayList <Plane>middleCircle = new ArrayList<Plane>();
-	public static int middlePointX= 200;
-	public static int middlePointY= 550;
-	public static int middleAngle= 36000;
+	private int smallPointX;
+	private int smallPointY;
+	private int smallAngle;
 
 
-	public static ArrayList <Plane>longCircle = new ArrayList<Plane>();
+	private ArrayList <Plane>middleCircle = new ArrayList<Plane>();
+	private int middlePointX;
+	private int middlePointY;
+	private int middleAngle;
 
-	public static int longPointX= 700;
-	public static int longPointY= 200;
-	public static int longAngle= 36000;
 
-	public static int straightX=420;
-	public static int straightY=166;
+	private ArrayList <Plane>longCircle = new ArrayList<Plane>();
+
+	private int longPointX;
+	private int longPointY;
+	private int longAngle;
+
+	private int straightX;
+	private int straightY;
 
 
 
@@ -104,7 +101,7 @@ public class Tower implements Runnable {
 	}
 	
 	public static void planeDidSendMayDay (String planeID){
-		journal.planeDidSendMayDay(planeID);
+		Tower.getInstance().getJournal().planeDidSendMayDay(planeID);
 	}
 
 	public static void planeHasCrashed (String planeID){
@@ -231,7 +228,7 @@ public class Tower implements Runnable {
 	}
 
 	public void setConsumption(double consumption) {
-		Tower.consumption += consumption;
+		this.consumption += consumption;
 	}
 	
 	// This method allows the circle information to be transfered from .txt file into the tower 
@@ -252,33 +249,33 @@ public class Tower implements Runnable {
 				coordinates = ((String) ins.subSequence(1, ins.length())).split(",");
 				switch(ins.charAt(0)) {
 				case 'S':
-					Tower.straightX= Integer.parseInt(coordinates[0]);
-					Tower.straightY = Integer.parseInt(coordinates[1]);
+					this.setStraightX(Integer.parseInt(coordinates[0]));
+					this.setStraightY(Integer.parseInt(coordinates[1]));
 				break;
 				
 				case 'C':
 					switch(circleName){
 					case "smallcircle" : 
-						Tower.smallPointX = Integer.parseInt(coordinates[0]);
-						Tower.smallPointY = Integer.parseInt(coordinates[1]);
-						Tower.smallAngle =  Integer.parseInt(coordinates[2]);
+						this.setSmallPointX(Integer.parseInt(coordinates[0]));
+						this.setSmallPointY(Integer.parseInt(coordinates[1]));
+						this.setSmallAngle(Integer.parseInt(coordinates[2]));
 						break;
 					case "middlecircle" : 
-						Tower.middlePointX = Integer.parseInt(coordinates[0]);
-						Tower.middlePointY = Integer.parseInt(coordinates[1]);
-						Tower.middleAngle =  Integer.parseInt(coordinates[2]);
+						this.setMiddlePointX(Integer.parseInt(coordinates[0]));
+						this.setMiddlePointY(Integer.parseInt(coordinates[1]));
+						this.setMiddleAngle(Integer.parseInt(coordinates[2]));
 						break;
 					case "longcircle" : 
-						Tower.longPointX = Integer.parseInt(coordinates[0]);
-						Tower.longPointY = Integer.parseInt(coordinates[1]);
-						Tower.longAngle =  Integer.parseInt(coordinates[2]);
+						this.setLongPointX(Integer.parseInt(coordinates[0]));
+						this.setLongPointY(Integer.parseInt(coordinates[1]));
+						this.setLongAngle(Integer.parseInt(coordinates[2]));
 						break;	
 					}
 					break;
 				
 				case 'L':
-					Tower.longPointX = Integer.parseInt(coordinates[0]);
-					Tower.longPointY = Integer.parseInt(coordinates[0]);
+					this.setLandingPointX(Integer.parseInt(coordinates[0]));
+					this.setLandingPointY(Integer.parseInt(coordinates[1]));
 					break;
 					
 				}
@@ -301,5 +298,157 @@ public class Tower implements Runnable {
 
 	public void setPlanes(ArrayList <Plane> planes) {
 		this.planes = planes;
+	}
+
+	public int getPassgerNumber() {
+		return passgerNumber;
+	}
+
+	public void setPassgerNumber(int passgerNumber) {
+		this.passgerNumber += passgerNumber;
+	}
+
+	public int getLandingTimeTotal() {
+		return landingTimeTotal;
+	}
+
+	public void setLandingTimeTotal(int landingTimeTotal) {
+		this.landingTimeTotal += landingTimeTotal;
+	}
+
+	public int getLandingPointX() {
+		return landingPointX;
+	}
+
+	public void setLandingPointX(int landingPointX) {
+		this.landingPointX = landingPointX;
+	}
+
+	public int getSmallPointX() {
+		return smallPointX;
+	}
+
+	public void setSmallPointX(int smallPointX) {
+		this.smallPointX = smallPointX;
+	}
+
+	public int getSmallPointY() {
+		return smallPointY;
+	}
+
+	public void setSmallPointY(int smallPointY) {
+		this.smallPointY = smallPointY;
+	}
+
+	public int getSmallAngle() {
+		return smallAngle;
+	}
+
+	public void setSmallAngle(int smallAngle) {
+		this.smallAngle = smallAngle;
+	}
+
+	public int getMiddlePointX() {
+		return middlePointX;
+	}
+
+	public void setMiddlePointX(int middlePointX) {
+		this.middlePointX = middlePointX;
+	}
+
+	public int getMiddlePointY() {
+		return middlePointY;
+	}
+
+	public void setMiddlePointY(int middlePointY) {
+		this.middlePointY = middlePointY;
+	}
+
+	public int getMiddleAngle() {
+		return middleAngle;
+	}
+
+	public void setMiddleAngle(int middleAngle) {
+		this.middleAngle = middleAngle;
+	}
+
+	public int getLongPointX() {
+		return longPointX;
+	}
+
+	public void setLongPointX(int longPointX) {
+		this.longPointX = longPointX;
+	}
+
+	public int getLongPointY() {
+		return longPointY;
+	}
+
+	public void setLongPointY(int longPointY) {
+		this.longPointY = longPointY;
+	}
+
+	public int getLongAngle() {
+		return longAngle;
+	}
+
+	public void setLongAngle(int longAngle) {
+		this.longAngle = longAngle;
+	}
+
+	public int getStraightX() {
+		return straightX;
+	}
+
+	public void setStraightX(int straightX) {
+		this.straightX = straightX;
+	}
+
+	public int getStraightY() {
+		return straightY;
+	}
+
+	public void setStraightY(int straightY) {
+		this.straightY = straightY;
+	}
+
+	public int getLandingPointY() {
+		return landingPointY;
+	}
+
+	public void setLandingPointY(int landingPointY) {
+		this.landingPointY = landingPointY;
+	}
+
+	public ArrayList <Plane> getLandingRoute() {
+		return landingRoute;
+	}
+
+	public void setLandingRoute(ArrayList <Plane> landingRoute) {
+		this.landingRoute = landingRoute;
+	}
+
+	public ArrayList <Plane> getSmallCircle() {
+		return smallCircle;
+	}
+
+	public void setSmallCircle(ArrayList <Plane> smallCircle) {
+		this.smallCircle = smallCircle;
+	}
+
+	public ArrayList <Plane> getMiddleCircle() {
+		return middleCircle;
+	}
+
+	public void setMiddleCircle(ArrayList <Plane> middleCircle) {
+		this.middleCircle = middleCircle;
+	}
+
+	public ArrayList <Plane> getLongCircle() {
+		return longCircle;
+	}
+
+	public void setLongCircle(ArrayList <Plane> longCircle) {
+		this.longCircle = longCircle;
 	}
 }

@@ -71,7 +71,10 @@ public class TowerThread extends Thread {
 			// finish the network and close the tunnel
 		} catch (IOException e) {
 			try {
+				System.out.println("One Plane lost,too bad");
 				Tower.planeHasCrashed(plane.getPlaneID());
+				Tower.getInstance().getPlanes().remove(plane);
+				Modes.reOrganiseChronos();
 				socket.close();
 			} catch (IOException e1) {
 				System.out.println("Connection interrupted");

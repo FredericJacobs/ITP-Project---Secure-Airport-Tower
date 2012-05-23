@@ -77,7 +77,6 @@ public class TowerMessageHandler extends Observable {
 					String[ ] tokens = scanner.nextLine().split(delimiters);
 					plane.setPlaneID(tokens[1]);					
 				} catch (FileNotFoundException e) {
-					System.out.println("File was not found");
 				}
 			}
 
@@ -88,8 +87,8 @@ public class TowerMessageHandler extends Observable {
 			System.out.println("Connection terminated");
 			plane.setlandingTimeTotal(System.currentTimeMillis()
 					- plane.getInitialTime());
-			Tower.passgerNumber += plane.getPassager();
-			Tower.landingTimeTotal += plane.getlandingTimeTotal();
+			Tower.getInstance().setPassgerNumber(plane.getPassager());
+			Tower.getInstance().setLandingTimeTotal((int)plane.getlandingTimeTotal());
 			// Read the fuel consumption and save it in the plane class and update it in the modesGUI.
 			try {
 				Scanner scanner = new Scanner(new FileInputStream("downloads"+ File.separator + plane.getPlaneID()+"-1.txt"));
@@ -98,9 +97,8 @@ public class TowerMessageHandler extends Observable {
 				String delimiters2 = "[;]"; 
 				String[ ] tokens2 = tokens[1].split(delimiters2);
 				int consumptionPlane =  Integer.valueOf(tokens2[0]).intValue(); 
-				Tower.consumption += consumptionPlane;
+				Tower.getInstance().setConsumption(consumptionPlane);
 			} catch (FileNotFoundException e) {
-				System.out.println("File was not found");
 			}		
 			Tower.getInstance().getPlanes().remove(plane);
 			setChanged();
@@ -118,11 +116,11 @@ public class TowerMessageHandler extends Observable {
 	in this way we can arrange all the landing request well.
 	*/
 	public void changeCircle() {
-		Tower.landingRoute.remove(0);
+		Tower.getInstance().getLandingRoute().remove(0);
 		// Check if there is other planes in the small circle, if so let them enter the landing route
-		if (Tower.smallCircle.size() != 0) {
-			Plane planeSmall = Tower.smallCircle.remove(0);
-			Tower.landingRoute.add(planeSmall);
+		if (Tower.getInstance().getSmallCircle().size() != 0) {
+			Plane planeSmall = Tower.getInstance().getSmallCircle().remove(0);
+			Tower.getInstance().getLandingRoute().add(planeSmall);
 			try {
 				DataOutputStream outData = new DataOutputStream(planeSmall
 						.getSocket().getOutputStream());
@@ -132,17 +130,17 @@ public class TowerMessageHandler extends Observable {
 						Circle.int2bytes(0));
 				respondLanding0.write(outData);
 				RoutingMessage respondLanding = new RoutingMessage(
-						"Tour0000".getBytes(), Tower.landingPointX,
-						Tower.landingPointY, routingMessageType.LAST,
+						"Tour0000".getBytes(), Tower.getInstance().getLandingPointX(),
+						Tower.getInstance().getLandingPointY(), routingMessageType.LAST,
 						moveType.LANDING, Circle.int2bytes(0));
 				respondLanding.write(outData);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 			// Check if there is other planes in the middle circle, if so let them enter the small circle
-			if (Tower.middleCircle.size() != 0) {
-				Plane planeMiddle = Tower.middleCircle.remove(0);
-				Tower.smallCircle.add(planeMiddle);
+			if (Tower.getInstance().getMiddleCircle().size() != 0) {
+				Plane planeMiddle = Tower.getInstance().getMiddleCircle().remove(0);
+				Tower.getInstance().getSmallCircle().add(planeMiddle);
 				try {
 					DataOutputStream outData = new DataOutputStream(planeMiddle
 							.getSocket().getOutputStream());
@@ -152,19 +150,19 @@ public class TowerMessageHandler extends Observable {
 							Circle.int2bytes(0));
 					respondLanding0.write(outData);
 					RoutingMessage respondLanding1 = new RoutingMessage(
-							"Tour0000".getBytes(), Tower.smallPointX,
-							Tower.smallPointY, routingMessageType.LAST,
+							"Tour0000".getBytes(), Tower.getInstance().getSmallPointX(),
+							Tower.getInstance().getSmallPointY(), routingMessageType.LAST,
 							moveType.CIRCULAR,
-							Circle.int2bytes(Tower.middleAngle));
+							Circle.int2bytes(Tower.getInstance().getMiddleAngle()));
 					respondLanding1.write(outData);
 
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
 				// Check if there is other planes in the long circle, if so let them enter the middle circle
-				if (Tower.longCircle.size() != 0) {
-					Plane planeLong = Tower.longCircle.remove(0);
-					Tower.middleCircle.add(planeLong);
+				if (Tower.getInstance().getLongCircle().size() != 0) {
+					Plane planeLong = Tower.getInstance().getLongCircle().remove(0);
+					Tower.getInstance().getMiddleCircle().add(planeLong);
 
 					try {
 						DataOutputStream outData = new DataOutputStream(
@@ -175,10 +173,10 @@ public class TowerMessageHandler extends Observable {
 								moveType.STRAIGHT, Circle.int2bytes(0));
 						respondLanding0.write(outData);
 						RoutingMessage respondLanding1 = new RoutingMessage(
-								"Tour0000".getBytes(), Tower.middlePointX,
-								Tower.middlePointY, routingMessageType.LAST,
+								"Tour0000".getBytes(), Tower.getInstance().getMiddlePointX(),
+								Tower.getInstance().getMiddlePointY(), routingMessageType.LAST,
 								moveType.CIRCULAR,
-								Circle.int2bytes(Tower.middleAngle));
+								Circle.int2bytes(Tower.getInstance().getMiddleAngle()));
 						respondLanding1.write(outData);
 					} catch (IOException e) {
 						e.printStackTrace();

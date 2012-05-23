@@ -41,8 +41,6 @@ public class Journal extends Observable {
 		// Find Plane in Array and add it's position
 		for (int i = 0; i < positions.size(); i++) {
 
-			//System.out.println(positions.get(i).getPlaneID());
-			//System.out.println(e.getSource());
 
 			if (e.getSource().equalsIgnoreCase(positions.get(i).getPlaneID())) {
 				positions.get(i).updatePosition(e.getMessage().getPosition());
@@ -50,7 +48,6 @@ public class Journal extends Observable {
 				if (e.getMessage().getType() == 6){
 					positions.get(i).setMayDayStatus(true);
 				}
-			//	System.out.println("position updated");
 				break;
 			}
 
@@ -63,7 +60,7 @@ public class Journal extends Observable {
 		}
 	}
 
-	public Event getEvent(int i) {
+	public synchronized Event getEvent(int i) {
 		return getList().remove(0);
 	}
 
