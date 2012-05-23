@@ -101,8 +101,8 @@ public class ModesGUI extends JFrame implements ActionListener, Observer {
 	// This override method update() is the essential part to print the newest information.
 	@Override
 	public void update(Observable arg0, Object arg1) {
-		 textP.setText(Tower.passgerNumber+" ");
-		 textC.setText(Tower.consumption+" ");
-		 textT.setText((double)Tower.landingTimeTotal/Tower.passgerNumber+" ");
+		 textP.setText(Tower.getInstance().getPassgerNumber()+" ");
+		 textC.setText(Tower.getInstance().getConsumption()+" ");
+		 textT.setText((double)Tower.getInstance().getLandingTimeTotal()/Tower.getInstance().getPassgerNumber()+" ");
 	}
 }

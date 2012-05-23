@@ -25,18 +25,18 @@ public class Circle {
 			DataOutputStream outData) throws IOException {
 		
 		// Judge if the landing route is valid 
-		if (Tower.landingRoute.size() == 0) {
+		if (Tower.getInstance().getLandingRoute().size() == 0) {
 		// Add the current plane into the arraylist
-			Tower.landingRoute.add(plane);
+			Tower.getInstance().getLandingRoute().add(plane);
 		//Send out the message
 			RoutingMessage respondLanding0 = new RoutingMessage(
-					"Tour0000".getBytes(), Tower.straightX, Tower.straightY,
+					"Tour0000".getBytes(), Tower.getInstance().getStraightX(), Tower.getInstance().getStraightY(),
 					routingMessageType.REPLACEALL, moveType.STRAIGHT,
 					int2bytes(0));
 			respondLanding0.write(outData);
 			RoutingMessage respondLanding = new RoutingMessage(
-					"Tour0000".getBytes(), Tower.landingPointX,
-					Tower.landingPointY, routingMessageType.LAST,
+					"Tour0000".getBytes(), Tower.getInstance().getLandingPointX(),
+					Tower.getInstance().getLandingPointY(), routingMessageType.LAST,
 					moveType.LANDING, int2bytes(0));
 			respondLanding.write(outData);
 			Event eventR = new Event(respondLanding, "Tower",
@@ -44,50 +44,50 @@ public class Circle {
 			Tower.getInstance().getJournal().addEvent(eventR);
 		} 
 		// Judge if the smallCircle route is valid 
-		else if (Tower.smallCircle.size() < 3) {
-			Tower.smallCircle.add(plane);
+		else if (Tower.getInstance().getSmallCircle().size() < 3) {
+			Tower.getInstance().getSmallCircle().add(plane);
 			RoutingMessage respondLanding0 = new RoutingMessage(
 					"Tour0000".getBytes(), 400, 150,
 					routingMessageType.REPLACEALL, moveType.STRAIGHT,
 					int2bytes(0));
 			respondLanding0.write(outData);
 			RoutingMessage respondLanding1 = new RoutingMessage(
-					"Tour0000".getBytes(), Tower.smallPointX,
-					Tower.smallPointY, routingMessageType.LAST,
-					moveType.CIRCULAR, int2bytes(Tower.smallAngle));
+					"Tour0000".getBytes(), Tower.getInstance().getSmallPointX(),
+					Tower.getInstance().getSmallPointY(), routingMessageType.LAST,
+					moveType.CIRCULAR, int2bytes(Tower.getInstance().getSmallAngle()));
 			respondLanding1.write(outData);
 			Event eventR = new Event(respondLanding1, "Tower",
 					plane.getPlaneID());
 			Tower.getInstance().getJournal().addEvent(eventR);
 		}
 		// Judge if the middleCircle route is valid 
-		else if (Tower.middleCircle.size() < 10) {
-			Tower.middleCircle.add(plane);
+		else if (Tower.getInstance().getMiddleCircle().size() < 10) {
+			Tower.getInstance().getMiddleCircle().add(plane);
 			RoutingMessage respondLanding0 = new RoutingMessage(
 					"Tour0000".getBytes(), 300, 650,
 					routingMessageType.REPLACEALL, moveType.STRAIGHT,
 					int2bytes(0));
 			respondLanding0.write(outData);
 			RoutingMessage respondLanding1 = new RoutingMessage(
-					"Tour0000".getBytes(), Tower.middlePointX,
-					Tower.middlePointY, routingMessageType.LAST,
-					moveType.CIRCULAR, int2bytes(Tower.middleAngle));
+					"Tour0000".getBytes(), Tower.getInstance().getMiddlePointX(),
+					Tower.getInstance().getMiddlePointY(), routingMessageType.LAST,
+					moveType.CIRCULAR, int2bytes(Tower.getInstance().getMiddleAngle()));
 			respondLanding1.write(outData);
 			Event eventR = new Event(respondLanding1, "Tower",
 					plane.getPlaneID());
 			Tower.getInstance().getJournal().addEvent(eventR);
 		}
 		// Judge if the longCircle route is valid 
-		else if (Tower.longCircle.size() < 100) {
-			Tower.longCircle.add(plane);
+		else if (Tower.getInstance().getLongCircle().size() < 100) {
+			Tower.getInstance().getLongCircle().add(plane);
 			RoutingMessage respondLanding1 = new RoutingMessage(
 					"Tour0000".getBytes(), 800, 300,
 					routingMessageType.REPLACEALL, moveType.STRAIGHT,
 					int2bytes(0));
 			RoutingMessage respondLanding2 = new RoutingMessage(
-					"Tour0000".getBytes(), Tower.longPointX, Tower.longPointY,
+					"Tour0000".getBytes(), Tower.getInstance().getLongPointX(), Tower.getInstance().getLongPointY(),
 					routingMessageType.LAST, moveType.CIRCULAR,
-					int2bytes(Tower.longAngle));
+					int2bytes(Tower.getInstance().getLongAngle()));
 			respondLanding1.write(outData);
 			respondLanding2.write(outData);
 			Event eventR = new Event(respondLanding1, "Tower",
@@ -95,8 +95,8 @@ public class Circle {
 			Tower.getInstance().getJournal().addEvent(eventR);
 		} else {
 			RoutingMessage respondLanding = new RoutingMessage(
-					"Tour0000".getBytes(), Tower.landingPointX,
-					Tower.landingPointY, routingMessageType.REPLACEALL,
+					"Tour0000".getBytes(), Tower.getInstance().getLandingPointX(),
+					Tower.getInstance().getLandingPointY(), routingMessageType.REPLACEALL,
 					moveType.NONE, int2bytes(0));
 			respondLanding.write(outData);
 		}
@@ -106,24 +106,24 @@ public class Circle {
 	public static void landingUrgent(Plane plane, DataOutputStream outData)
 			throws IOException {
 		// remove the current landing plane and replace it with the may day planes
-		Tower.landingRoute.clear();
-		Tower.landingRoute.add(plane);
+		Tower.getInstance().getLandingRoute().clear();
+		Tower.getInstance().getLandingRoute().add(plane);
 
 		// The following allows the Mayday-plane to land as soon as possible
 		RoutingMessage respondLanding0 = new RoutingMessage(
-				"Tour0000".getBytes(), Tower.straightX, Tower.straightY,
+				"Tour0000".getBytes(), Tower.getInstance().getStraightX(), Tower.getInstance().getStraightY(),
 				routingMessageType.REPLACEALL, moveType.STRAIGHT,
 				int2bytes(0));
 		respondLanding0.write(outData);
 		RoutingMessage respondLanding = new RoutingMessage(
-				"Tour0000".getBytes(), Tower.landingPointX,
-				Tower.landingPointY, routingMessageType.LAST,
+				"Tour0000".getBytes(), Tower.getInstance().getLandingPointX(),
+				Tower.getInstance().getLandingPointY(), routingMessageType.LAST,
 				moveType.LANDING, int2bytes(0));
 		respondLanding.write(outData);
 		// Clear the recent circle and arrange them again
-		Tower.smallCircle.clear();
-		Tower.middleCircle.clear();
-		Tower.longCircle.clear();
+		Tower.getInstance().getSmallCircle().clear();
+		Tower.getInstance().getMiddleCircle().clear();
+		Tower.getInstance().getLongCircle().clear();
 		for (int i = 0; i < Tower.getInstance().getPlanes().size(); i++) {
 			Plane planelist = Tower.getInstance().getPlanes().get(i);
 			DataOutputStream outDataList;

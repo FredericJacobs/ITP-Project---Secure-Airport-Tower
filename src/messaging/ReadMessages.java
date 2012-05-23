@@ -100,7 +100,7 @@ public class ReadMessages {
 			return new LandingMessage(planeID, 0, posX, posY);
 		default:
 			System.out.println("message not created");
-			return null;// If the messagetype doesnt match then we break the link by sending a Bye
+			return null;// If the messagetype doesn't match then we break the link by sending a Bye
 		}
 	}
 }
