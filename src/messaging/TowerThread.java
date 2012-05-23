@@ -72,6 +72,7 @@ public class TowerThread extends Thread {
 		} catch (IOException e) {
 			try {
 				Tower.planeHasCrashed(plane.getPlaneID());
+				Tower.getInstance().getLandingRoute().clear();
 				socket.close();
 			} catch (IOException e1) {
 				System.out.println("Connection interrupted");
