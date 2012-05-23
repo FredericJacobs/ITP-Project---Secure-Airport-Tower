@@ -64,9 +64,8 @@ public class PlaneMessageHandler {
 						
 		case 7:
 			RoutingMessage routingMessage = (RoutingMessage) message;
-			
 			PlaneNavigation.currentInstruction = new RoutingInstruction(routingMessage.getPosition().getPosx(),routingMessage.getPosition().getPosy(), 0 , routingMessage.getTypeM());
-			
+			System.out.println("New Instruction !");
 		
 		default: return 0;
 		}

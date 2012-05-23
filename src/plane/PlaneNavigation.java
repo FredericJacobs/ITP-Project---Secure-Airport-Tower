@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import messaging.messages.ByeMessage;
 import messaging.messages.KeepAliveMessage;
+import messaging.messages.LandingMessage;
 import messaging.messages.RoutingMessage;
 import messaging.messages.RoutingMessage.moveType;
 import messaging.messages.RoutingMessage.routingMessageType;
@@ -14,7 +15,6 @@ public class PlaneNavigation implements Runnable {
 	
 	double planeSpeed = Plane.getPlaneSpeed();
 	static RoutingInstruction currentInstruction = new RoutingInstruction(533, 437, 0, moveType.STRAIGHT) ;
-	ArrayList<RoutingInstruction> roadInstructions = new ArrayList<RoutingInstruction>();
 	
 	@Override
 	public void run() {
@@ -24,9 +24,7 @@ public class PlaneNavigation implements Runnable {
 				movePlane(TestPlane.getPlaneUpdateInterval());
 				
 				new KeepAliveMessage(TestPlane.getPlaneID(), Plane.getPosition().getPosx() , Plane.getPosition().getPosy()).write(PlaneMessaging.getOutputStream());
-				
-				System.out.println(Plane.getPosition().getPosx() + Plane.getPosition().getPosy());
-				
+
 				// Pause this thread until the next position update
 			
 				Thread.sleep(TestPlane.getPlaneUpdateInterval());
@@ -50,6 +48,7 @@ public class PlaneNavigation implements Runnable {
 			dx = dx / length;
 			dy = dy / length;
 		}
+		
 		// How much time will it take us to get there?
 		double timeNeeded = length / speed;
 		double timeTraveled = (timeNeeded > deltaTimeSeconds) ? deltaTimeSeconds : timeNeeded;
@@ -62,14 +61,13 @@ public class PlaneNavigation implements Runnable {
 		// If we arrived, continue with the next road instruction
 		if (timeTraveled == timeNeeded) {
 			System.out.println("Plane " + TestPlane.getPlaneID().toString() + " arrived at waypoint (" + instruction.getxCoord() + ", " + instruction.getyCoord() + ").");
-			if (instruction.getType() == RoutingMessage.moveType.LANDING) {
-				try {
-					new ByeMessage(TestPlane.getPlaneID(), 0, Plane.getPosition().getPosx(), Plane.getPosition().getPosy()).write(PlaneMessaging.getOutputStream());
-					System.out.println("Plane landed safely");
-					System.exit(-1);
-				} catch (IOException e) {
-				}
+			try {
+				new ByeMessage(TestPlane.getPlaneID(), 0, Plane.getPosition().getPosx(), Plane.getPosition().getPosy()).write(PlaneMessaging.getOutputStream());
+			} catch (IOException e) {
+
 			}
+			System.exit(-1);
+		
 		}
 	}
 	private void moveInCircle(double deltaTimeSeconds, RoutingInstruction instruction) {
