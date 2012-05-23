@@ -1,15 +1,12 @@
 package plane;
 
+import generals.XYPosition;
+
 import java.io.IOException;
-import java.util.ArrayList;
 
 import messaging.messages.ByeMessage;
 import messaging.messages.KeepAliveMessage;
-import messaging.messages.LandingMessage;
-import messaging.messages.RoutingMessage;
 import messaging.messages.RoutingMessage.moveType;
-import messaging.messages.RoutingMessage.routingMessageType;
-import generals.XYPosition;
 
 public class PlaneNavigation implements Runnable {
 	

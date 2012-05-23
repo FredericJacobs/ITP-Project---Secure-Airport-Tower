@@ -5,8 +5,6 @@ import java.util.Date;
 import java.io.*;
 
 import twitter.SendTweet;
-import twitter4j.Tweet;
-
 import messaging.messages.*;
 import encryption.*;
 

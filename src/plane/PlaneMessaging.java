@@ -4,15 +4,11 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+import messaging.ReadMessages;
+import messaging.messages.HelloMessage;
+import messaging.messages.Message;
 import encryption.RsaInputStream;
 import encryption.RsaOutputStream;
-import messaging.Plane;
-import messaging.ReadMessages;
-import messaging.messages.ByeMessage;
-import messaging.messages.HelloMessage;
-import messaging.messages.KeepAliveMessage;
-import messaging.messages.Message;
-import messaging.messages.SendRSAMessage;
 
 
 public class PlaneMessaging implements Runnable {
