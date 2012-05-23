@@ -49,6 +49,11 @@ public class TowerThread extends Thread {
 				mes = ReadMessages.readMessage(inData);
 				// read the message send by the DataInputStream
 				//Tower.addMessageToIncomingQueue(mes);// Add it into the incomingQueue
+				
+				if (mes.getType() == 3){
+					SendRSAMessage message = (SendRSAMessage) mes;
+					plane.setKeypair(message.getPublicKey());
+				}
 
 				if (mes.getType() != 6) {            
 					// Handle the message , if the messageType isnt Bye, then go to the next;Tower.getNextMessageIncomingQueue()
