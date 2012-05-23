@@ -1,7 +1,11 @@
 package messaging;
 
 import java.net.*;
+import java.util.Date;
 import java.io.*;
+
+import twitter.SendTweet;
+import twitter4j.Tweet;
 
 import messaging.messages.*;
 import encryption.*;
@@ -70,6 +74,7 @@ public class TowerThread extends Thread {
 					messageHandler.respond(plane, mes, outData);
 					System.out.println("Bye! Bon voyage");
 					Tower.planDidLandSafely(plane.getPlaneID());
+					SendTweet.publish("Plane "+plane.getPlaneID() + " has LANDED at ITP Airport at " + new Date().toString() +" #ICITP2012" );
 					break;
 				}
 			}
