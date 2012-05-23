@@ -14,10 +14,10 @@ public class Plane implements Runnable {
 	private double fuelAlertLevel;
 	
 	Plane() {
-		Plane.type = plane.A320;
+		Plane.type = PlaneType.A320;
 		Plane.position = new XYPosition();
-		this.fuelLevel = plane.A320.getFuelCapacity();
-		this.fuelAlertLevel = plane.A320.getFuelCapacity()*0.2;
+		this.fuelLevel = PlaneType.A320.getFuelCapacity();
+		this.fuelAlertLevel = PlaneType.A320.getFuelCapacity()*0.2;
 	}
 		
 	public void changeTypeTo (PlaneType type){
@@ -27,6 +27,7 @@ public class Plane implements Runnable {
 	public boolean setFuelLevel (double fuelLevel){
 		if (fuelLevel < type.getFuelCapacity()){
 			this.fuelLevel = fuelLevel;
+			this.fuelAlertLevel = type.getFuelCapacity()*0.2;
 			return true;
 		}
 		else {

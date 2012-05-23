@@ -108,5 +108,10 @@ public final class KeyPair
 	public void hidePrivateKey() {
 		d=null;
 	}
+	
+	public KeyPair copyKeyPairWithoutPrivateKey (){
+		KeyPair returnedKeyPair = new KeyPair(n, e, null, N);
+		return returnedKeyPair;
+	}
 
 }

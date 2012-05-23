@@ -17,7 +17,23 @@ public class RoutingMessage extends Message  implements VisitorMessage{
 	}
 
 	 private routingMessageType TypeR;
-	 private moveType TypeM;
+	 public routingMessageType getTypeR() {
+		return TypeR;
+	}
+
+	public moveType getTypeM() {
+		return TypeM;
+	}
+
+	public byte[] getPayload() {
+		return payload;
+	}
+
+	public void setPayload(byte[] payload) {
+		this.payload = payload;
+	}
+
+	private moveType TypeM;
 	 private byte[] payload;
 
 	public RoutingMessage(byte[] planeID, int posx, int posy,
