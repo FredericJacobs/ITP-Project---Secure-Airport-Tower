@@ -21,19 +21,19 @@ import dataFile.DataFile;
 
 /**
  * Pour faire fonctionner le test il faut placer le fichier "test_image_itp.png"
- * dans un rpertoire "test" dans le mme dossier que "src".
+ * dans un rÅ½pertoire "test" dans le mï¿½me dossier que "src".
  * 
- * L'implmentation utilise ici est peut-tre diffrente de la v™tre, il faudra
+ * L'implÅ½mentation utilisÅ½e ici est peut-ï¿½tre diffÅ½rente de la vâ„¢tre, il faudra
  * donc modifier le code pour le faire fonctionner dans votre projet.
  * 
- * La classe DataFile possde deux constructeurs :
+ * La classe DataFile possï¿½de deux constructeurs :
  * 
- * -Un pour lire depuis un fichier djˆ existant, qui ne prend qu'un seul
- * paramtre , le chemin vers ce fichier. -Un deuxime pour crer un fichier ˆ
- * partir de messages Data. Son constructeur prend deux paramtres : le chemin
- * du nouveau fichier, et le premier message Data reu, qui contient des
+ * -Un pour lire depuis un fichier dÅ½jË† existant, qui ne prend qu'un seul
+ * paramï¿½tre , le chemin vers ce fichier. -Un deuxiï¿½me pour crÅ½er un fichier Ë†
+ * partir de messages Data. Son constructeur prend deux paramï¿½tres : le chemin
+ * du nouveau fichier, et le premier message Data reï¿½u, qui contient des
  * informations utiles telles que le hash, la taille totale du fichier et le
- * format ( pour complter le nom du fichier ).
+ * format ( pour complÅ½ter le nom du fichier ).
  * 
  * @author Jeremy Gotteland
  * 
@@ -72,10 +72,10 @@ public class DataMessageTest {
 	}
 
 	/**
-	 * L'extension n'est pas ajoute car en temps normal on ne la connait pas.
+	 * L'extension n'est pas ajoutÅ½e car en temps normal on ne la connait pas.
 	 * 
-	 * Il faut utiliser l'attribut "format" de l'objet Data pass en paramtre
-	 * dans le constructeur pour crer le fichier proprement avec la bonne
+	 * Il faut utiliser l'attribut "format" de l'objet Data passÅ½ en paramï¿½tre
+	 * dans le constructeur pour crÅ½er le fichier proprement avec la bonne
 	 * extension.
 	 */
 	@Test
@@ -101,10 +101,10 @@ public class DataMessageTest {
 	 * public Data(byte[] planeID, int continuation, int posx, int posy, byte[]
 	 * hash, byte[] format,int filesize, byte[] payload)
 	 * 
-	 * Adaptez en fonction du v™tre.
+	 * Adaptez en fonction du vâ„¢tre.
 	 * 
 	 * Ce test devrait lancer une "IllegalArgumentException" car on essaye
-	 * d'crire un bloc de donne de taille infrieure ˆ 1024 bytes alors que ce
+	 * d'Å½crire un bloc de donnÅ½e de taille infÅ½rieure Ë† 1024 bytes alors que ce
 	 * n'est pas le dernier bloc.
 	 * 
 	 */
@@ -128,8 +128,8 @@ public class DataMessageTest {
 	}
 
 	/**
-	 * Ici aucune exception n'est leve car il s'agit du dernier bloc donc sa
-	 * taille peut-tre infrieure ˆ 1024 bytes.
+	 * Ici aucune exception n'est levÅ½e car il s'agit du dernier bloc donc sa
+	 * taille peut-ï¿½tre infÅ½rieure Ë† 1024 bytes.
 	 */
 	@Test
 	public void lastPacketSizeTest() {
@@ -194,7 +194,7 @@ public class DataMessageTest {
 		}
 
 		Collections.shuffle(pieces);
-
+		bis.close();
 		return pieces;
 	}
 

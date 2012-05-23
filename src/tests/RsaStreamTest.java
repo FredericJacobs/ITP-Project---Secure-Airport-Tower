@@ -30,6 +30,8 @@ public class RsaStreamTest {
 		}
 		
 		assertArrayEquals(clearText, readText);
+		ris.close();
+		ros.close();
 	}
 
 }

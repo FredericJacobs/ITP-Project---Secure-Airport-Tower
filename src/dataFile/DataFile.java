@@ -84,6 +84,7 @@ public class DataFile extends File {
 		byte[] data = null;
 		BufferedInputStream stream = new BufferedInputStream(new FileInputStream(this));
 		stream.read(data, offset, PACKETSIZE);
+		stream.close();
 		return data;
 	}
 	
@@ -109,6 +110,7 @@ public class DataFile extends File {
 		FileInputStream fis;
 		try {
 			fis = new FileInputStream(this);
+			
 		} catch (FileNotFoundException e) {
 			System.err.println("Couldn't find self. Weird");
 			fis = null;
@@ -127,12 +129,12 @@ public class DataFile extends File {
 			while ((nread = fis.read(dataBytes)) != -1) {
 			  hasher.update(dataBytes, 0, nread);
 			}
+			fis.close();
 		} catch (IOException e) {
 			//Should abort this filetransfer
 			//Will be implemented later once the implementation is ready
 		};
         byte[] mdbytes = hasher.digest();
- 
         return mdbytes;
 	}
 

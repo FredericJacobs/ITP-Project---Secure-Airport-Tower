@@ -75,7 +75,8 @@ public class TowerMessageHandler extends Observable {
 					
 					String delimiters = "[=]"; 
 					String[ ] tokens = scanner.nextLine().split(delimiters);
-					plane.setPlaneID(tokens[1]);					
+					plane.setPlaneID(tokens[1]);
+					scanner.close();
 				} catch (FileNotFoundException e) {
 				}
 			}
@@ -98,6 +99,7 @@ public class TowerMessageHandler extends Observable {
 				String[ ] tokens2 = tokens[1].split(delimiters2);
 				int consumptionPlane =  Integer.valueOf(tokens2[0]).intValue(); 
 				Tower.getInstance().setConsumption(consumptionPlane);
+				scanner.close();
 			} catch (FileNotFoundException e) {
 			}		
 			Tower.getInstance().getPlanes().remove(plane);

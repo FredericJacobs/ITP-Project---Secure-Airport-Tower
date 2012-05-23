@@ -184,6 +184,7 @@ public class Tower implements Runnable {
 			publicKey.write(decryptKeypair.getModulus());
 			publicKey.writeInt(decryptKeypair.getPublicKey().length);
 			publicKey.write(decryptKeypair.getPublicKey());
+			publicKey.close();
 			creatPriorityQueue();
 			TourNetwork();
 
@@ -200,6 +201,7 @@ public class Tower implements Runnable {
 	 * @throws IOException
 	 * @throws CloneNotSupportedException
 	 */
+	@SuppressWarnings("resource")
 	public static void TourNetwork()
 	{
 		ServerSocket serverSocket = null;
