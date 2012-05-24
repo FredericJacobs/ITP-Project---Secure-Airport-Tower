@@ -144,6 +144,7 @@ public class Tower implements Runnable {
 	 */
 	public static void creatPriorityQueue() {
 		inQueue = new PriorityQueue<Message>(6, new Comparator<Message>() {
+			@Override
 			public int compare(Message a, Message b) {
 				return a.compareTo(b);
 			}
@@ -160,6 +161,7 @@ public class Tower implements Runnable {
 
 	}
 	
+	@Override
 	public void run (){
 		setCircle("landing");
 		setCircle("smallcircle");
@@ -237,7 +239,7 @@ public class Tower implements Runnable {
 	public void setCircle(String circleName){
 			Scanner scanner = null;
 			try {
-				scanner = new Scanner(new FileInputStream("Circle"+ File.separator + circleName +".txt"));
+				scanner = new Scanner(new FileInputStream("src"+ File.separator + "ressources" + File.separator + "Routes" + File.separator +circleName +".txt"));
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			}

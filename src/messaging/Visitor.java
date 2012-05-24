@@ -19,7 +19,7 @@ import messaging.messages.*;
 public class Visitor {
 	// Respond to the Hello message
 	public int visit(Plane plane, HelloMessage message, DataOutputStream outData) {
-		if (((HelloMessage) message).isCrypted()) {// To see if the hello is
+		if (message.isCrypted()) {// To see if the hello is
 			// crypted or not, then
 			// give different
 			// respond hello message
@@ -104,8 +104,8 @@ public class Visitor {
 	// Respond to the KeepAliveMessage
 	public int visit(Plane plane, KeepAliveMessage message,
 			DataOutputStream outData) {
-		plane.setPosx(((KeepAliveMessage) message).keepaliveX());
-		plane.setPosy(((KeepAliveMessage) message).keepaliveY());
+		plane.setPosx(message.keepaliveX());
+		plane.setPosy(message.keepaliveY());
 		return 0;
 	}
 	// Respond to the LandingMessage
