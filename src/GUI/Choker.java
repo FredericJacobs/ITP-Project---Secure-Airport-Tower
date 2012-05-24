@@ -87,14 +87,15 @@ public class Choker extends JPanel implements MouseListener {
 					Event eventR = new Event(chock, "Tower", "Allplanes");
 					Tower.getInstance().getJournal().addEvent(eventR);
 				} catch (IOException e) {
-					//
 					e.printStackTrace();
 				}
 			}
-			// Block the chock function for 10 minutes
-			timer.schedule(new Counter(), 600000);
+			timer.schedule(new Counter(), 600000);			// Block the chock function for 10 minutes
+
 		}
-		// If the choke is already active
+		/**
+		 *  If the choke is already active,then we enter the unchoke mode and send all the planes a message
+		 */
 		else {
 
 			for (int i = 0; i < Tower.getInstance().getPlanes().size(); i++) {
@@ -119,8 +120,9 @@ public class Choker extends JPanel implements MouseListener {
 		}
 	}
 
-	// The class which extends the TimerTask, it can arrange the time counter
-	// and run the method after a specified time
+	/**
+	 * The class which extends the TimerTask, it can arrange the time counter
+	 */
 	class Counter extends TimerTask {
 		@Override
 		public void run() {
@@ -132,6 +134,9 @@ public class Choker extends JPanel implements MouseListener {
 	}
 
 	@Override
+	/**
+	 * Every time the mouse is clicked we will inform the choker modes
+	 */
 	public void mouseClicked(MouseEvent arg0) {
 		if (!choking) {
 			status = !status;

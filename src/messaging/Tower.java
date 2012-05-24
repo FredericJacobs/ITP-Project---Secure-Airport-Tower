@@ -56,7 +56,7 @@ public class Tower implements Runnable {
 	private ArrayList<Plane> planes = new ArrayList<Plane>();
 	private Journal journal = new Journal();
 	private double consumption;
-	private int passgerNumber;
+	private int passgerNumber = 1;
 	private int landingTimeTotal;
 
 	private int landingPointX;

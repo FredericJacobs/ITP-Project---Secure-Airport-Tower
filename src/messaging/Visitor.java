@@ -13,7 +13,7 @@ import messaging.messages.MayDayMessage;
 import messaging.messages.RoutingMessage;
 import messaging.messages.SendRSAMessage;
 import messaging.messages.UnchokeMessage;
-import GUI.AirportGUI;
+import GUI.ModesGUI;
 
 /**
  * This class is the main part of the visitor pattern. It aims at handling
@@ -27,12 +27,18 @@ import GUI.AirportGUI;
  * 
  */
 public class Visitor {
-	// Respond to the Hello message
+	/**
+	 * The override method help us to determine different kind of message and use differend to to 
+	 * 
+	 * @param plane The plane which needs the respond and instruction
+	 * @param message The message send by the plane, to be responded
+	 * @param outData The outputstream  of the socket of the plane
+	 * @return The return int stands for the encryption statues. It will help the tower to decide the future
+	 * communication
+	 */
 	public int visit(Plane plane, HelloMessage message, DataOutputStream outData) {
-		if (message.isCrypted()) {// To see if the hello is
-			// crypted or not, then
-			// give different
-			// respond hello message
+		if (message.isCrypted()) {
+			// To see if the hello is crypted or not, then give different respond hello message
 			HelloMessage respondHelloMessage = new HelloMessage(
 					"Tour0000".getBytes(), 0, 0, (byte) (1 << 4));
 			try {
@@ -40,6 +46,7 @@ public class Visitor {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+			//Add the event to the journal
 			Event eventR = new Event(respondHelloMessage, "Tower",
 					message.getPlaneID());
 			Tower.getInstance().getJournal().addEvent(eventR);
@@ -86,7 +93,7 @@ public class Visitor {
 														// plane is an exception
 														// now.
 
-		AirportGUI.choker.chokeEnabled(true);// Run the choke mode
+		ModesGUI.choker.chokeEnabled(true);// Run the choke mode
 		try {
 			Circle.landingUrgent(plane, outData);
 		} catch (IOException e) {

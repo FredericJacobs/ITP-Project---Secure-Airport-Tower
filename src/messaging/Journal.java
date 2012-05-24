@@ -95,7 +95,7 @@ public class Journal extends Observable {
 			}
 		}
 	}
-
+	// The special event such as plane has mayday situation
 	public void planeDidSendMayDay(String planeID) {
 		for (int i = 0; i < positions.size(); i++) {
 			if (positions.get(i).getPlaneID().equalsIgnoreCase(planeID)) {

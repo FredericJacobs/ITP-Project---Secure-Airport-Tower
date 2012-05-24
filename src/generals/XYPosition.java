@@ -1,4 +1,9 @@
 package generals;
+/**
+ * It's wrapper object to store and use locations.
+ * @author Fredric Jacobs
+ *
+ */
 
 public class XYPosition {
 	private int posx;

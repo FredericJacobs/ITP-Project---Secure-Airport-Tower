@@ -21,6 +21,7 @@ public class AirportGUI extends JFrame {
 	private static DownloadGUI downloadGUI;
 	private static JournalGUI journalGUI;
 	public static ModesGUI modesGUI;
+	public static Choker choker;
 
 	public AirportGUI() {
 
@@ -34,6 +35,7 @@ public class AirportGUI extends JFrame {
 		journalGUI = new JournalGUI();
 		downloadGUI = new DownloadGUI();
 		modesGUI = new ModesGUI();
+		choker = new Choker();
 		// Create an airport panel, add it to this window
 		setLayout(new BorderLayout());
 		AirportPanel airport = new AirportPanel();
@@ -45,7 +47,6 @@ public class AirportGUI extends JFrame {
 		journalGUI.setVisible(true);
 		downloadGUI.setVisible(true);
 		modesGUI.setVisible(true);
-
 		// this is how the GUI interfaces with the tower, to get the
 		// journal and the list of downloaded files.
 		// Add here the observers to he appropriate classes

@@ -32,14 +32,14 @@ import messaging.Tower;
  */
 public class ModesGUI extends JFrame implements ActionListener, Observer {
 	/**
-	 * 
+	 * There are three modes to be chosen
 	 */
 	private static final long serialVersionUID = 1L;
 	static String CHRONOS = "CHRONOS";
 	static String FUEL = "FUEL";
 	static String TIME = "TIME";
 	public Modes modes;
-	public Choker choker = new Choker();
+	public static Choker choker = new Choker();
 	JTextField textP = new JTextField("0");
 	JTextField textC = new JTextField("0");
 	JTextField textT = new JTextField("0");
@@ -114,7 +114,7 @@ public class ModesGUI extends JFrame implements ActionListener, Observer {
 	}
 
 	// This override method update() is the essential part to print the newest
-	// information.
+	// information, such as the latest passgernumber and landing time.
 	@Override
 	public void update(Observable arg0, Object arg1) {
 		textP.setText(Tower.getInstance().getPassgerNumber() + " ");

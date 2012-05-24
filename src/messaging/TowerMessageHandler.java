@@ -38,8 +38,9 @@ public class TowerMessageHandler extends Observable {
 
 	/**
 	 * The respond method,it will respond a message and output the necessary
-	 * information by sending it into the DataOutputStream
-	 * 
+	 * information by sending it into the DataOutputStream.  We answer most the messages by implementing
+	 * the visitor pattern.While the Datafile and the bye message need some of the special parameter 
+	 * so we still keep the switch function for them.
 	 * @param plane
 	 *            The corresponded plane
 	 * @param planenumber
@@ -55,30 +56,27 @@ public class TowerMessageHandler extends Observable {
 		Event event = new Event(message, message.getPlaneID(), "Tower");
 		Tower.getInstance().getJournal().addEvent(event);
 		plane.setPlaneID(message.getPlaneID());
-		// We answer most the messages by implementing the visitor pattern.
-		// While the Datafile and the bye message
-		// need some of the special parameter so we still keep the switch
-		// function for them.
+
 		Visitor visitor = new Visitor();
 
-		switch (type) {// depends on different type of message we go to
-						// different cases
-		// Answer the Data message
+		switch (type) {
+		// depends on different type of message we go to different cases Answer the Data message
 		case 1:
 
+		// Build a txt file based on the plane's name
 			towerDataFile = new DataFile("downloads" + File.separator
 					+ plane.getPlaneID() + "-" + fileCount,
 					(DataMessage) message);
+		// If it's completed we update the downloads file
 			if (towerDataFile.isComplete()) {
 				fileCount++;
 				listOfDownloads.add(towerDataFile);
 				AirportGUI.updateDownloads(listOfDownloads);
-				// Read the plane type and save it in the plane class.
+		// Read the plane type and save it in the plane class.
 				try {
 					Scanner scanner = new Scanner(new FileInputStream(
 							"downloads" + File.separator + plane.getPlaneID()
 									+ "-0.txt"));
-
 					String delimiters = "[=]";
 					String[] tokens = scanner.nextLine().split(delimiters);
 					plane.setPlaneID(tokens[1]);
@@ -88,17 +86,21 @@ public class TowerMessageHandler extends Observable {
 			}
 
 			return 0;
-			// Answer the Bye message
-		case 6:
+		
+		case 6:// Answer the Bye message
+			// Change the current circld , the way is written as followed
 			changeCircle();
+			
 			System.out.println("Connection terminated");
-			plane.setlandingTimeTotal(System.currentTimeMillis()
-					- plane.getInitialTime());
+			// According to the time difference we calculate and update the waiting time per passage statue. 
+			plane.setlandingTimeTotal(System.currentTimeMillis() - plane.getInitialTime());
+			// The number of the passages who have landed
 			Tower.getInstance().setPassgerNumber(plane.getPassager());
+			
+			// The total landing time
 			Tower.getInstance().setLandingTimeTotal(
 					(int) plane.getlandingTimeTotal());
-			// Read the fuel consumption and save it in the plane class and
-			// update it in the modesGUI.
+			// Read the fuel consumption and save it in the plane class and update it in the modesGUI.
 			try {
 				Scanner scanner = new Scanner(new FileInputStream("downloads"
 						+ File.separator + plane.getPlaneID() + "-1.txt"));
@@ -111,7 +113,9 @@ public class TowerMessageHandler extends Observable {
 				scanner.close();
 			} catch (FileNotFoundException e) {
 			}
+			// Move the plane from the arraylist
 			Tower.getInstance().getPlanes().remove(plane);
+			// Notify the ModesGUI to update the new numbers
 			setChanged();
 			notifyObservers();
 			return 0;
@@ -121,14 +125,14 @@ public class TowerMessageHandler extends Observable {
 		}
 	}
 
-	/*
+	/**
 	 * This method helps the bye message to arrange the other planes. Each time
 	 * a plane has landed and the landing route is valid again, the changeCircle
 	 * will call the next plane to come to land.Then it will check if there is
 	 * other planes are waiting;if so the waiting planes will be instructed to
 	 * enter the smaller circle so that in this way we can arrange all the
 	 * landing request well.
-	 */
+	 **/
 	public void changeCircle() {
 		Tower.getInstance().getLandingRoute().remove(0);
 		// Check if there is other planes in the small circle, if so let them
@@ -144,12 +148,12 @@ public class TowerMessageHandler extends Observable {
 						routingMessageType.REPLACEALL, moveType.STRAIGHT,
 						Circle.int2bytes(0));
 				respondLanding0.write(outData);
-				RoutingMessage respondLanding = new RoutingMessage(
+				RoutingMessage respondLanding1 = new RoutingMessage(
 						"Tour0000".getBytes(), Tower.getInstance()
 								.getLandingPointX(), Tower.getInstance()
 								.getLandingPointY(), routingMessageType.LAST,
 						moveType.LANDING, Circle.int2bytes(0));
-				respondLanding.write(outData);
+				respondLanding1.write(outData);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

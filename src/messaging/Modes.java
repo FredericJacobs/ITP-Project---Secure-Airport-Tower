@@ -63,11 +63,14 @@ public class Modes {
 	// The action when the button CHRONOS is clicked
 
 	public static void reOrganiseChronos() {
-		Collections.sort(Tower.getInstance().getPlanes(), comparatorChronos);
+		// Clear the current plane arrays
 		Tower.getInstance().getLandingRoute().clear();
 		Tower.getInstance().getSmallCircle().clear();
 		Tower.getInstance().getMiddleCircle().clear();
-		Tower.getInstance().getLongCircle().clear();
+		Tower.getInstance().getLongCircle().clear();	
+		// sort the planes according to the Fuel comparator
+		Collections.sort(Tower.getInstance().getPlanes(), comparatorChronos);
+		// Send the new instructions to all the planes 
 		for (int i = 0; i < Tower.getInstance().getPlanes().size(); i++) {
 			Plane plane = Tower.getInstance().getPlanes().get(i);
 			DataOutputStream outData;
@@ -83,11 +86,14 @@ public class Modes {
 
 	// The action when the button FUEL is clicked
 	public static void reOrganiseFuel() {
+		// Clear the current plane arrays
 		Tower.getInstance().getLandingRoute().clear();
 		Tower.getInstance().getSmallCircle().clear();
 		Tower.getInstance().getMiddleCircle().clear();
 		Tower.getInstance().getLongCircle().clear();
+		// sort the planes according to the Fuel comparator
 		Collections.sort(Tower.getInstance().getPlanes(), comparatorFuel);
+		// Send the new instructions to all the planes 
 		for (int i = 0; i < Tower.getInstance().getPlanes().size(); i++) {
 			Plane plane = Tower.getInstance().getPlanes().get(i);
 			DataOutputStream outData;
@@ -103,11 +109,14 @@ public class Modes {
 
 	// The action when the button TIME is clicked
 	public static void reOrganiseTime() {
+		// Clear the current plane arrays
 		Tower.getInstance().getLandingRoute().clear();
 		Tower.getInstance().getSmallCircle().clear();
 		Tower.getInstance().getMiddleCircle().clear();
 		Tower.getInstance().getLongCircle().clear();
+		// sort the planes according to the Time comparator
 		Collections.sort(Tower.getInstance().getPlanes(), comparatorTime);
+		// Send the new instructions to all the planes 
 		for (int i = 0; i < Tower.getInstance().getPlanes().size(); i++) {
 			Plane plane = Tower.getInstance().getPlanes().get(i);
 			DataOutputStream outData;
