@@ -5,11 +5,11 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.Comparator;
 
-/**This class is the main part of the ModesGUI, it contains three kinds of Comparator to rank the arraylist of the tower
+/**This class is the main part of the ModesGUI, it contains three kinds of Comparator to rank the ArrayList of the tower
  * 
  * The comparatorChronos is based on the time order of the plane so we judge it by comparing the initial time
  * of the planes.
- *  The comparatorFuel is based on the consommation of the plane so we judge it by comparing the consommation
+ *  The comparatorFuel is based on the consommation of the plane so we judge it by comparing the consummation
  * of the planes. 
  * The comparatorTime is based on the waiting time of the plane so we judge it by comparing the passage number
  * of the planes.

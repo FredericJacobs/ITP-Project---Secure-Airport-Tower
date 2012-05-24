@@ -28,8 +28,8 @@ tabsize=4,
 showspaces=false,
 showstringspaces=false}
 \usepackage[applemac]{inputenc}
-\newtheorem{theorem}{Théorème}
-\newtheorem*{definition}{Définition}
+\newtheorem{theorem}{Th√©or√®me}
+\newtheorem*{definition}{D√©finition}
 \newtheorem*{exercice}{Exercice}
 \hyphenpenalty=10000
 
@@ -37,25 +37,73 @@ showstringspaces=false}
 \author{frederic.jacobs@epfl.ch\\ hantao.zhao@epfl.ch}
 \begin{document}
 \maketitle 
-\section{Setting up}
-During the set up phase, we chose Git over SVN. There are many reasons that explain this decision but we'll highlight here only a few. We really fancy the social features of GitHub for collaboration. GitHub Issues makes it easier to report bugs and to fix them. Git is also way simpler to set up than SVN. The branching of Git makes it way easier to work on different branches and then merge them with the master at a further stage. We set it up as a private repository according to the requirements of this course.
-\section{Project's Architecture}
-Our program is structured into different packages.
+\section{Setting up our project}
+The first thing to point out is the fact that we used the JRE 1.7 because we use switches on Strings and other features of the JRE 1.7. It runs smoothy on Windows, Mac and Linux (the OpenJDK is advised to avoid compilation issues).  Once you created the project in Eclipse, don't forget to add the libraries that are in \verb /src/libs  to the build path. Once that's done, you're ready to go. 
 
-\begin{figure}[h]
-  \centering
-  \includegraphics[width=\textwidth]{Architecture.png}
-  \caption{The current architecture of our software. It is subject to change in later iterations for consistency.} 
-\end{figure}
+Java 1.7 SDK has some flaws on Unix-Platforms though. Written once, runs everywhere might not be true depending on the runtime. It turned out that JRE 1.7 was the most stable on Windows. 
+
+\section{Project's Architecture}
+Our program is structured into different packages. There are two classes that are executable.  \verb AirportGUI.java  launches everything needed to run the tower while \verb TestPlane.java  launches everything required for the plane to run. We are in this section going to give a quick overview of what each class does. For further information please check out our JavaDoc. 
+We have some encapsulation flaws that are linked with late minute refactoring.
+
+ADD ARCHITECTURE DIAGRAM
+
+\subsection{Database}
+This is a separate package that is specific to our innovation. We designed a REST-API that allows to fetch the logs and the position of planes. To do that, we had to have a specific syncing thread. Updating the position each time a plane sends a keep-alive wasn't sustainable so we chose to update the database every second with the latest positions. That is \verb DBSync.java  's job. It fetches the positions from the journal and updates them automatically in the Tower only if they changed. We are using a JSON format that is very friendly in JavaScript for future applications such as web apps. 
+
+\subsection{DataFile}
+
+\verb DataFile.java  is responsible for creating DataMessages objects from a File. It can also write a File from a bunch of DataMessages. The DataMessages should be routed to this DataFile. After some refactoring we didn't stick to the original description of the DataFile because we believed it didn't make much sense to have this bunch of superficial variable (or we may not have understood what they were doing). We managed to get this class working with a slightly modified version of the original test. 
 
 \subsection{Encryption}
-This package contains two main classes namely \emph{KeyPair}, which can store both public and private keys, and \emph{KeyGenerator}, which can generate both public and private keys with a given length during the initialization of the program. In addition of these two classes we coded a \emph{RSAInputStream} and  \emph{RSAOutputStream} which can handle encryption and decryption of incoming and outgoing streams.
+The \verb encryption  package provide all the tools required in this project related to encryption. 
+\begin{enumerate}
+\item \verb KeyGenerator.java  - It is responsible for generating new RSA keys, both public and private. It simply requires a given size and it will generate the keys for you.
+\item \verb KeyPair.java  - Nothing more than a simple wrapper object to store RSA Keys. 
+\item \verb RsaInputStream.java  - This is a tool for reading encrypted blocks of data coming from the network. It requires a KeyPair with a private key to decrypt the blocks coming from the network. 
+\item \verb RsaOutputStream.java  - Exactly the opposite of the preceding class. It is designed to encrypt blocks of data and splitting them to be RSA-safe depending on the size of the size of the key. 
+\end{enumerate}
+
+\subsection{generals}
+In this package we have only one but very precious tool. It's a class called  \verb XYPosition it is used all over the project and defines what coordinates are. It is a timesaver and makes the code often more readable. 
+
 \subsection{GUI}
-The Graphical User Interface hasn't been coded yet but the package is already there, waiting to be implemented. 
-\subsection{I/O}
-At this current stage of development we haven't coded the network support yet. Thus, we built a custom class to write the messages in the filesystem instead of sending them straight to the network.
-\subsection{Radio}
-The Radio handles all messaging by sorting them into priority queues. The radio package also holds all of the Message classes which defines what the messages contains. We also provide support for data messages (using the I/O package to get some special hash treatment).
+
+The \verb GUI  package is the main package of our application. It is the main thread of our application that will launch and dispatch all the rest of the tasks. We sticked to \verb AWT/SWING  for the design. Although it is not perfect, we believe it completes it's task. We also launch a bunch of other panels. Let's quickly discover all the essential classes in the GUI.
+
+\begin{enumerate}
+\item \verb AirportGUI.java is our main class. It remains very simple but launches the Tower Singleton instance that will handle all the communication with the planes. It also handles all the different panels that are launched.  
+\item \verb AirportPanel.java  is the radar screen. We only made very little changes to it to allow it to work with our classes. We also improved it for having custom red airplanes in case of MayDays.  
+\item \verb Choker.java  is the our custom button to simply toggle the Choke mode. It is simple and work as expected. It's a simple button that changed from red to green depending on the choke status.
+\item \verb CircularBuffer.java  is a buffer used in the AirportPanel to draw the points. It was provided. No changes.
+\item \verb DownloadGUI.java  is a little box that displays the downloaded files from the plane. Nothing special here.
+\item \verb JournalGUI.java  is the observer of any changes in the Journal and then automatically updates the \verb GUI  version of the journal.
+\item \verb ModesGUI  - This class is the GUI of the optimization modes. It uses a ButtonGroup to let the client choose from 3 types of the modes, and it can print out the total number of passages, the total number of fuel consumption and the waiting time of per passages.  It also implements the observer so that each time we receive a bye message, the corresponded information will be updated automatically.
+\end{enumerate}
+
+\subsection{Messaging}
+Messaging is the biggest part of this project. 
+Let's have an overview of all the classes in this package.
+\begin{enumerate}
+\item \verb Circle.java  - This class is the main part to arrange the landing request of the planes and also send the routing messages to different planes. It has also a method to respond the Mayday message, called the landingUrgent. The general idea of designing the routing respond is that we judge which is the closed valid route, and add the current plane to the \verb Arraylist  of the route.For example if the landing route is valid right now we will send a landing routing message directly. In this way all the planes will be well arranged. 
+\item \verb Event.java  - This class is a part of the journal. Each time a message is created or send out, it will be saved as an Event. It contain the information such as message, source, destination and the time at which it is created.
+\item \verb Journal.java  - This class is a journal which will record all the event happened during the communication. It will also run the planeHasCrashed or planeDidLand method to help the GUI to print out the needed information. As it is a part of the observer mode, it extends the Observable to remind the \verb JournalGUI  when a new event is saved in.
+\item \verb Modes.java  - This class is the main part of the ModesGUI, it contains three kinds of Comparator to rank the ArrayList of the tower. The comparatorChronos is based on the time order of the plane so we judge it by comparing the initial time of the planes. The comparatorFuel is based on the consummation of the plane so we judge it by comparing the consummation of the planes. The comparatorTime is based on the waiting time of the plane so we judge it by comparing the passage number of the planes.
+\item \verb Plane.java  - This is the class of Plane. It is responsible for create a array of the planes in the Tour to save all the information of the planes which have communicated with the Tour. It has several parameters.
+\item \verb PlanePosition.java  - This class allows to have a wrapper object for an array of Planes with an associated position, crash status and landing status.
+\item \verb ReadMessages.java  - This class aims at converting the DataInputStream into a new created message, by using the method read (for byte[]) and readInt.
+\item \verb Tower.java represents the tour of airport, which have the function of receiving and sending Message with the planes. 
+\item \verb TowerMessageHandler.java is the class file that handles received messages. This class help the Tower to handle communications with several planes, that is to say that each thread handles the connection with one plane.
+\item \verb TowerThead.java  - This class help the Tower to handle communications with several planes, that is to say that each thread handles the connection with one plane.
+\item \verb Visitor.java  - This class is the main part of the visitor pattern. It aims at handling different kinds of messages, such as Hello , KeepAlive and so on. Each time there is a message which needs to be handled in the tower-message handle it will call the visit() method so that the Visitor class will judge the type of different message and do different move to respond.
+\end{enumerate}
+
+Please note that we have a sub-package in which we define each different type of message. Since these are only wrappers, please refer to the JavaDoc to know more about them.
+
+\subsection{Plane}
+
+
+
 
 \section{Q\&A}
 In ITP-02, we were asked two questions. 
@@ -79,7 +127,7 @@ The reason why we want this to be an abstract class is really straightforward. W
 \end{document}
 
 
-Prière d’ajouter une réponse synthétique à ces questions sur votre journal :
-1. Avoir une super classe dans ce cas. Est-??ce une bonne idée ?
+Pri√®re d‚Äôajouter une r√©ponse synth√©tique √† ces questions sur votre journal :
+1. Avoir une super classe dans ce cas. Est-??ce une bonne id√©e ?
 2. Pourquoi serait-??elle une classe abstraite ?
 

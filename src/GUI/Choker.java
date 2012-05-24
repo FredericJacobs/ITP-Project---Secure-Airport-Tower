@@ -78,7 +78,7 @@ public class Choker extends JFrame implements MouseListener {
 					outData = new DataOutputStream(
 							socket.getOutputStream());
 
-				ChokeMessage chock = new ChokeMessage("Tour0000".getBytes(), 0,
+				ChokeMessage chock = new ChokeMessage("Tower".getBytes(), 0,
 						0, 0);
 				chock.write(outData);
 				Event eventR = new Event(chock, "Tower",
@@ -102,7 +102,7 @@ public class Choker extends JFrame implements MouseListener {
 					outData = new DataOutputStream(
 							socket.getOutputStream());
 
-				UnchokeMessage unchock = new UnchokeMessage("Tour0000".getBytes(), 0,
+				UnchokeMessage unchock = new UnchokeMessage("Tower".getBytes(), 0,
 						0, 0);
 				unchock.write(outData);
 				Event eventR = new Event(unchock, "Tower",

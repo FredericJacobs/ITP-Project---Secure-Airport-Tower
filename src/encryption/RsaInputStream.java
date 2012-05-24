@@ -67,14 +67,6 @@ public class RsaInputStream extends InputStream
 
 		block = key.decrypt(new BigInteger(block)).toByteArray();
 
-		// BigInteger outputs:
-		//
-		//    [----key---] --> l = n-1
-		//    [----block---] -> l = n
-		//
-		// 1) [0|pad|0|buff] -> l = n
-		// 2)   [pad|0|buff] -> l = n-1
-
 		int drop = block[0] == 0 ? 1 : 0;
 		int bufferOffset = -1;
 

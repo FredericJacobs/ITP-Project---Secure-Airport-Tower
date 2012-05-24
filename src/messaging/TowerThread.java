@@ -9,8 +9,7 @@ import messaging.messages.*;
 import encryption.*;
 
 /**
- * This class help the Tour to realize the Multiply client, that is to say to
- * handle different planes at the same time by extending the class Thread
+ * This class help the Tower to handle communications with several planes, that is to say that each thread handles the connection with one plane.
  * 
  * @author Hantao Zhao
  * @author Frederic Jacobs

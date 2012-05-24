@@ -7,12 +7,12 @@ import messaging.messages.Message;
 import encryption.KeyPair;
 
 /**
- ** This is the class of Plane. It is responsible for creat a array of the planes
+ ** This is the class of Plane. It is responsible for create a array of the planes
  * in the Tour to save all the information of the planes which have communicated
  * with the Tour. It has several parameters.
  * 
  ** @param planeID
- ** @param keypairo
+ ** @param keypair
  *            save the necessary Keypair for encrypted communication.
  ** @param messages
  *            The table of the messages that have been given and send.!! Not

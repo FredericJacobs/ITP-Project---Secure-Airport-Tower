@@ -18,12 +18,8 @@ import encryption.*;
 import messaging.messages.*;
 
 /**
- * Description of Tour Tour.java represents the tour of airport, which have the
- * function of receiving and sending Message with the planes By using the class
- * of Message, Tour can receive the Message in the way that Print all the
- * information to the file "Outfile.txt". And the information which is transfer
- * can be shown as "Journal" in the Console In this first version we haven't
- * finished coding the RSA implementation
+ * Tower.java represents the tower of airport, which have the
+ * function of receiving and sending Message with the planes.
  * 
  * @author Hantao Zhao
  * @author Frederic Jacobs

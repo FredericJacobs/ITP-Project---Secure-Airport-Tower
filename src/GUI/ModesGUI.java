@@ -14,7 +14,7 @@ import messaging.Tower;
 /**
  * This class is the GUI of the optimization modes. It uses a ButtonGroup to let the client choose from 3 types
  * of the modes, and it can print out The total number of passages,The total number of fuel consumption and
- * The waiting time of per passages.  It also implements the observer so that each time we recieve a bye message,
+ * The waiting time of per passages.  It also implements the observer so that each time we receive a bye message,
  * the corresponded information will be updated automatically.
  * 
  * @author Hantao Zhao 

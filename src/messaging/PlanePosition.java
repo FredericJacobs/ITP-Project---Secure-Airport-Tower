@@ -2,6 +2,13 @@ package messaging;
 
 import generals.*;
 
+/**
+ ** This class allows to have a wrapper object for an Array of Planes with an associated position, crash status and landing status.
+ * 
+ ** @author Hantao Zhao
+ ** @author Frederic Jacobs
+ **/
+
 public class PlanePosition {
 	private String planeid;
 	private XYPosition position;

@@ -30,12 +30,12 @@ public class Circle {
 			Tower.getInstance().getLandingRoute().add(plane);
 		//Send out the message
 			RoutingMessage respondLanding0 = new RoutingMessage(
-					"Tour0000".getBytes(), Tower.getInstance().getStraightX(), Tower.getInstance().getStraightY(),
+					"Tower".getBytes(), Tower.getInstance().getStraightX(), Tower.getInstance().getStraightY(),
 					routingMessageType.REPLACEALL, moveType.STRAIGHT,
 					int2bytes(0));
 			respondLanding0.write(outData);
 			RoutingMessage respondLanding = new RoutingMessage(
-					"Tour0000".getBytes(), Tower.getInstance().getLandingPointX(),
+					"Tower".getBytes(), Tower.getInstance().getLandingPointX(),
 					Tower.getInstance().getLandingPointY(), routingMessageType.LAST,
 					moveType.LANDING, int2bytes(0));
 			respondLanding.write(outData);
@@ -47,12 +47,12 @@ public class Circle {
 		else if (Tower.getInstance().getSmallCircle().size() < 3) {
 			Tower.getInstance().getSmallCircle().add(plane);
 			RoutingMessage respondLanding0 = new RoutingMessage(
-					"Tour0000".getBytes(), 400, 150,
+					"Tower".getBytes(), 400, 150,
 					routingMessageType.REPLACEALL, moveType.STRAIGHT,
 					int2bytes(0));
 			respondLanding0.write(outData);
 			RoutingMessage respondLanding1 = new RoutingMessage(
-					"Tour0000".getBytes(), Tower.getInstance().getSmallPointX(),
+					"Tower".getBytes(), Tower.getInstance().getSmallPointX(),
 					Tower.getInstance().getSmallPointY(), routingMessageType.LAST,
 					moveType.CIRCULAR, int2bytes(Tower.getInstance().getSmallAngle()));
 			respondLanding1.write(outData);
@@ -64,12 +64,12 @@ public class Circle {
 		else if (Tower.getInstance().getMiddleCircle().size() < 10) {
 			Tower.getInstance().getMiddleCircle().add(plane);
 			RoutingMessage respondLanding0 = new RoutingMessage(
-					"Tour0000".getBytes(), 300, 650,
+					"Tower".getBytes(), 300, 650,
 					routingMessageType.REPLACEALL, moveType.STRAIGHT,
 					int2bytes(0));
 			respondLanding0.write(outData);
 			RoutingMessage respondLanding1 = new RoutingMessage(
-					"Tour0000".getBytes(), Tower.getInstance().getMiddlePointX(),
+					"Tower".getBytes(), Tower.getInstance().getMiddlePointX(),
 					Tower.getInstance().getMiddlePointY(), routingMessageType.LAST,
 					moveType.CIRCULAR, int2bytes(Tower.getInstance().getMiddleAngle()));
 			respondLanding1.write(outData);
@@ -81,11 +81,11 @@ public class Circle {
 		else if (Tower.getInstance().getLongCircle().size() < 100) {
 			Tower.getInstance().getLongCircle().add(plane);
 			RoutingMessage respondLanding1 = new RoutingMessage(
-					"Tour0000".getBytes(), 800, 300,
+					"Tower".getBytes(), 800, 300,
 					routingMessageType.REPLACEALL, moveType.STRAIGHT,
 					int2bytes(0));
 			RoutingMessage respondLanding2 = new RoutingMessage(
-					"Tour0000".getBytes(), Tower.getInstance().getLongPointX(), Tower.getInstance().getLongPointY(),
+					"Tower".getBytes(), Tower.getInstance().getLongPointX(), Tower.getInstance().getLongPointY(),
 					routingMessageType.LAST, moveType.CIRCULAR,
 					int2bytes(Tower.getInstance().getLongAngle()));
 			respondLanding1.write(outData);
@@ -95,7 +95,7 @@ public class Circle {
 			Tower.getInstance().getJournal().addEvent(eventR);
 		} else {
 			RoutingMessage respondLanding = new RoutingMessage(
-					"Tour0000".getBytes(), Tower.getInstance().getLandingPointX(),
+					"Tower".getBytes(), Tower.getInstance().getLandingPointX(),
 					Tower.getInstance().getLandingPointY(), routingMessageType.REPLACEALL,
 					moveType.NONE, int2bytes(0));
 			respondLanding.write(outData);
@@ -111,12 +111,12 @@ public class Circle {
 
 		// The following allows the Mayday-plane to land as soon as possible
 		RoutingMessage respondLanding0 = new RoutingMessage(
-				"Tour0000".getBytes(), Tower.getInstance().getStraightX(), Tower.getInstance().getStraightY(),
+				"Tower".getBytes(), Tower.getInstance().getStraightX(), Tower.getInstance().getStraightY(),
 				routingMessageType.REPLACEALL, moveType.STRAIGHT,
 				int2bytes(0));
 		respondLanding0.write(outData);
 		RoutingMessage respondLanding = new RoutingMessage(
-				"Tour0000".getBytes(), Tower.getInstance().getLandingPointX(),
+				"Tower".getBytes(), Tower.getInstance().getLandingPointX(),
 				Tower.getInstance().getLandingPointY(), routingMessageType.LAST,
 				moveType.LANDING, int2bytes(0));
 		respondLanding.write(outData);
