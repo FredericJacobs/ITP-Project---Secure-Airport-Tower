@@ -186,6 +186,7 @@ public class Tower implements Runnable {
 			publicKey.write(decryptKeypair.getPublicKey());
 			creatPriorityQueue();
 			TourNetwork();
+			publicKey.close();
 
 		} catch (FileNotFoundException e) {
 			System.out.println("Key Not Found");
@@ -200,6 +201,7 @@ public class Tower implements Runnable {
 	 * @throws IOException
 	 * @throws CloneNotSupportedException
 	 */
+	@SuppressWarnings("resource")
 	public static void TourNetwork()
 	{
 		ServerSocket serverSocket = null;
