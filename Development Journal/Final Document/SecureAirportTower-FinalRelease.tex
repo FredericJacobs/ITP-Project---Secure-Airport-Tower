@@ -33,7 +33,7 @@ showstringspaces=false}
 \newtheorem*{exercice}{Exercice}
 \hyphenpenalty=10000
 
-\title{Secure Airport Tower\\First Development Journal}
+\title{Secure Airport Tower\\Final Report}
 \author{frederic.jacobs@epfl.ch\\ hantao.zhao@epfl.ch}
 \begin{document}
 \maketitle 
@@ -101,11 +101,19 @@ Let's have an overview of all the classes in this package.
 Please note that we have a sub-package in which we define each different type of message. Since these are only wrappers, please refer to the JavaDoc to know more about them.
 
 \subsection{Plane}
+Plane is the package that contains all the classes related to our own plane. 
+\verb TestPlane.java  is the main class. It handles the initialization of different kind of planes and initialization with encryption key. \verb
+NEEDS COMPLETION
 
+\subsection{Tests}
 
+All our unit tests. No need for further explanation. They all run.
 
+\subsection{Twitter}
+Simple static class to send a tweet with only a line of code using the \verb twitter4j  library. Neat !
 
 \section{Q\&A}
+
 In ITP-02, we were asked two questions. 
 \begin{enumerate}
 \item Is it a good idea to use a superclass to define Messages ?
@@ -122,12 +130,11 @@ int posy;
 MessageType type; //Type of Message
 \end{lstlisting}
 
-The reason why we want this to be an abstract class is really straightforward. We defined a Message super-class because we expect messages to behave a given way but we also want these messages to have a type. All messages will inherit these attributes from the super-class but the super-class won't be instantiable to assure we call the right constructor when creating a message with a certain type. The keyword \emph{abstract} does exactly this. 
+The reason why we want this to be an abstract class is really straightforward. We defined a Message super-class because we expect messages to behave a given way but we also want these messages to have a type. All messages will inherit these attributes from the super-class but the super-class won't be instanciable to assure we call the right constructor when creating a message with a certain type. The keyword \emph{abstract} does exactly this. 
+
+\subsection {GUI Critics}
+
+TO BE COMPLETED
 
 \end{document}
-
-
-Prière d’ajouter une réponse synthétique à ces questions sur votre journal :
-1. Avoir une super classe dans ce cas. Est-??ce une bonne idée ?
-2. Pourquoi serait-??elle une classe abstraite ?
 

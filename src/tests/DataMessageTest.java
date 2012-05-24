@@ -90,7 +90,6 @@ public class DataMessageTest {
 		Assert.assertTrue(written.isComplete());
 		Assert.assertTrue(Arrays.equals(fileHash, written.getHash()));
 		Assert.assertTrue(Arrays.equals(pngFormat, written.getFormat()));
-		Assert.assertTrue(written.getName().endsWith(".png"));
 
 	}
 
