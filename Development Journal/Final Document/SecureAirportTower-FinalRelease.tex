@@ -42,6 +42,8 @@ The first thing to point out is the fact that we used the JRE 1.7 because we use
 
 Java 1.7 SDK has some flaws on Unix-Platforms though. Written once, runs everywhere might not be true depending on the runtime. It turned out that JRE 1.7 was the most stable on Windows. 
 
+For use of encryption with our Tower, it generates at runtime a file called \verb MyKey  that stores the key in a plane compatible format inside the main folder. 
+
 \section{Project's Architecture}
 Our program is structured into different packages. There are two classes that are executable.  \verb AirportGUI.java  launches everything needed to run the tower while \verb TestPlane.java  launches everything required for the plane to run. We are in this section going to give a quick overview of what each class does. For further information please check out our JavaDoc. 
 We have some encapsulation flaws that are linked with late minute refactoring.
