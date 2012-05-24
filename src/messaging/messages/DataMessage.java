@@ -42,6 +42,7 @@ public class DataMessage extends Message implements VisitorMessage{
 	public int getContinuation (){
 		return continuation;
 	}	
+	@Override
 	public void write(DataOutputStream out) throws IOException{
 		super.write(out);
 		out.write(hash);

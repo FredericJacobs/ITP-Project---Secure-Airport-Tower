@@ -23,6 +23,7 @@ public class Modes {
 
 	// Three kind of comparator to match different modes
 	public static Comparator<Plane> comparatorChronos = new Comparator<Plane>() {
+		@Override
 		public int compare(Plane p1, Plane p2) {
 			if (p1.getInitialTime() != p2.getInitialTime()) {
 				return (int) (p1.getInitialTime() - p2.getInitialTime());
@@ -33,6 +34,7 @@ public class Modes {
 
 	};
 	public static Comparator<Plane> comparatorFuel = new Comparator<Plane>() {
+		@Override
 		public int compare(Plane p1, Plane p2) {
 			if (p1.getConsommation() != p2.getConsommation()) {
 				return (int) (p1.getConsommation() - p2.getConsommation());
@@ -44,9 +46,10 @@ public class Modes {
 	};
 
 	public static Comparator<Plane> comparatorTime = new Comparator<Plane>() {
+		@Override
 		public int compare(Plane p1, Plane p2) {
 			if (p1.getPassager() != p2.getPassager()) {
-				return (int) (p1.getPassager() - p2.getPassager());
+				return p1.getPassager() - p2.getPassager();
 			} else {
 				return (int) (p1.getInitialTime() - p2.getInitialTime());
 			}

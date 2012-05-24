@@ -82,6 +82,7 @@ public abstract class Message implements Comparable<Message>, Cloneable,
 	 * 
 	 * @return int
 	 **/
+	@Override
 	public int compareTo(Message msg) {
 		if (this.getPriority() != msg.getPriority())
 			return this.getPriority() - msg.getPriority();
@@ -178,6 +179,7 @@ public abstract class Message implements Comparable<Message>, Cloneable,
 		return Type;
 	}
 
+	@Override
 	public int accept(Visitor visitor, Plane plane, DataOutputStream outData) {
 		return 0;
 	}

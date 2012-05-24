@@ -89,6 +89,7 @@ public class ModesGUI extends JFrame implements ActionListener, Observer {
 	}
 
 	// Listens to the radio buttons. 
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getActionCommand().equals(FUEL)) {
 			Modes.reOrganiseFuel();

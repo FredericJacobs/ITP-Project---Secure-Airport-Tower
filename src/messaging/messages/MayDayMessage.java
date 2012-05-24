@@ -21,6 +21,7 @@ public class MayDayMessage extends Message implements VisitorMessage{
 	/** Getter to see if the hello message requires encrypted communication or not
 	 * @return boolean: true for encrypted and false for not encrypted
 	**/
+	@Override
 	public void write(DataOutputStream out) throws IOException {
 		super.write(out);
 		out.write(cause.getBytes());

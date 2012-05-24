@@ -117,6 +117,7 @@ public class Choker extends JFrame implements MouseListener {
 	}
 	// The class which extends the TimerTask, it can arrange the time counter and run the method after a specified time
 	class Counter extends TimerTask {
+		@Override
 		public void run() {
 			System.out.println("Choke finish");
 			timer.cancel();

@@ -127,12 +127,12 @@ public class TowerMessageHandler extends Observable {
 				DataOutputStream outData = new DataOutputStream(planeSmall
 						.getSocket().getOutputStream());
 				RoutingMessage respondLanding0 = new RoutingMessage(
-						"Tower".getBytes(), 420, 166,
+						"Tour0000".getBytes(), 420, 166,
 						routingMessageType.REPLACEALL, moveType.STRAIGHT,
 						Circle.int2bytes(0));
 				respondLanding0.write(outData);
 				RoutingMessage respondLanding = new RoutingMessage(
-						"Tower".getBytes(), Tower.getInstance().getLandingPointX(),
+						"Tour0000".getBytes(), Tower.getInstance().getLandingPointX(),
 						Tower.getInstance().getLandingPointY(), routingMessageType.LAST,
 						moveType.LANDING, Circle.int2bytes(0));
 				respondLanding.write(outData);
@@ -147,12 +147,12 @@ public class TowerMessageHandler extends Observable {
 					DataOutputStream outData = new DataOutputStream(planeMiddle
 							.getSocket().getOutputStream());
 					RoutingMessage respondLanding0 = new RoutingMessage(
-							"Tower".getBytes(), 400, 150,
+							"Tour0000".getBytes(), 400, 150,
 							routingMessageType.REPLACEALL, moveType.STRAIGHT,
 							Circle.int2bytes(0));
 					respondLanding0.write(outData);
 					RoutingMessage respondLanding1 = new RoutingMessage(
-							"Tower".getBytes(), Tower.getInstance().getSmallPointX(),
+							"Tour0000".getBytes(), Tower.getInstance().getSmallPointX(),
 							Tower.getInstance().getSmallPointY(), routingMessageType.LAST,
 							moveType.CIRCULAR,
 							Circle.int2bytes(Tower.getInstance().getMiddleAngle()));
@@ -170,12 +170,12 @@ public class TowerMessageHandler extends Observable {
 						DataOutputStream outData = new DataOutputStream(
 								planeLong.getSocket().getOutputStream());
 						RoutingMessage respondLanding0 = new RoutingMessage(
-								"Tower".getBytes(), 300, 650,
+								"Tour0000".getBytes(), 300, 650,
 								routingMessageType.REPLACEALL,
 								moveType.STRAIGHT, Circle.int2bytes(0));
 						respondLanding0.write(outData);
 						RoutingMessage respondLanding1 = new RoutingMessage(
-								"Tower".getBytes(), Tower.getInstance().getMiddlePointX(),
+								"Tour0000".getBytes(), Tower.getInstance().getMiddlePointX(),
 								Tower.getInstance().getMiddlePointY(), routingMessageType.LAST,
 								moveType.CIRCULAR,
 								Circle.int2bytes(Tower.getInstance().getMiddleAngle()));

@@ -104,6 +104,7 @@ public class RsaOutputStream extends OutputStream
 		bufferLength = 0;
 	}
 
+	@Override
 	public void close() throws IOException {
 		flush(); 
 		output.close();

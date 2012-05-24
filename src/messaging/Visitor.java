@@ -7,10 +7,10 @@ import messaging.messages.*;
 
 /**
  * This class is the main part of the visitor pattern. It aims at handling
- * different kinds of messages, such as Hello , KeepAlive and so on.Each time
+ * different kinds of messages, such as Hello , Keepalive and so on.Each time
  * there is a message which needs to be handled in the towermessage handle it
  * will call the visit() method so that the Visitor class will judge the type of
- * different message and do different move to respond.
+ * diffferent message and do different move to respond.
  ** 
  * @author Hantao Zhao
  ** @author Frederic Jacobs
@@ -24,7 +24,7 @@ public class Visitor {
 			// give different
 			// respond hello message
 			HelloMessage respondHelloMessage = new HelloMessage(
-					"Tower".getBytes(), 0, 0, (byte) (1 << 4));
+					"Tour0000".getBytes(), 0, 0, (byte) (1 << 4));
 			try {
 				respondHelloMessage.write(outData);
 			} catch (IOException e) {
@@ -39,7 +39,7 @@ public class Visitor {
 
 		else {
 			HelloMessage respondHelloMessage = new HelloMessage(
-					"Tower".getBytes(), 0, 0, (byte) 0);
+					"Tour0000".getBytes(), 0, 0, (byte) 0);
 			plane.setPlaneID(message.getPlaneID());
 			try {
 				respondHelloMessage.write(outData);

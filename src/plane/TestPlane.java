@@ -1,7 +1,5 @@
 package plane;
 
-import messaging.messages.*;
-
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.FileInputStream;
@@ -12,6 +10,9 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Comparator;
 import java.util.PriorityQueue;
+import java.util.Random;
+
+import messaging.messages.Message;
 import encryption.KeyGenerator;
 import encryption.KeyPair;
 
@@ -27,7 +28,7 @@ public class TestPlane {
 	 * @param args
 	 */
 	private static KeyPair decryptKeypair= KeyGenerator.generateRSAKeyPair(256);
-	private static String planeID = "B1778000"; //Fixed for debugging purposes
+	private static String planeID = generateString("ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890", 8);
 	private static final int PLANE_UPDATE_INTERVAL = 100 ; 
 	private static boolean encryptionEnabledAtLaunch = false;
 	private static Socket socket = null;
@@ -39,6 +40,16 @@ public class TestPlane {
 	private static PriorityQueue<Message> inQueue;
 	private static KeyPair towerKey;
 	
+	public static String generateString(String characters, int length)
+	{
+		Random rng = new Random();
+	    char[] text = new char[length];
+	    for (int i = 0; i < length; i++)
+	    {
+	        text[i] = characters.charAt(rng.nextInt(characters.length()));
+	    }
+	    return new String(text).toUpperCase();
+	}
 	
 	public static void addMessageToIncomingQueue(Message message) {
 		inQueue.offer(message);
@@ -51,6 +62,7 @@ public class TestPlane {
 	public static void main(String[] args) throws IOException {
 		
 		inQueue = new PriorityQueue<Message>(6, new Comparator<Message>() {
+			@Override
 			public int compare(Message a, Message b) {
 				return a.compareTo(b);
 			}

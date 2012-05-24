@@ -11,6 +11,7 @@ public class LandingMessage extends Message implements VisitorMessage {
 		super(planeID, length, 2, posx, posy, MessageType.LANDINGREQUEST);
 	}
 
+	@Override
 	public void write(DataOutputStream out) throws IOException {
 		super.write(out);
 	}

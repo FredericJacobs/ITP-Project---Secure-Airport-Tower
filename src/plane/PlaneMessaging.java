@@ -33,7 +33,6 @@ public class PlaneMessaging implements Runnable {
 		
 		while (true){
 			try {
-
 				mes = ReadMessages.readMessage(in);
 				TestPlane.addMessageToIncomingQueue(mes);
 				messageHandler.respond(TestPlane.getNextMessageIncomingQueue(), out);

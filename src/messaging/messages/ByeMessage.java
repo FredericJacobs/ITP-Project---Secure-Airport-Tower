@@ -12,6 +12,7 @@ public class ByeMessage extends Message implements VisitorMessage{
 			int posy) {
 		super (planeID, length, 3, posx, posy, MessageType.BYE );
 	}
+	@Override
 	public void write(DataOutputStream out) throws IOException{
 		super.write(out);
 	}

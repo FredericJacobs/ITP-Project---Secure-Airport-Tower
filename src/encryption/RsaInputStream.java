@@ -52,6 +52,7 @@ public class RsaInputStream extends InputStream
 		buffer = new byte[bufferSize];
 	}
 
+	@Override
 	public int available() throws IOException {
 		return bufferLength - bufferPosition;
 	}
@@ -88,6 +89,7 @@ public class RsaInputStream extends InputStream
 		System.arraycopy(block, bufferOffset, buffer, 0, bufferLength);
 	}
 
+	@Override
 	public int read() throws IOException {
 		if(bufferPosition >= bufferLength)
 			load();

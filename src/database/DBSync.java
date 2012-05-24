@@ -51,7 +51,7 @@ public class DBSync implements Runnable  {
 			newPosition = new BasicDBObject [100];
 			oldPosition = new BasicDBObject[100];
 			cachedPosition = new XYPosition[100];
-
+			
 			while (true){
 
 				updatePositions();			
@@ -73,6 +73,10 @@ public class DBSync implements Runnable  {
 
 	}
 
+	
+	/** Update method for the logs
+	 * 
+	 */
 	private void updateLogs() {
 
 		for (int i=0; i< (Journal.archiveList.size()); i++){
@@ -84,6 +88,10 @@ public class DBSync implements Runnable  {
 		}
 	}
 
+	
+	/**	Update method for the positions
+	 * 
+	 */
 	private void updatePositions() {
 
 		for (int i=0; i< (Tower.getInstance().getJournal().positions.size()); i++){

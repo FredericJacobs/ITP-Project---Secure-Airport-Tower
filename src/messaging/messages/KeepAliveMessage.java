@@ -11,6 +11,7 @@ public class KeepAliveMessage extends Message implements VisitorMessage{
 		super(planeID, 0, 3, posx, posy, MessageType.KEEPALIVE);
 	}
 
+	@Override
 	public void write(DataOutputStream out) throws IOException {
 		super.write(out);
 	}

@@ -33,6 +33,7 @@ public class TowerThread extends Thread {
 	 * Override of the method run(). All the functions of the tour should be
 	 * added in here
 	 */
+	@Override
 	public void run() {
 
 		try {

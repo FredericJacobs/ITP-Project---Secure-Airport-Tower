@@ -26,6 +26,7 @@ public class HelloMessage extends Message implements VisitorMessage{
 	/** An override of the write message , to send out one byte to represent if the Hello message is crypted
 	 * @return boolean: true for Crypted and false for not Crypted
 	**/
+	@Override
 	public void write(DataOutputStream out) throws IOException{
 		super.write(out);
 		out.write(reserved);
