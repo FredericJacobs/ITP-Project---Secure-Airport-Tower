@@ -15,14 +15,13 @@ import messaging.messages.RoutingMessage.moveType;
 public class PlaneNavigation implements Runnable {
 
 	double planeSpeed = Plane.getPlaneSpeed();
-	static RoutingInstruction currentInstruction = new RoutingInstruction(533,
-			437, 0, moveType.STRAIGHT);
+	static RoutingInstruction currentInstruction ;
 
 	@Override
 	public void run() {
 		while (true) {
 			try {
-
+				currentInstruction = RoadInstructionsList.getCurrent();
 				movePlane(TestPlane.getPlaneUpdateInterval());
 
 				new KeepAliveMessage(TestPlane.getPlaneID(), Plane
@@ -67,6 +66,9 @@ public class PlaneNavigation implements Runnable {
 			System.out.println("Plane " + TestPlane.getPlaneID().toString()
 					+ " arrived at waypoint (" + instruction.getxCoord() + ", "
 					+ instruction.getyCoord() + ").");
+			
+			if (currentInstruction.getType() == moveType.LANDING){
+			
 			try {
 				new ByeMessage(TestPlane.getPlaneID(), 0, Plane.getPosition()
 						.getPosx(), Plane.getPosition().getPosy())
@@ -75,7 +77,11 @@ public class PlaneNavigation implements Runnable {
 
 			}
 			System.exit(-1);
-
+			}
+			
+			else {
+				currentInstruction = RoadInstructionsList.nextInstruction();
+			}
 		}
 	}
 
