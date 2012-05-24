@@ -16,78 +16,78 @@ import messaging.messages.Message;
 import encryption.KeyGenerator;
 import encryption.KeyPair;
 
-
 /**
- ** This class the a test plane for our first step of the socket programming. Since we will use the .jar file to model the planes we dont need this class for now
- *
- ** But just in case we keep it in to try some test also to fulfill the demand of the mid-term check
+ ** This class the a test plane for our first step of the socket programming.
+ * Since we will use the .jar file to model the planes we dont need this class
+ * for now
+ * 
+ ** But just in case we keep it in to try some test also to fulfill the demand of
+ * the mid-term check
  **/
 public class TestPlane {
 
 	/**
 	 * @param args
 	 */
-	private static KeyPair decryptKeypair= KeyGenerator.generateRSAKeyPair(256);
-	private static String planeID = generateString("ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890", 8);
-	private static final int PLANE_UPDATE_INTERVAL = 100 ; 
+	private static KeyPair decryptKeypair = KeyGenerator
+			.generateRSAKeyPair(256);
+	private static String planeID = generateString(
+			"ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890", 8);
+	private static final int PLANE_UPDATE_INTERVAL = 100;
 	private static boolean encryptionEnabledAtLaunch = false;
 	private static String fileToSend = null;
-	
 
 	private static Socket socket = null;
 	public static DataOutputStream out = null;
 	public static DataInputStream in = null;
 	private static String towerHost = "LOCALHOST";
 	private static String towerPort = "6969";
-	private static Plane plane = new Plane ();
+	private static Plane plane = new Plane();
 	private static PriorityQueue<Message> inQueue;
 	private static KeyPair towerKey;
-	
-	public static String generateString(String characters, int length)
-	{
+
+	public static String generateString(String characters, int length) {
 		Random rng = new Random();
-	    char[] text = new char[length];
-	    for (int i = 0; i < length; i++)
-	    {
-	        text[i] = characters.charAt(rng.nextInt(characters.length()));
-	    }
-	    return new String(text).toUpperCase();
+		char[] text = new char[length];
+		for (int i = 0; i < length; i++) {
+			text[i] = characters.charAt(rng.nextInt(characters.length()));
+		}
+		return new String(text).toUpperCase();
 	}
-	
+
 	public static void addMessageToIncomingQueue(Message message) {
 		inQueue.offer(message);
 	}
-	
+
 	public static Message getNextMessageIncomingQueue() {
 		return inQueue.poll();
 	}
-	
+
 	public static String getFileToSend() {
 		return fileToSend;
 	}
-	
+
 	public static void main(String[] args) throws IOException {
-		
+
 		inQueue = new PriorityQueue<Message>(6, new Comparator<Message>() {
 			@Override
 			public int compare(Message a, Message b) {
 				return a.compareTo(b);
 			}
 		});
-		
+
 		init(args);
-		
+
 		try {
 			socket = new Socket(towerHost, Integer.parseInt(towerPort));
-			out = new DataOutputStream(
-					socket.getOutputStream());
-			in = new DataInputStream(
-					socket.getInputStream());
+			out = new DataOutputStream(socket.getOutputStream());
+			in = new DataInputStream(socket.getInputStream());
 		} catch (UnknownHostException e) {
 			System.err.println("Don't know about host: LOCALHOST.");
 			System.exit(1);
 		} catch (IOException e) {
-			System.err.println("Couldn't get I/O for the connection to: LOCALHOST.");
+			System.err
+					.println("Couldn't get I/O for the connection to: LOCALHOST.");
 			System.exit(1);
 		}
 		PlaneMessaging messagingThread = new PlaneMessaging();
@@ -95,21 +95,22 @@ public class TestPlane {
 	}
 
 	private static void init(String[] args) {
-		
-		for (int i = 0; i< args.length; i++){
-			
-			if (args[i].equals("--encryption-enabled")){
+
+		for (int i = 0; i < args.length; i++) {
+
+			if (args[i].equals("--encryption-enabled")) {
 				encryptionEnabledAtLaunch = (args[++i].equals("true"));
 			}
-			
-			if (args[i].equals("--towerkey")){
-				
+
+			if (args[i].equals("--towerkey")) {
+
 				FileInputStream publicKeyFile;
 				try {
 					publicKeyFile = new FileInputStream(args[++i]);
-					DataInputStream publicKeyDIS = new DataInputStream(publicKeyFile);
-					byte [] modulus = null ;
-					byte [] publicKey = null ;
+					DataInputStream publicKeyDIS = new DataInputStream(
+							publicKeyFile);
+					byte[] modulus = null;
+					byte[] publicKey = null;
 
 					int keySize = publicKeyDIS.readInt();
 					@SuppressWarnings("unused")
@@ -118,91 +119,91 @@ public class TestPlane {
 					@SuppressWarnings("unused")
 					int publicKeyLength = publicKeyDIS.readInt();
 					publicKeyDIS.read(publicKey);
-					
-					towerKey = new KeyPair( new BigInteger(modulus), new BigInteger(publicKey), null , keySize); 
-					
+
+					towerKey = new KeyPair(new BigInteger(modulus),
+							new BigInteger(publicKey), null, keySize);
+
 					publicKeyDIS.close();
-					
+
 				} catch (FileNotFoundException e) {
 					System.out.println("File Not Found");
 					System.exit(-1);
 				} catch (IOException e) {
-					
+
 				}
 			}
-			
-			if (args[i].equals("--towerhost")){
+
+			if (args[i].equals("--towerhost")) {
 				towerHost = (args[++i]);
 			}
-			
-			if (args[i].equals("--towerport")){
+
+			if (args[i].equals("--towerport")) {
 				towerPort = (args[++i]);
 			}
-			
-			if (args[i].equals("--file-to-send")){
+
+			if (args[i].equals("--file-to-send")) {
 				fileToSend = (args[++i]);
 			}
-			
-			if (args[i].equals("--initialX")){
+
+			if (args[i].equals("--initialX")) {
 				Plane.getPosition().setPosx(Integer.parseInt(args[++i]));
 			}
-		
-			if (args[i].equals("--initialY")){
+
+			if (args[i].equals("--initialY")) {
 				Plane.getPosition().setPosy(Integer.parseInt(args[++i]));
 			}
-			
-			if (args[i].equals("--planeType")){
-				
-				String planeTypeString = args [++i];
-				
-				if (planeTypeString.equalsIgnoreCase("A380")){
+
+			if (args[i].equals("--planeType")) {
+
+				String planeTypeString = args[++i];
+
+				if (planeTypeString.equalsIgnoreCase("A380")) {
 					plane.changeTypeTo(PlaneType.A380);
 				}
-				
-				if (planeTypeString.equalsIgnoreCase("A320")){
+
+				if (planeTypeString.equalsIgnoreCase("A320")) {
 					plane.changeTypeTo(PlaneType.A320);
 				}
-				
-				if (planeTypeString.equalsIgnoreCase("B787")){
+
+				if (planeTypeString.equalsIgnoreCase("B787")) {
 					plane.changeTypeTo(PlaneType.B787);
 				}
 
-				if (planeTypeString.equalsIgnoreCase("CONCORDE")){
+				if (planeTypeString.equalsIgnoreCase("CONCORDE")) {
 					plane.changeTypeTo(PlaneType.CONCORDE);
 				}
 
-				if (planeTypeString.equalsIgnoreCase("GRIPEN")){
+				if (planeTypeString.equalsIgnoreCase("GRIPEN")) {
 					plane.changeTypeTo(PlaneType.GRIPEN);
-				}
-				else {
-					System.out.println("Given plane type doesn't exist. Initialized with default A320");
+				} else {
+					System.out
+							.println("Given plane type doesn't exist. Initialized with default A320");
 				}
 			}
-			
-			if (args[i].equals("--initialFuel")){
-				
-				if (!plane.setFuelLevel(Double.parseDouble(args[++i]))){
+
+			if (args[i].equals("--initialFuel")) {
+
+				if (!plane.setFuelLevel(Double.parseDouble(args[++i]))) {
 					System.out.println("The plane can't store that much fuel.");
 					System.exit(-1);
 				}
-				
+
 			}
-			
+
 		}
 	}
-	
+
 	public static boolean isEncryptionEnabledAtLaunch() {
 		return encryptionEnabledAtLaunch;
 	}
-	
-	public static byte[] getPlaneID () {
+
+	public static byte[] getPlaneID() {
 		return planeID.getBytes();
 	}
-	
+
 	public static String getPlaneIDString() {
 		return planeID;
 	}
-
 
 	public static DataOutputStream getOut() {
 		return out;
@@ -223,5 +224,5 @@ public class TestPlane {
 	public static KeyPair getDecryptKeypair() {
 		return decryptKeypair;
 	}
-	
+
 }

@@ -6,7 +6,7 @@ import java.io.IOException;
 import messaging.Plane;
 import messaging.Visitor;
 
-public class RoutingMessage extends Message  implements VisitorMessage{
+public class RoutingMessage extends Message implements VisitorMessage {
 	public enum routingMessageType {
 		NEWFIRST, LAST, REPLACEALL;
 	}
@@ -16,8 +16,9 @@ public class RoutingMessage extends Message  implements VisitorMessage{
 
 	}
 
-	 private routingMessageType TypeR;
-	 public routingMessageType getTypeR() {
+	private routingMessageType TypeR;
+
+	public routingMessageType getTypeR() {
 		return TypeR;
 	}
 
@@ -34,7 +35,7 @@ public class RoutingMessage extends Message  implements VisitorMessage{
 	}
 
 	private moveType TypeM;
-	 private byte[] payload;
+	private byte[] payload;
 
 	public RoutingMessage(byte[] planeID, int posx, int posy,
 			routingMessageType typeR, moveType typeM, byte[] payload) {
@@ -56,10 +57,8 @@ public class RoutingMessage extends Message  implements VisitorMessage{
 	}
 
 	@Override
-	public int accept(Visitor visitor,Plane plane,DataOutputStream outData){
-		 return visitor.visit(plane,this,outData);						
+	public int accept(Visitor visitor, Plane plane, DataOutputStream outData) {
+		return visitor.visit(plane, this, outData);
 	}
-	
-	
 
 }

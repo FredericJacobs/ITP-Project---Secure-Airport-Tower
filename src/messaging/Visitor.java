@@ -64,21 +64,28 @@ public class Visitor {
 		}
 
 	}
-	// Respond to the date message, which has been done in the tower message handler
+
+	// Respond to the date message, which has been done in the tower message
+	// handler
 	public int visit(Plane plane, DataMessage message, DataOutputStream outData) {
 		return 0;
 	}
+
 	// Respond to the MayDayMessage message
 	public int visit(Plane plane, MayDayMessage message,
 			DataOutputStream outData) {
 		System.out.println("Try to handle the mayday message");
-		
-		Tower.getInstance().getPlanes().remove(plane);// To make sure the mayday plane is an exception now.
 
-		//Find match of plandID in the tower planedDB
+		Tower.getInstance().getPlanes().remove(plane);// To make sure the mayday
+														// plane is an exception
+														// now.
 
-		Tower.planeDidSendMayDay(plane.getPlaneID());// To make sure the mayday plane is an exception now. 
-		
+		// Find match of plandID in the tower planedDB
+
+		Tower.planeDidSendMayDay(plane.getPlaneID());// To make sure the mayday
+														// plane is an exception
+														// now.
+
 		AirportGUI.choker.chokeEnabled(true);// Run the choke mode
 		try {
 			Circle.landingUrgent(plane, outData);
@@ -87,30 +94,37 @@ public class Visitor {
 		}
 		return 0;
 	}
-	// Respond to the SendRSAMessage 
+
+	// Respond to the SendRSAMessage
 	public int visit(Plane plane, SendRSAMessage message,
 			DataOutputStream outData) {
 		return 2;
 	}
+
 	// Respond to the ChokeMessage , wont happen to the tower
 	public int visit(Plane plane, ChokeMessage message, DataOutputStream outData) {
 		return 0;
 	}
+
 	// Respond to the UnChokeMessage , wont happen to the tower
 	public int visit(Plane plane, UnchokeMessage message,
 			DataOutputStream outData) {
 		return 0;
 	}
-	// Respond to the bye message, which has been done in the tower message handler
+
+	// Respond to the bye message, which has been done in the tower message
+	// handler
 	public int visit(Plane plane, ByeMessage message, DataOutputStream outData) {
 
 		return 0;
 	}
+
 	// Respond to the routing message , wont happen to the tower
 	public int visit(Plane plane, RoutingMessage message,
 			DataOutputStream outData) {
 		return 0;
 	}
+
 	// Respond to the KeepAliveMessage
 	public int visit(Plane plane, KeepAliveMessage message,
 			DataOutputStream outData) {
@@ -118,6 +132,7 @@ public class Visitor {
 		plane.setPosy(message.keepaliveY());
 		return 0;
 	}
+
 	// Respond to the LandingMessage
 	public int visit(Plane plane, LandingMessage message,
 			DataOutputStream outData) {

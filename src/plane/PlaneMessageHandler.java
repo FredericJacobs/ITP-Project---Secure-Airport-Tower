@@ -19,9 +19,9 @@ import encryption.KeyPair;
  * @author Frederic Jacobs
  */
 public class PlaneMessageHandler {
-	
+
 	DataFile towerDataFile = null;
-	
+
 	public PlaneMessageHandler() {
 	}
 
@@ -35,40 +35,53 @@ public class PlaneMessageHandler {
 	 *            The DataOutputStream where we send the feed back message
 	 * @throws IOException
 	 */
-	public int respond(Message message, DataOutputStream outData) throws IOException {
+	public int respond(Message message, DataOutputStream outData)
+			throws IOException {
 		int type = message.getType();
-		
+
 		switch (type) {
-		
+
 		case 0:
 			HelloMessage mes = (HelloMessage) message;
-			if (mes.isCrypted()){
-				KeyPair publicKeyPair = TestPlane.getEncryptKeypair().copyKeyPairWithoutPrivateKey();
-				new SendRSAMessage(TestPlane.getPlaneID(), publicKeyPair.getKeySize(), Plane.getPosition().getPosx(), Plane.getPosition().getPosy(),publicKeyPair).write(PlaneMessaging.getOutputStream());
+			if (mes.isCrypted()) {
+				KeyPair publicKeyPair = TestPlane.getEncryptKeypair()
+						.copyKeyPairWithoutPrivateKey();
+				new SendRSAMessage(TestPlane.getPlaneID(),
+						publicKeyPair.getKeySize(), Plane.getPosition()
+						.getPosx(), Plane.getPosition().getPosy(),
+						publicKeyPair).write(PlaneMessaging.getOutputStream());
 				return 1;
 			}
-			
-			new LandingMessage(TestPlane.getPlaneID(), 0, Plane.getPosition().getPosx(), Plane.getPosition().getPosy()).write(PlaneMessaging.getOutputStream());
-		
-			if (TestPlane.getFileToSend() != null && !TestPlane.getFileToSend().isEmpty()){
+
+			new LandingMessage(TestPlane.getPlaneID(), 0, Plane.getPosition()
+					.getPosx(), Plane.getPosition().getPosy())
+			.write(PlaneMessaging.getOutputStream());
+
+			if (TestPlane.getFileToSend() != null
+					&& !TestPlane.getFileToSend().isEmpty()) {
 				DataFile dataToSend = new DataFile(TestPlane.getFileToSend());
-				dataToSend.writeToOutputStream(TestPlane.getPlaneIDString(), TestPlane.getOut());
+				dataToSend.writeToOutputStream(TestPlane.getPlaneIDString(),
+						TestPlane.getOut());
 			}
-			
+
 			return 0;
-		
+
 		case 1:
-			if (towerDataFile == null){
-				towerDataFile = new DataFile ("testfile", (DataMessage) message);
+			if (towerDataFile == null) {
+				towerDataFile = new DataFile("testfile", (DataMessage) message);
 			}
 			return 0;
-						
+
 		case 7:
 			RoutingMessage routingMessage = (RoutingMessage) message;
-			PlaneNavigation.currentInstruction = new RoutingInstruction(routingMessage.getPosition().getPosx(),routingMessage.getPosition().getPosy(), 0 , routingMessage.getTypeM());
+			PlaneNavigation.currentInstruction = new RoutingInstruction(
+					routingMessage.getPosition().getPosx(), routingMessage
+					.getPosition().getPosy(), 0,
+					routingMessage.getTypeM());
 			System.out.println("New Instruction !");
-		
-		default: return 0;
+
+		default:
+			return 0;
 		}
 	}
 

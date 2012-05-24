@@ -17,7 +17,6 @@ import org.junit.Test;
 
 import dataFile.DataFile;
 
-
 /**
  * Pour faire fonctionner le test il faut placer le fichier "test_image_itp.png"
  * dans un rŽpertoire "test" dans le m�me dossier que "src".
@@ -52,7 +51,8 @@ public class DataMessageTest {
 	@BeforeClass
 	public static void setUpClass() throws IOException {
 
-		dataFile = new DataFile("src"+File.separator+"tests" + File.separator + "test_image_itp.png");
+		dataFile = new DataFile("src" + File.separator + "tests"
+				+ File.separator + "test_image_itp.png");
 
 		pieces = generateDataList(dataFile);
 	}
@@ -92,7 +92,6 @@ public class DataMessageTest {
 
 	}
 
-	
 	/**
 	 * Format de mon constructeur Data :
 	 * 
@@ -113,10 +112,10 @@ public class DataMessageTest {
 
 		int fileSize = 4097;
 
-		DataMessage firstDataBlock = new DataMessage(null, 0, -1, -1, null, noFormat,
-				fileSize, new byte[DataMessage.MAX_PACKET_SIZE]);
-		DataMessage wrongDataBlock = new DataMessage(null, 2, -1, 1, null, noFormat,
-				fileSize, new byte[DataMessage.MAX_PACKET_SIZE / 2]);
+		DataMessage firstDataBlock = new DataMessage(null, 0, -1, -1, null,
+				noFormat, fileSize, new byte[DataMessage.MAX_PACKET_SIZE]);
+		DataMessage wrongDataBlock = new DataMessage(null, 2, -1, 1, null,
+				noFormat, fileSize, new byte[DataMessage.MAX_PACKET_SIZE / 2]);
 
 		DataFile test = new DataFile("dummy", firstDataBlock);
 
@@ -136,10 +135,10 @@ public class DataMessageTest {
 
 		int fileSize = 1536;
 
-		DataMessage firstDataBlock = new DataMessage(null, 0, -1, -1, null, noFormat,
-				fileSize, new byte[DataMessage.MAX_PACKET_SIZE]);
-		DataMessage lastBlock = new DataMessage(null, 1, -1, 1, null, noFormat, fileSize,
-				new byte[DataMessage.MAX_PACKET_SIZE / 2]);
+		DataMessage firstDataBlock = new DataMessage(null, 0, -1, -1, null,
+				noFormat, fileSize, new byte[DataMessage.MAX_PACKET_SIZE]);
+		DataMessage lastBlock = new DataMessage(null, 1, -1, 1, null, noFormat,
+				fileSize, new byte[DataMessage.MAX_PACKET_SIZE / 2]);
 
 		DataFile test = new DataFile("dummy", firstDataBlock);
 
@@ -185,8 +184,8 @@ public class DataMessageTest {
 
 			bis.read(buffer, 0, buffer.length);
 
-			pieces.add(new DataMessage(null, i, -1, -1, fileHash, pngFormat, fileSize,
-					buffer));
+			pieces.add(new DataMessage(null, i, -1, -1, fileHash, pngFormat,
+					fileSize, buffer));
 
 			i++;
 		}

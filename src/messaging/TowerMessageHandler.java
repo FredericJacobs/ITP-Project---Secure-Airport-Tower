@@ -49,19 +49,21 @@ public class TowerMessageHandler extends Observable {
 	 *            The DataOutputStream where we send the feed back message
 	 * @throws IOException
 	 */
-	public int respond(Plane plane, Message message,
-			DataOutputStream outData) throws IOException {
+	public int respond(Plane plane, Message message, DataOutputStream outData)
+			throws IOException {
 		int type = message.getType();
 		Event event = new Event(message, message.getPlaneID(), "Tower");
 		Tower.getInstance().getJournal().addEvent(event);
 		plane.setPlaneID(message.getPlaneID());
-		// We answer most the messages by implementing the visitor pattern. While the Datafile and the bye message
-		// need some of the special parameter so we still keep the switch function for them.
+		// We answer most the messages by implementing the visitor pattern.
+		// While the Datafile and the bye message
+		// need some of the special parameter so we still keep the switch
+		// function for them.
 		Visitor visitor = new Visitor();
-		 
+
 		switch (type) {// depends on different type of message we go to
 						// different cases
-		// Answer the Data message 
+		// Answer the Data message
 		case 1:
 
 			towerDataFile = new DataFile("downloads" + File.separator
@@ -73,10 +75,12 @@ public class TowerMessageHandler extends Observable {
 				AirportGUI.updateDownloads(listOfDownloads);
 				// Read the plane type and save it in the plane class.
 				try {
-					Scanner scanner = new Scanner(new FileInputStream("downloads"+ File.separator + plane.getPlaneID()+"-0.txt"));
-					
-					String delimiters = "[=]"; 
-					String[ ] tokens = scanner.nextLine().split(delimiters);
+					Scanner scanner = new Scanner(new FileInputStream(
+							"downloads" + File.separator + plane.getPlaneID()
+									+ "-0.txt"));
+
+					String delimiters = "[=]";
+					String[] tokens = scanner.nextLine().split(delimiters);
 					plane.setPlaneID(tokens[1]);
 					scanner.close();
 				} catch (FileNotFoundException e) {
@@ -84,26 +88,29 @@ public class TowerMessageHandler extends Observable {
 			}
 
 			return 0;
-		// Answer the Bye message 
+			// Answer the Bye message
 		case 6:
 			changeCircle();
 			System.out.println("Connection terminated");
 			plane.setlandingTimeTotal(System.currentTimeMillis()
 					- plane.getInitialTime());
 			Tower.getInstance().setPassgerNumber(plane.getPassager());
-			Tower.getInstance().setLandingTimeTotal((int)plane.getlandingTimeTotal());
-			// Read the fuel consumption and save it in the plane class and update it in the modesGUI.
+			Tower.getInstance().setLandingTimeTotal(
+					(int) plane.getlandingTimeTotal());
+			// Read the fuel consumption and save it in the plane class and
+			// update it in the modesGUI.
 			try {
-				Scanner scanner = new Scanner(new FileInputStream("downloads"+ File.separator + plane.getPlaneID()+"-1.txt"));
-				String delimiters = "[=]"; 
-				String[ ] tokens = scanner.nextLine().split(delimiters);
-				String delimiters2 = "[;]"; 
-				String[ ] tokens2 = tokens[1].split(delimiters2);
-				int consumptionPlane =  Integer.valueOf(tokens2[0]).intValue(); 
+				Scanner scanner = new Scanner(new FileInputStream("downloads"
+						+ File.separator + plane.getPlaneID() + "-1.txt"));
+				String delimiters = "[=]";
+				String[] tokens = scanner.nextLine().split(delimiters);
+				String delimiters2 = "[;]";
+				String[] tokens2 = tokens[1].split(delimiters2);
+				int consumptionPlane = Integer.valueOf(tokens2[0]).intValue();
 				Tower.getInstance().setConsumption(consumptionPlane);
 				scanner.close();
 			} catch (FileNotFoundException e) {
-			}		
+			}
 			Tower.getInstance().getPlanes().remove(plane);
 			setChanged();
 			notifyObservers();
@@ -114,14 +121,18 @@ public class TowerMessageHandler extends Observable {
 		}
 	}
 
-	/* This method helps the bye message to arrange the other planes. Each time a plane has landed and the landing
-	 route is valid again, the changeCircle will call the next plane to come to land.Then it will check if there
-	is other planes are waiting;if so the waiting planes will be instructed to enter the smaller circle so that 
-	in this way we can arrange all the landing request well.
-	*/
+	/*
+	 * This method helps the bye message to arrange the other planes. Each time
+	 * a plane has landed and the landing route is valid again, the changeCircle
+	 * will call the next plane to come to land.Then it will check if there is
+	 * other planes are waiting;if so the waiting planes will be instructed to
+	 * enter the smaller circle so that in this way we can arrange all the
+	 * landing request well.
+	 */
 	public void changeCircle() {
 		Tower.getInstance().getLandingRoute().remove(0);
-		// Check if there is other planes in the small circle, if so let them enter the landing route
+		// Check if there is other planes in the small circle, if so let them
+		// enter the landing route
 		if (Tower.getInstance().getSmallCircle().size() != 0) {
 			Plane planeSmall = Tower.getInstance().getSmallCircle().remove(0);
 			Tower.getInstance().getLandingRoute().add(planeSmall);
@@ -134,16 +145,19 @@ public class TowerMessageHandler extends Observable {
 						Circle.int2bytes(0));
 				respondLanding0.write(outData);
 				RoutingMessage respondLanding = new RoutingMessage(
-						"Tour0000".getBytes(), Tower.getInstance().getLandingPointX(),
-						Tower.getInstance().getLandingPointY(), routingMessageType.LAST,
+						"Tour0000".getBytes(), Tower.getInstance()
+								.getLandingPointX(), Tower.getInstance()
+								.getLandingPointY(), routingMessageType.LAST,
 						moveType.LANDING, Circle.int2bytes(0));
 				respondLanding.write(outData);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			// Check if there is other planes in the middle circle, if so let them enter the small circle
+			// Check if there is other planes in the middle circle, if so let
+			// them enter the small circle
 			if (Tower.getInstance().getMiddleCircle().size() != 0) {
-				Plane planeMiddle = Tower.getInstance().getMiddleCircle().remove(0);
+				Plane planeMiddle = Tower.getInstance().getMiddleCircle()
+						.remove(0);
 				Tower.getInstance().getSmallCircle().add(planeMiddle);
 				try {
 					DataOutputStream outData = new DataOutputStream(planeMiddle
@@ -154,18 +168,21 @@ public class TowerMessageHandler extends Observable {
 							Circle.int2bytes(0));
 					respondLanding0.write(outData);
 					RoutingMessage respondLanding1 = new RoutingMessage(
-							"Tour0000".getBytes(), Tower.getInstance().getSmallPointX(),
-							Tower.getInstance().getSmallPointY(), routingMessageType.LAST,
-							moveType.CIRCULAR,
-							Circle.int2bytes(Tower.getInstance().getMiddleAngle()));
+							"Tour0000".getBytes(), Tower.getInstance()
+									.getSmallPointX(), Tower.getInstance()
+									.getSmallPointY(), routingMessageType.LAST,
+							moveType.CIRCULAR, Circle.int2bytes(Tower
+									.getInstance().getMiddleAngle()));
 					respondLanding1.write(outData);
 
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				// Check if there is other planes in the long circle, if so let them enter the middle circle
+				// Check if there is other planes in the long circle, if so let
+				// them enter the middle circle
 				if (Tower.getInstance().getLongCircle().size() != 0) {
-					Plane planeLong = Tower.getInstance().getLongCircle().remove(0);
+					Plane planeLong = Tower.getInstance().getLongCircle()
+							.remove(0);
 					Tower.getInstance().getMiddleCircle().add(planeLong);
 
 					try {
@@ -177,10 +194,12 @@ public class TowerMessageHandler extends Observable {
 								moveType.STRAIGHT, Circle.int2bytes(0));
 						respondLanding0.write(outData);
 						RoutingMessage respondLanding1 = new RoutingMessage(
-								"Tour0000".getBytes(), Tower.getInstance().getMiddlePointX(),
-								Tower.getInstance().getMiddlePointY(), routingMessageType.LAST,
-								moveType.CIRCULAR,
-								Circle.int2bytes(Tower.getInstance().getMiddleAngle()));
+								"Tour0000".getBytes(), Tower.getInstance()
+										.getMiddlePointX(), Tower.getInstance()
+										.getMiddlePointY(),
+								routingMessageType.LAST, moveType.CIRCULAR,
+								Circle.int2bytes(Tower.getInstance()
+										.getMiddleAngle()));
 						respondLanding1.write(outData);
 					} catch (IOException e) {
 						e.printStackTrace();

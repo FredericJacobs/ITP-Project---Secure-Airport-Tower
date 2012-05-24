@@ -6,12 +6,13 @@ import java.io.IOException;
 
 import messaging.messages.MayDayMessage;
 
-/** This class is a wrapper class of what a plane can be. 
- * @author Hantao Zhao 
+/**
+ * This class is a wrapper class of what a plane can be.
+ * 
+ * @author Hantao Zhao
  * @author Frederic Jacobs
  * @version 1.0
  **/
-
 
 public class Plane implements Runnable {
 	static private PlaneType type;

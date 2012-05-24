@@ -26,7 +26,8 @@ public class AirportGUI extends JFrame {
 	public AirportGUI() {
 
 		// Create a window. The program will exit when the window is closed.
-		// See http://docs.oracle.com/javase/tutorial/uiswing/components/frame.html
+		// See
+		// http://docs.oracle.com/javase/tutorial/uiswing/components/frame.html
 		super("Airport");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
@@ -49,7 +50,7 @@ public class AirportGUI extends JFrame {
 		modesGUI.setVisible(true);
 
 		// this is how the GUI interfaces with the tower, to get the
-		// journal and the list of downloaded files. 
+		// journal and the list of downloaded files.
 		// Add here the observers to he appropriate classes
 
 		// Run the tower
@@ -57,8 +58,11 @@ public class AirportGUI extends JFrame {
 		(new Thread(new DBSync())).start();
 	}
 
-	/** This method starts a standalone GUI, for testing purposes. 
-	 * @throws IOException */
+	/**
+	 * This method starts a standalone GUI, for testing purposes.
+	 * 
+	 * @throws IOException
+	 */
 	public static void main(String[] args) throws IOException {
 		new AirportGUI();
 	}
@@ -66,11 +70,12 @@ public class AirportGUI extends JFrame {
 	public static JournalGUI getJournalGUI() {
 		return journalGUI;
 	}
+
 	public static ModesGUI getModesGUI() {
 		return modesGUI;
 	}
-	
-	public static void updateDownloads (ArrayList <File> downloadList){
+
+	public static void updateDownloads(ArrayList<File> downloadList) {
 		downloadGUI.addFilesToDownloadBox(downloadList);
 	}
 }

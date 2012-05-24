@@ -8,7 +8,7 @@ public class RoutingInstruction {
 	private moveType planeMoveType;
 	private double degrees;
 	private XYPosition waypoint;
-	
+
 	public RoutingInstruction(int getxCoord, int getyCoord, double degrees,
 			moveType planeMoveType) {
 		waypoint = new XYPosition(getxCoord, getyCoord);
@@ -31,7 +31,5 @@ public class RoutingInstruction {
 	public double getAngle() {
 		return degrees;
 	}
-	
-	
 
 }

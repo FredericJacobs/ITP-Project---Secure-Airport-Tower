@@ -40,7 +40,7 @@ import messaging.Tower;
  * the right data (see the addEvent method)
  * 
  */
-public class JournalGUI extends JFrame implements ActionListener  , Observer {
+public class JournalGUI extends JFrame implements ActionListener, Observer {
 
 	private static final long serialVersionUID = -8316495054463238988L;
 	private static final String[] columnNames = { "Priority", "Type", "Source",
@@ -215,15 +215,18 @@ public class JournalGUI extends JFrame implements ActionListener  , Observer {
 
 	}
 
-	// This override method update() is the essential part to print the messages as vectors.
+	// This override method update() is the essential part to print the messages
+	// as vectors.
 	@SuppressWarnings({ "unchecked", "static-access" })
 	@Override
 	public void update(Observable o, Object arg) {
-		messaging.Event printEvent = Tower.getInstance().getJournal().getEvent(0);
+		messaging.Event printEvent = Tower.getInstance().getJournal()
+				.getEvent(0);
 		@SuppressWarnings("rawtypes")
 		Vector print = new Vector();
 		print.add(printEvent.getMessage().getPriority());
-		print.add(printEvent.getMessage().messageTypeName(printEvent.getMessage().getType()));
+		print.add(printEvent.getMessage().messageTypeName(
+				printEvent.getMessage().getType()));
 		print.add(printEvent.getSource());
 		print.add(printEvent.getDestination());
 		print.add(printEvent.getDate());

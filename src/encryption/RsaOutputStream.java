@@ -1,6 +1,5 @@
 package encryption;
 
-
 import java.io.IOException;
 import java.io.OutputStream;
 import java.math.BigInteger;
@@ -8,6 +7,7 @@ import java.security.SecureRandom;
 
 /**
  * Write and encrypt bytes to an output stream. This stream uses RSA decryption.
+ * 
  * @author Frederic Jacobs
  * @author Hantao Zhao
  * @see InputStream
@@ -34,8 +34,7 @@ public class RsaOutputStream extends OutputStream
 	 * @param key
 	 *            Key to use.
 	 */
-	public RsaOutputStream(OutputStream output, KeyPair key)
-	{
+	public RsaOutputStream(OutputStream output, KeyPair key) {
 		// Checking if the arguments are valid
 		if (key == null)
 			throw new IllegalArgumentException(
@@ -64,7 +63,7 @@ public class RsaOutputStream extends OutputStream
 	@Override
 	public void flush() throws IOException {
 		// Nothing to send, so we don't send anything.
-		if(bufferLength == 0)
+		if (bufferLength == 0)
 			return;
 
 		// Padding according to the ITP guidelines
@@ -77,26 +76,28 @@ public class RsaOutputStream extends OutputStream
 		byte[] padding_bytes = new byte[padding];
 		rand.nextBytes(padding_bytes);
 
-		for(int i = 0; i < padding_bytes.length; i++) {
+		for (int i = 0; i < padding_bytes.length; i++) {
 			// Check zero-byte
-			while(padding_bytes[i] == 0) {
+			while (padding_bytes[i] == 0) {
 				padding_bytes[i] = (byte) (rand.nextInt() & 0xff);
 			}
 		}
-		// Correcting padding 
+		// Correcting padding
 		System.arraycopy(padding_bytes, 0, block, 2, padding);
 		block[padding + 2] = 0;
 		System.arraycopy(buffer, 0, block, padding + 3, bufferLength);
 
 		// Encrypt
-		byte[] block_encrypted = key.encrypt(new BigInteger(block)).toByteArray();
+		byte[] block_encrypted = key.encrypt(new BigInteger(block))
+				.toByteArray();
 
 		padding = block.length - block_encrypted.length;
 
-		for(int i = 0; i < padding; i++)
+		for (int i = 0; i < padding; i++)
 			block[i] = 0;
 
-		System.arraycopy(block_encrypted, 0, block, padding, block_encrypted.length);
+		System.arraycopy(block_encrypted, 0, block, padding,
+				block_encrypted.length);
 
 		output.write(block);
 		output.flush();
@@ -105,7 +106,7 @@ public class RsaOutputStream extends OutputStream
 
 	@Override
 	public void close() throws IOException {
-		flush(); 
+		flush();
 		output.close();
 	}
 
@@ -113,7 +114,7 @@ public class RsaOutputStream extends OutputStream
 	public void write(int b) throws IOException {
 		buffer[bufferLength++] = (byte) (b & 0xff);
 
-		if(bufferLength >= bufferSize)
+		if (bufferLength >= bufferSize)
 			flush();
 	}
 

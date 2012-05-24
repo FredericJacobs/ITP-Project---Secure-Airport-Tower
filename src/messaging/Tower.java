@@ -15,6 +15,7 @@ import java.util.Scanner;
 import messaging.messages.Message;
 import encryption.KeyGenerator;
 import encryption.KeyPair;
+
 //import encryption.KeyPair;
 
 /**
@@ -52,30 +53,27 @@ public class Tower implements Runnable {
 
 	private static PriorityQueue<Message> inQueue;//
 	private static KeyPair decryptKeypair;// the KeyPair for the tour
-	private ArrayList <Plane> planes = new ArrayList<Plane>();
+	private ArrayList<Plane> planes = new ArrayList<Plane>();
 	private Journal journal = new Journal();
 	private double consumption;
 	private int passgerNumber;
 	private int landingTimeTotal;
 
-
 	private int landingPointX;
-	private int landingPointY ;
-	private ArrayList <Plane>landingRoute = new ArrayList<Plane>();
-	private ArrayList <Plane>smallCircle = new ArrayList<Plane>();
+	private int landingPointY;
+	private ArrayList<Plane> landingRoute = new ArrayList<Plane>();
+	private ArrayList<Plane> smallCircle = new ArrayList<Plane>();
 
 	private int smallPointX;
 	private int smallPointY;
 	private int smallAngle;
 
-
-	private ArrayList <Plane>middleCircle = new ArrayList<Plane>();
+	private ArrayList<Plane> middleCircle = new ArrayList<Plane>();
 	private int middlePointX;
 	private int middlePointY;
 	private int middleAngle;
 
-
-	private ArrayList <Plane>longCircle = new ArrayList<Plane>();
+	private ArrayList<Plane> longCircle = new ArrayList<Plane>();
 
 	private int longPointX;
 	private int longPointY;
@@ -83,8 +81,6 @@ public class Tower implements Runnable {
 
 	private int straightX;
 	private int straightY;
-
-
 
 	/**
 	 * The functional method for Singleton Pattern
@@ -99,18 +95,19 @@ public class Tower implements Runnable {
 
 	private Tower() {
 	}
-	
-	public static void planeDidSendMayDay (String planeID){
+
+	public static void planeDidSendMayDay(String planeID) {
 		Tower.getInstance().getJournal().planeDidSendMayDay(planeID);
 	}
 
-	public static void planeHasCrashed (String planeID){
+	public static void planeHasCrashed(String planeID) {
 		Tower.getInstance().getJournal().planeHasCrashed(planeID);
 	}
-	
-	public static void planDidLandSafely (String planeID){
+
+	public static void planDidLandSafely(String planeID) {
 		Tower.getInstance().getJournal().planeDidLand(planeID);
 	}
+
 	/**
 	 * The setter and getter of the Keypair
 	 * 
@@ -152,17 +149,17 @@ public class Tower implements Runnable {
 	}
 
 	public static void deleteDir(File dir) {
-	    if (dir.isDirectory()) {
-	        String[] children = dir.list();
-	        for (int i=0; i<children.length; i++) {
-	        	(new File ("downloads"+ File.separator + children[i])).delete();
-	        }
-	    }
+		if (dir.isDirectory()) {
+			String[] children = dir.list();
+			for (int i = 0; i < children.length; i++) {
+				(new File("downloads" + File.separator + children[i])).delete();
+			}
+		}
 
 	}
-	
+
 	@Override
-	public void run (){
+	public void run() {
 		setCircle("landing");
 		setCircle("smallcircle");
 		setCircle("middlecircle");
@@ -170,15 +167,15 @@ public class Tower implements Runnable {
 
 		decryptKeypair = KeyGenerator.generateRSAKeyPair(256);
 
-		File outputFile = new File ("MyKey");
-		outputFile.delete() ;
+		File outputFile = new File("MyKey");
+		outputFile.delete();
 		File downloads = new File("downloads");
 		deleteDir(downloads);
-		
+
 		FileOutputStream publicKeyFile;
-		
+
 		try {
-			//TowerMessageHandler messageHandler = new TowerMessageHandler();
+			// TowerMessageHandler messageHandler = new TowerMessageHandler();
 			publicKeyFile = new FileOutputStream("MyKey");
 			DataOutputStream publicKey = new DataOutputStream(publicKeyFile);
 			publicKey.writeInt(decryptKeypair.getKeySize());
@@ -204,8 +201,7 @@ public class Tower implements Runnable {
 	 * @throws CloneNotSupportedException
 	 */
 	@SuppressWarnings("resource")
-	public static void TourNetwork()
-	{
+	public static void TourNetwork() {
 		ServerSocket serverSocket = null;
 		// Begin to connect by the net work socket , using the port "LOCALHOST",
 		// 6969
@@ -221,8 +217,8 @@ public class Tower implements Runnable {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}// call the
-															// TourThread
-															// class
+				// TourThread
+				// class
 		}
 
 	}
@@ -234,59 +230,61 @@ public class Tower implements Runnable {
 	public void setConsumption(double consumption) {
 		this.consumption += consumption;
 	}
-	
-	// This method allows the circle information to be transfered from .txt file into the tower 
-	public void setCircle(String circleName){
-			Scanner scanner = null;
-			try {
-				scanner = new Scanner(new FileInputStream("src"+ File.separator + "ressources" + File.separator + "Routes" + File.separator +circleName +".txt"));
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-			}
-			
-			
-			String tmp = scanner.nextLine();
-			String instructions[] = tmp.split(";");
-			String coordinates[] = null;
-			
-			for(String ins : instructions) {
-				coordinates = ((String) ins.subSequence(1, ins.length())).split(",");
-				switch(ins.charAt(0)) {
-				case 'S':
-					this.setStraightX(Integer.parseInt(coordinates[0]));
-					this.setStraightY(Integer.parseInt(coordinates[1]));
-				break;
-				
-				case 'C':
-					switch(circleName){
-					case "smallcircle" : 
-						this.setSmallPointX(Integer.parseInt(coordinates[0]));
-						this.setSmallPointY(Integer.parseInt(coordinates[1]));
-						this.setSmallAngle(Integer.parseInt(coordinates[2]));
-						break;
-					case "middlecircle" : 
-						this.setMiddlePointX(Integer.parseInt(coordinates[0]));
-						this.setMiddlePointY(Integer.parseInt(coordinates[1]));
-						this.setMiddleAngle(Integer.parseInt(coordinates[2]));
-						break;
-					case "longcircle" : 
-						this.setLongPointX(Integer.parseInt(coordinates[0]));
-						this.setLongPointY(Integer.parseInt(coordinates[1]));
-						this.setLongAngle(Integer.parseInt(coordinates[2]));
-						break;	
-					}
-					break;
-				
-				case 'L':
-					this.setLandingPointX(Integer.parseInt(coordinates[0]));
-					this.setLandingPointY(Integer.parseInt(coordinates[1]));
-					break;
-					
-				}
-			}
-			
-			
+
+	// This method allows the circle information to be transfered from .txt file
+	// into the tower
+	public void setCircle(String circleName) {
+		Scanner scanner = null;
+		try {
+			scanner = new Scanner(new FileInputStream("src" + File.separator
+					+ "ressources" + File.separator + "Routes" + File.separator
+					+ circleName + ".txt"));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
 		}
+
+		String tmp = scanner.nextLine();
+		String instructions[] = tmp.split(";");
+		String coordinates[] = null;
+
+		for (String ins : instructions) {
+			coordinates = ((String) ins.subSequence(1, ins.length()))
+					.split(",");
+			switch (ins.charAt(0)) {
+			case 'S':
+				this.setStraightX(Integer.parseInt(coordinates[0]));
+				this.setStraightY(Integer.parseInt(coordinates[1]));
+				break;
+
+			case 'C':
+				switch (circleName) {
+				case "smallcircle":
+					this.setSmallPointX(Integer.parseInt(coordinates[0]));
+					this.setSmallPointY(Integer.parseInt(coordinates[1]));
+					this.setSmallAngle(Integer.parseInt(coordinates[2]));
+					break;
+				case "middlecircle":
+					this.setMiddlePointX(Integer.parseInt(coordinates[0]));
+					this.setMiddlePointY(Integer.parseInt(coordinates[1]));
+					this.setMiddleAngle(Integer.parseInt(coordinates[2]));
+					break;
+				case "longcircle":
+					this.setLongPointX(Integer.parseInt(coordinates[0]));
+					this.setLongPointY(Integer.parseInt(coordinates[1]));
+					this.setLongAngle(Integer.parseInt(coordinates[2]));
+					break;
+				}
+				break;
+
+			case 'L':
+				this.setLandingPointX(Integer.parseInt(coordinates[0]));
+				this.setLandingPointY(Integer.parseInt(coordinates[1]));
+				break;
+
+			}
+		}
+
+	}
 
 	public Journal getJournal() {
 		return journal;
@@ -296,11 +294,11 @@ public class Tower implements Runnable {
 		this.journal = journal;
 	}
 
-	public ArrayList <Plane> getPlanes() {
+	public ArrayList<Plane> getPlanes() {
 		return planes;
 	}
 
-	public void setPlanes(ArrayList <Plane> planes) {
+	public void setPlanes(ArrayList<Plane> planes) {
 		this.planes = planes;
 	}
 
@@ -424,35 +422,35 @@ public class Tower implements Runnable {
 		this.landingPointY = landingPointY;
 	}
 
-	public ArrayList <Plane> getLandingRoute() {
+	public ArrayList<Plane> getLandingRoute() {
 		return landingRoute;
 	}
 
-	public void setLandingRoute(ArrayList <Plane> landingRoute) {
+	public void setLandingRoute(ArrayList<Plane> landingRoute) {
 		this.landingRoute = landingRoute;
 	}
 
-	public ArrayList <Plane> getSmallCircle() {
+	public ArrayList<Plane> getSmallCircle() {
 		return smallCircle;
 	}
 
-	public void setSmallCircle(ArrayList <Plane> smallCircle) {
+	public void setSmallCircle(ArrayList<Plane> smallCircle) {
 		this.smallCircle = smallCircle;
 	}
 
-	public ArrayList <Plane> getMiddleCircle() {
+	public ArrayList<Plane> getMiddleCircle() {
 		return middleCircle;
 	}
 
-	public void setMiddleCircle(ArrayList <Plane> middleCircle) {
+	public void setMiddleCircle(ArrayList<Plane> middleCircle) {
 		this.middleCircle = middleCircle;
 	}
 
-	public ArrayList <Plane> getLongCircle() {
+	public ArrayList<Plane> getLongCircle() {
 		return longCircle;
 	}
 
-	public void setLongCircle(ArrayList <Plane> longCircle) {
+	public void setLongCircle(ArrayList<Plane> longCircle) {
 		this.longCircle = longCircle;
 	}
 }

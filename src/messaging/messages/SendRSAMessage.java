@@ -7,7 +7,7 @@ import messaging.Plane;
 import messaging.Visitor;
 import encryption.KeyPair;
 
-public class SendRSAMessage extends Message implements VisitorMessage{
+public class SendRSAMessage extends Message implements VisitorMessage {
 	private KeyPair publicKey;
 
 	public SendRSAMessage(byte[] planeID, int length, int posx, int posy,
@@ -15,12 +15,14 @@ public class SendRSAMessage extends Message implements VisitorMessage{
 		super(planeID, length, 2, posx, posy, MessageType.SENDRSA);
 		publicKey = myKey;
 	}
+
 	/**
 	 ** Getter of the publickey
 	 **/
 	public KeyPair getPublicKey() {
 		return publicKey;
 	}
+
 	/**
 	 ** Override of the write message, to send out the supplementary information
 	 **/
@@ -33,8 +35,9 @@ public class SendRSAMessage extends Message implements VisitorMessage{
 		out.write(publicKey.getPublicKey().length);
 		out.write(publicKey.getPublicKey());
 	}
+
 	@Override
-	public int accept(Visitor visitor,Plane plane,DataOutputStream outData){
-		 return visitor.visit(plane,this,outData);						
+	public int accept(Visitor visitor, Plane plane, DataOutputStream outData) {
+		return visitor.visit(plane, this, outData);
 	}
 }

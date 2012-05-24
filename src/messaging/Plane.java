@@ -6,9 +6,9 @@ import messaging.messages.Message;
 import encryption.KeyPair;
 
 /**
- ** This is the class of Plane. It is responsible for create a array of the planes
- * in the Tour to save all the information of the planes which have communicated
- * with the Tour. It has several parameters.
+ ** This is the class of Plane. It is responsible for create a array of the
+ * planes in the Tour to save all the information of the planes which have
+ * communicated with the Tour. It has several parameters.
  * 
  ** @param planeID
  ** @param keypair
@@ -23,7 +23,7 @@ public class Plane {
 
 	private String planeID = "";
 	private KeyPair keypair;
-	private boolean mayDay = false ;
+	private boolean mayDay = false;
 	private Message messages[];
 	private int messageNo = 0;
 	private static int posX;
@@ -188,13 +188,13 @@ public class Plane {
 	public void setPassager(int passager) {
 		this.passager = passager;
 	}
-	
-	public boolean getMayDayStatus (){
+
+	public boolean getMayDayStatus() {
 		return mayDay;
 	}
-	
-	public void setMayDayStatus(boolean mayDayStatus){
+
+	public void setMayDayStatus(boolean mayDayStatus) {
 		mayDay = mayDayStatus;
 	}
-	
+
 }

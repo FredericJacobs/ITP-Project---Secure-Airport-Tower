@@ -17,7 +17,7 @@ public class LandingMessage extends Message implements VisitorMessage {
 	}
 
 	@Override
-	public int accept(Visitor visitor,Plane plane,DataOutputStream outData){
-		 return visitor.visit(plane,this,outData);						
+	public int accept(Visitor visitor, Plane plane, DataOutputStream outData) {
+		return visitor.visit(plane, this, outData);
 	}
 }

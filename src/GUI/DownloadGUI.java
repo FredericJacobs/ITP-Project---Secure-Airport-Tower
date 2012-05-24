@@ -28,10 +28,11 @@ import javax.swing.filechooser.FileSystemView;
 
 /**
  * Graphical interface to show the files that have been sent by the planes.
+ * 
  * @author Jonathan Cheseaux, Alexis Kessel, Maud Chami
- *
+ * 
  */
-public class DownloadGUI extends JFrame implements ActionListener /* , Observer */ {
+public class DownloadGUI extends JFrame implements ActionListener /* , Observer */{
 
 	private static final long serialVersionUID = -2822355651114549873L;
 	private JPanel titlePanel, panEmpty;
@@ -43,8 +44,8 @@ public class DownloadGUI extends JFrame implements ActionListener /* , Observer 
 	public DownloadGUI() {
 		buildComponents();
 		this.setLayout(gbTrace);
-		setSize(300,200);
-		
+		setSize(300, 200);
+
 		// Ensure the downloads directory exists
 		File downloads = new File("downloads");
 		downloads.mkdir();
@@ -60,7 +61,8 @@ public class DownloadGUI extends JFrame implements ActionListener /* , Observer 
 
 	private void buildFileList() {
 		titlePanel = new JPanel();
-		titlePanel.setBorder(BorderFactory.createTitledBorder("Received files"));
+		titlePanel
+				.setBorder(BorderFactory.createTitledBorder("Received files"));
 		titlePanel.setLayout(gbTrace);
 
 		addComponent(this, titlePanel, 1, 1, GridBagConstraints.BOTH);
@@ -79,18 +81,21 @@ public class DownloadGUI extends JFrame implements ActionListener /* , Observer 
 
 	/**
 	 * This is a helper method that adds a component to a GridBagLayout.
-	 * @param container     the container to which we add the component
-	 * @param component     the component to add
-	 * @param weightx       the horizontal weight
-	 * @param weighty       the vertical weight
-	 * @param fill          how the component behaves when the window is resized
+	 * 
+	 * @param container
+	 *            the container to which we add the component
+	 * @param component
+	 *            the component to add
+	 * @param weightx
+	 *            the horizontal weight
+	 * @param weighty
+	 *            the vertical weight
+	 * @param fill
+	 *            how the component behaves when the window is resized
 	 */
-	private void addComponent(
-			Container container,
-			Component component,
-			int weightx, int weighty,
-			int fill) {
-		GridBagConstraints gbConstraints  = new GridBagConstraints();
+	private void addComponent(Container container, Component component,
+			int weightx, int weighty, int fill) {
+		GridBagConstraints gbConstraints = new GridBagConstraints();
 		gbConstraints.weightx = weightx;
 		gbConstraints.weighty = weighty;
 		gbConstraints.fill = fill;
@@ -99,14 +104,16 @@ public class DownloadGUI extends JFrame implements ActionListener /* , Observer 
 		gbConstraints.gridwidth = 1;
 		gbConstraints.gridheight = 1;
 		gbConstraints.insets = new Insets(5, 5, 5, 5);
-		
-		gbTrace.setConstraints( component, gbConstraints );
-		container.add( component );
+
+		gbTrace.setConstraints(component, gbConstraints);
+		container.add(component);
 	}
 
 	/**
 	 * Returns the icon associated with the given filename
-	 * @param fileName the name of the file
+	 * 
+	 * @param fileName
+	 *            the name of the file
 	 * @return the icon corresponding to the file type
 	 */
 	private Icon getExtFileIcon(File file) {
@@ -114,7 +121,8 @@ public class DownloadGUI extends JFrame implements ActionListener /* , Observer 
 		// (temporary) file with the given extension
 		try {
 			File temp = File.createTempFile("temp", file.getName());
-			Icon result = FileSystemView.getFileSystemView().getSystemIcon(file);
+			Icon result = FileSystemView.getFileSystemView()
+					.getSystemIcon(file);
 			temp.delete();
 			return result;
 		} catch (IOException e) {
@@ -123,19 +131,20 @@ public class DownloadGUI extends JFrame implements ActionListener /* , Observer 
 		}
 	}
 
-
 	/**
 	 * This method fills the list of files with the files given in fileList
-	 * @param fileList the list of received files
+	 * 
+	 * @param fileList
+	 *            the list of received files
 	 */
 	public synchronized void addFilesToDownloadBox(ArrayList<File> fileList) {
 		// Whether the current row should have a different background color or
 		// not. Used to color every other row.
 		boolean colorChange = false;
-		
+
 		panEmpty.removeAll();
 
-		for (int i = 0; i < fileList.size(); i++) {	
+		for (int i = 0; i < fileList.size(); i++) {
 			File bFile = fileList.get(i);
 
 			JPanel panIcon = new JPanel();
@@ -160,10 +169,11 @@ public class DownloadGUI extends JFrame implements ActionListener /* , Observer 
 			rowFileName.add(lblName);
 			rowFileName.add(Box.createHorizontalGlue());
 
-			//rowDownload.add(panIcon);
+			// rowDownload.add(panIcon);
 			rowDownload.add(Box.createHorizontalStrut(5));
 			rowDownload.add(rowFileName);
-			rowDownload.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
+			rowDownload.setBorder(BorderFactory.createEmptyBorder(10, 10, 10,
+					10));
 
 			Color color = (colorChange ? new Color(0xd0d0d0) : Color.WHITE);
 			rowDownload.setBackground(color);
@@ -171,12 +181,13 @@ public class DownloadGUI extends JFrame implements ActionListener /* , Observer 
 
 			JPanel panBorder = new JPanel();
 			panBorder.setLayout(new BoxLayout(panBorder, BoxLayout.X_AXIS));
-			panBorder.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.GRAY));
+			panBorder.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0,
+					Color.GRAY));
 			panBorder.add(rowDownload);
 
 			panEmpty.add(panBorder);
 		}
-		
+
 		// Repaint the window because its components changed
 		validate();
 	}
@@ -198,10 +209,9 @@ public class DownloadGUI extends JFrame implements ActionListener /* , Observer 
 		rowButtons.add(btnOpen);
 		rowButtons.add(Box.createHorizontalStrut(5));
 		rowButtons.add(btnQuit);
-		rowButtons.add(Box.createHorizontalStrut(5));      
+		rowButtons.add(Box.createHorizontalStrut(5));
 
-		addComponent(this, rowButtons , 1, 0,
-				GridBagConstraints.HORIZONTAL);
+		addComponent(this, rowButtons, 1, 0, GridBagConstraints.HORIZONTAL);
 	}
 
 	@Override
@@ -211,7 +221,8 @@ public class DownloadGUI extends JFrame implements ActionListener /* , Observer 
 			try {
 				java.awt.Desktop.getDesktop().open(new File("downloads"));
 			} catch (IOException e1) {
-				System.err.println("Could not open downloads folder: " + e1.getMessage());
+				System.err.println("Could not open downloads folder: "
+						+ e1.getMessage());
 			}
 		} else if (obj == btnQuit) {
 			dispose();

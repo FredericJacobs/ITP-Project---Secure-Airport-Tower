@@ -6,7 +6,7 @@ import java.io.IOException;
 import messaging.Plane;
 import messaging.Visitor;
 
-public class KeepAliveMessage extends Message implements VisitorMessage{
+public class KeepAliveMessage extends Message implements VisitorMessage {
 	public KeepAliveMessage(byte[] planeID, int posx, int posy) {
 		super(planeID, 0, 3, posx, posy, MessageType.KEEPALIVE);
 	}
@@ -30,8 +30,7 @@ public class KeepAliveMessage extends Message implements VisitorMessage{
 	}
 
 	@Override
-	public int accept(Visitor visitor,Plane plane,DataOutputStream outData){
-		 return visitor.visit(plane,this,outData);						
+	public int accept(Visitor visitor, Plane plane, DataOutputStream outData) {
+		return visitor.visit(plane, this, outData);
 	}
 }
-

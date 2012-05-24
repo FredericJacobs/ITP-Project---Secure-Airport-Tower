@@ -6,13 +6,13 @@ import java.math.BigInteger;
 
 /**
  * Read and decrypt bytes from an input stream. This stream uses RSA decryption.
+ * 
  * @author Frederic Jacobs
  * @author Hantao Zhao
  * @see InputStream
  * @see KeyPair
  */
-public class RsaInputStream extends InputStream
-{
+public class RsaInputStream extends InputStream {
 	// Defining the inputStream and the KeyPair used for encryption
 	private InputStream input;
 	private KeyPair key;
@@ -30,8 +30,7 @@ public class RsaInputStream extends InputStream
 	 * @param key
 	 *            Key to use.
 	 */
-	public RsaInputStream(InputStream input, KeyPair key)
-	{	
+	public RsaInputStream(InputStream input, KeyPair key) {
 		// Checking if the arguments are valid
 		if (key == null)
 			throw new IllegalArgumentException(
@@ -60,27 +59,25 @@ public class RsaInputStream extends InputStream
 	protected void load() throws IOException {
 		byte[] block = new byte[blockSize];
 
-		for(int i = 0; i < blockSize; i++) {
+		for (int i = 0; i < blockSize; i++) {
 			block[i] = (byte) (input.read());
 		}
 
-		
-
 		block = key.decrypt(new BigInteger(block)).toByteArray();
-		
-		//Removing padding according to ITP-Guidelines
-		
+
+		// Removing padding according to ITP-Guidelines
+
 		int drop = block[0] == 0 ? 1 : 0;
 		int bufferOffset = -1;
 
-		for(int i = drop; i < block.length; i++) {
-			if(block[i] == 0) {
+		for (int i = drop; i < block.length; i++) {
+			if (block[i] == 0) {
 				bufferOffset = i + 1;
 				break;
 			}
 		}
 
-		if(bufferOffset < 0)
+		if (bufferOffset < 0)
 			throw new IOException("Invalid RSA block");
 
 		bufferLength = block.length - bufferOffset;
@@ -92,11 +89,10 @@ public class RsaInputStream extends InputStream
 
 	@Override
 	public int read() throws IOException {
-		if(bufferPosition >= bufferLength)
+		if (bufferPosition >= bufferLength)
 			load();
 
-		return (buffer[bufferPosition++]& 0xff);
+		return (buffer[bufferPosition++] & 0xff);
 	}
-
 
 }

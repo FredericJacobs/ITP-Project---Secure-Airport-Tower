@@ -9,46 +9,44 @@ import org.junit.Test;
 import encryption.KeyGenerator;
 
 /**
- *
+ * 
  * @author gvero
  */
 public class KeyGeneratorTest {
-    
-    public KeyGeneratorTest() {
-    }
 
-    @BeforeClass
-    public static void setUpClass() throws Exception {
-    }
+	public KeyGeneratorTest() {
+	}
 
-    @AfterClass
-    public static void tearDownClass() throws Exception {
-    }
-    
-    @Before
-    public void setUp() {
-    }
-    
-    @After
-    public void tearDown() {
-    }
+	@BeforeClass
+	public static void setUpClass() throws Exception {
+	}
 
-    /**
-     * Test of generateRSAKeyPair method, of class KeyGenerator.
-     */
+	@AfterClass
+	public static void tearDownClass() throws Exception {
+	}
 
-    
-    @Test(expected=java.lang.IllegalArgumentException.class)
-    public void testGenerateRSAKeyPair2() {
-        System.out.println("generateRSAKeyPair2");
-        KeyGenerator.generateRSAKeyPair(4);
-    }
+	@Before
+	public void setUp() {
+	}
 
-        
-    @Test
-    public void testGenerateRSAKeyPair3() {
-        System.out.println("generateRSAKeyPair3");
-        KeyGenerator.generateRSAKeyPair(8);
-    }
+	@After
+	public void tearDown() {
+	}
+
+	/**
+	 * Test of generateRSAKeyPair method, of class KeyGenerator.
+	 */
+
+	@Test(expected = java.lang.IllegalArgumentException.class)
+	public void testGenerateRSAKeyPair2() {
+		System.out.println("generateRSAKeyPair2");
+		KeyGenerator.generateRSAKeyPair(4);
+	}
+
+	@Test
+	public void testGenerateRSAKeyPair3() {
+		System.out.println("generateRSAKeyPair3");
+		KeyGenerator.generateRSAKeyPair(8);
+	}
 
 }

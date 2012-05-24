@@ -6,7 +6,7 @@ import java.io.IOException;
 import messaging.Plane;
 import messaging.Visitor;
 
-public class MayDayMessage extends Message implements VisitorMessage{
+public class MayDayMessage extends Message implements VisitorMessage {
 	private String cause;
 
 	public MayDayMessage(byte[] planeID, int length, int posx, int posy,
@@ -18,9 +18,13 @@ public class MayDayMessage extends Message implements VisitorMessage{
 	public String getCause() {
 		return cause;
 	}
-	/** Getter to see if the hello message requires encrypted communication or not
+
+	/**
+	 * Getter to see if the hello message requires encrypted communication or
+	 * not
+	 * 
 	 * @return boolean: true for encrypted and false for not encrypted
-	**/
+	 **/
 	@Override
 	public void write(DataOutputStream out) throws IOException {
 		super.write(out);
@@ -28,8 +32,8 @@ public class MayDayMessage extends Message implements VisitorMessage{
 	}
 
 	@Override
-	public int accept(Visitor visitor,Plane plane,DataOutputStream outData){
-		 return visitor.visit(plane,this,outData);						
+	public int accept(Visitor visitor, Plane plane, DataOutputStream outData) {
+		return visitor.visit(plane, this, outData);
 	}
 
 }
