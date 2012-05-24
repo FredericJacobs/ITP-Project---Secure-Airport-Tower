@@ -200,6 +200,9 @@ public class Tower implements Runnable {
 	 * @throws IOException
 	 * @throws CloneNotSupportedException
 	 */
+	
+	// resource warning is not supported on older version than 1.7, if you see it, you're not running the right version of the JRE.
+	
 	@SuppressWarnings("resource")
 	public static void TourNetwork() {
 		ServerSocket serverSocket = null;

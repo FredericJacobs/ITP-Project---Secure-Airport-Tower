@@ -17,20 +17,10 @@ import encryption.KeyGenerator;
 import encryption.KeyPair;
 
 /**
- ** This class the a test plane for our first step of the socket programming.
- * Since we will use the .jar file to model the planes we dont need this class
- * for now
- * 
- ** But just in case we keep it in to try some test also to fulfill the demand of
- * the mid-term check
+ ** TestPlane is the main class of our plane. It supports random name generation for planes, initialization with launch settings and generates the key used for encryption.
  **/
 public class TestPlane {
-
-	/**
-	 * @param args
-	 */
-	private static KeyPair decryptKeypair = KeyGenerator
-			.generateRSAKeyPair(256);
+	private static KeyPair decryptKeypair = KeyGenerator.generateRSAKeyPair(256);
 	private static String planeID = generateString(
 			"ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890", 8);
 	private static final int PLANE_UPDATE_INTERVAL = 100;
