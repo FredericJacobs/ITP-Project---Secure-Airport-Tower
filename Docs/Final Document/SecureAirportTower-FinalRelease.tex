@@ -107,6 +107,12 @@ Plane is the package that contains all the classes related to our own plane.
 \verb TestPlane.java  is the main class. It supports random name generation for planes, initialization with launch settings and generates the key used for encryption.
 Here are some other underlying classes.
 \begin{enumerate}
+\item \verb Plane.java  - This class is a wrapper class of what a plane can be. 
+\item \verb PlaneMessageHandler.java  - Similar than the TowerMessageHandler but with other reactions. It helps the Plane to handle different type of messages and respond to them accordingly.
+\item \verb PlaneMessaging.java  - It is the Thread handeling the communication with the Tower.
+\item \verb PlaneNavigation.java  - This class is taking care of the navigation of the plane. Of course, the main goal of this thread is to update on a regular basis the position of the plane.
+\item \verb PlaneType.java  - This enum defines a few types of planes given in ITP-06 and assigns them their specifications.
+\item \verb RoutingInstruction.java  - Just a wrapper class of a RoutingInstruction.
 \end{enumerate}
 
 \subsection{Tests}
@@ -144,4 +150,3 @@ For instance, you could badge the dock on the Mac with the number of planes in t
 Being able to click the plane and having some advanced information like the fuel level would be really great. We would also greatly benefit from having a GUI for the planes allowing to launch them easier with custom settings.
  
 \end{document}
-

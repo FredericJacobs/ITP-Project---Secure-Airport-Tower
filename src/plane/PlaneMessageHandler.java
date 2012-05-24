@@ -13,7 +13,7 @@ import dataFile.DataFile;
 import encryption.KeyPair;
 
 /**
- * This class help the Plane to handle different type of messages and respond to them accordingly.
+ * This class helps the Plane to handle different type of messages and respond to them accordingly.
  * 
  * @author Hantao Zhao
  * @author Frederic Jacobs
