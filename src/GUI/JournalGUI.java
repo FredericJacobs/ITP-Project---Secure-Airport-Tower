@@ -30,7 +30,8 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableRowSorter;
-import messaging.*;
+
+import messaging.Tower;
 
 /**
  * This class displays the Tower's Journal, i.e. a list of received messages.

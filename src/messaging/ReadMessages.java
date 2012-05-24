@@ -2,11 +2,22 @@ package messaging;
 
 import java.io.DataInputStream;
 import java.io.IOException;
-import java.math.*;
-import encryption.KeyPair;
-import messaging.messages.*;
+import java.math.BigInteger;
+
+import messaging.messages.ByeMessage;
+import messaging.messages.ChokeMessage;
+import messaging.messages.DataMessage;
+import messaging.messages.HelloMessage;
+import messaging.messages.KeepAliveMessage;
+import messaging.messages.LandingMessage;
+import messaging.messages.MayDayMessage;
+import messaging.messages.Message;
+import messaging.messages.RoutingMessage;
 import messaging.messages.RoutingMessage.moveType;
 import messaging.messages.RoutingMessage.routingMessageType;
+import messaging.messages.SendRSAMessage;
+import messaging.messages.UnchokeMessage;
+import encryption.KeyPair;
 
 /**
  * This class aims at converting the DataInputStream into a new created message,

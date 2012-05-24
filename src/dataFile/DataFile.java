@@ -12,8 +12,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
-
-import messaging.messages.*;
+import messaging.messages.DataMessage;
 
 /**
  * This class is responsible for creating DataMessages objects from a File. It can also write a File from a bunch of DataMessages.

@@ -9,11 +9,13 @@ import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Scanner;
 
-import dataFile.DataFile;
-import GUI.AirportGUI;
-import messaging.messages.*;
+import messaging.messages.DataMessage;
+import messaging.messages.Message;
+import messaging.messages.RoutingMessage;
 import messaging.messages.RoutingMessage.moveType;
 import messaging.messages.RoutingMessage.routingMessageType;
+import GUI.AirportGUI;
+import dataFile.DataFile;
 
 /**
  * This class help the Tour to handle different type of messages

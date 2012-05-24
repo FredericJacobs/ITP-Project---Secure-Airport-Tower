@@ -12,7 +12,8 @@ import java.math.BigInteger;
 
 import org.junit.Test;
 
-import encryption.*;
+import encryption.KeyGenerator;
+import encryption.KeyPair;
 
 
 

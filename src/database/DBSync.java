@@ -9,11 +9,11 @@ import messaging.Journal;
 import messaging.Tower;
 import messaging.messages.Message;
 
-import com.mongodb.Mongo;
+import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
-import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
+import com.mongodb.Mongo;
 import com.mongodb.MongoException;
 
 /** Description of DBSync 

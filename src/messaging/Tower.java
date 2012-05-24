@@ -12,10 +12,10 @@ import java.util.Comparator;
 import java.util.PriorityQueue;
 import java.util.Scanner;
 
-import encryption.*;
-
+import messaging.messages.Message;
+import encryption.KeyGenerator;
+import encryption.KeyPair;
 //import encryption.KeyPair;
-import messaging.messages.*;
 
 /**
  * Description of Tour Tour.java represents the tour of airport, which have the

@@ -5,7 +5,6 @@ import java.io.IOException;
 
 import messaging.Plane;
 import messaging.Visitor;
-
 import encryption.KeyPair;
 import generals.XYPosition;
 

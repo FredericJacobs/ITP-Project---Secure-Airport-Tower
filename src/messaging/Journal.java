@@ -1,9 +1,9 @@
 package messaging;
 
-import GUI.AirportGUI;
-
 import java.util.ArrayList;
 import java.util.Observable;
+
+import GUI.AirportGUI;
 
 /**
  * This class is a journal which will record all the event happened during the communication. 

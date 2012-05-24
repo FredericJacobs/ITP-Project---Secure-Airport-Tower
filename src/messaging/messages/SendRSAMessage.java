@@ -5,8 +5,7 @@ import java.io.IOException;
 
 import messaging.Plane;
 import messaging.Visitor;
-
-import encryption.*;
+import encryption.KeyPair;
 
 public class SendRSAMessage extends Message implements VisitorMessage{
 	private KeyPair publicKey;

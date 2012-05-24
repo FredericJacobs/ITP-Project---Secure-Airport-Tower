@@ -1,13 +1,17 @@
 package tests;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 import org.junit.Test;
-import encryption.*;
+
+import encryption.KeyGenerator;
+import encryption.KeyPair;
+import encryption.RsaInputStream;
+import encryption.RsaOutputStream;
 
 public class RsaStreamTest {
 

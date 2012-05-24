@@ -3,7 +3,6 @@ package messaging;
 import java.net.Socket;
 
 import messaging.messages.Message;
-
 import encryption.KeyPair;
 
 /**

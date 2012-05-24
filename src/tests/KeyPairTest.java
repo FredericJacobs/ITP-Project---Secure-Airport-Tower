@@ -1,7 +1,9 @@
 package tests;
 
-import java.math.BigInteger;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
 
+import java.math.BigInteger;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -9,8 +11,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import encryption.*;
-import static org.junit.Assert.*;
+import encryption.KeyGenerator;
+import encryption.KeyPair;
 
 /**
  *

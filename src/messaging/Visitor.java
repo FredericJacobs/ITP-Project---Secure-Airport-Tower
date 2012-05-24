@@ -2,8 +2,18 @@ package messaging;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
+
+import messaging.messages.ByeMessage;
+import messaging.messages.ChokeMessage;
+import messaging.messages.DataMessage;
+import messaging.messages.HelloMessage;
+import messaging.messages.KeepAliveMessage;
+import messaging.messages.LandingMessage;
+import messaging.messages.MayDayMessage;
+import messaging.messages.RoutingMessage;
+import messaging.messages.SendRSAMessage;
+import messaging.messages.UnchokeMessage;
 import GUI.AirportGUI;
-import messaging.messages.*;
 
 /**
  * This class is the main part of the visitor pattern. It aims at handling

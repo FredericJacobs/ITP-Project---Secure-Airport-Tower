@@ -9,12 +9,11 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 
-import org.junit.BeforeClass;
-
 import messaging.messages.DataMessage;
 
-
-import org.junit.*;
+import org.junit.Assert;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 import dataFile.DataFile;
 

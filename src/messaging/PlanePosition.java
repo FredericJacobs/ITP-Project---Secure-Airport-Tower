@@ -1,6 +1,6 @@
 package messaging;
 
-import generals.*;
+import generals.XYPosition;
 
 /**
  ** This class allows to have a wrapper object for an Array of Planes with an associated position, crash status and landing status.

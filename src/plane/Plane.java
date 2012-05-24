@@ -1,11 +1,10 @@
 package plane;
 
+import generals.XYPosition;
+
 import java.io.IOException;
 
-import plane.PlaneType;
-
 import messaging.messages.MayDayMessage;
-import generals.XYPosition;
 
 /** This class is a wrapper class of what a plane can be. 
  * @author Hantao Zhao 

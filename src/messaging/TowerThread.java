@@ -1,12 +1,16 @@
 package messaging;
 
-import java.net.*;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.Socket;
 import java.util.Date;
-import java.io.*;
 
+import messaging.messages.Message;
+import messaging.messages.SendRSAMessage;
 import twitter.SendTweet;
-import messaging.messages.*;
-import encryption.*;
+import encryption.RsaInputStream;
+import encryption.RsaOutputStream;
 
 /**
  * This class help the Tower to handle communications with several planes, that is to say that each thread handles the connection with one plane.

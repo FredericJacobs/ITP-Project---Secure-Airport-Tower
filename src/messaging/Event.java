@@ -1,6 +1,8 @@
 package messaging;
 
-import java.util.*;
+import java.util.Date;
+import java.util.Vector;
+
 import messaging.messages.Message;
 /**
  * This class is a part of the journal. Each time a message is created or send out, it will be saved as an Event
