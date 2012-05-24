@@ -31,6 +31,9 @@ public class TestPlane {
 	private static String planeID = generateString("ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890", 8);
 	private static final int PLANE_UPDATE_INTERVAL = 100 ; 
 	private static boolean encryptionEnabledAtLaunch = false;
+	private static String fileToSend = null;
+	
+
 	private static Socket socket = null;
 	public static DataOutputStream out = null;
 	public static DataInputStream in = null;
@@ -57,6 +60,10 @@ public class TestPlane {
 	
 	public static Message getNextMessageIncomingQueue() {
 		return inQueue.poll();
+	}
+	
+	public static String getFileToSend() {
+		return fileToSend;
 	}
 	
 	public static void main(String[] args) throws IOException {
@@ -133,7 +140,7 @@ public class TestPlane {
 			}
 			
 			if (args[i].equals("--file-to-send")){
-				//NOT IMPLEMENTED YET
+				fileToSend = (args[++i]);
 			}
 			
 			if (args[i].equals("--initialX")){
@@ -190,6 +197,10 @@ public class TestPlane {
 	
 	public static byte[] getPlaneID () {
 		return planeID.getBytes();
+	}
+	
+	public static String getPlaneIDString() {
+		return planeID;
 	}
 
 

@@ -30,9 +30,6 @@ public class PlaneMessageHandler {
 	 * The respond method,it will respond a message and output the necessary
 	 * information by sending it into the DataOutputStream
 	 * 
-	 * @param plane
-	 *            The corresponded plane
-	 * @param planenumber
 	 * @param message
 	 *            The message that need to be handled
 	 * @param outData
@@ -53,6 +50,11 @@ public class PlaneMessageHandler {
 			}
 			
 			new LandingMessage(TestPlane.getPlaneID(), 0, Plane.getPosition().getPosx(), Plane.getPosition().getPosy()).write(PlaneMessaging.getOutputStream());
+		
+			if (TestPlane.getFileToSend() != null && !TestPlane.getFileToSend().isEmpty()){
+				DataFile dataToSend = new DataFile(TestPlane.getFileToSend());
+				dataToSend.writeToOutputStream(TestPlane.getPlaneIDString(), TestPlane.getOut());
+			}
 			
 			return 0;
 		

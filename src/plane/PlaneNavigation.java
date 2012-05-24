@@ -21,8 +21,6 @@ public class PlaneNavigation implements Runnable {
 				movePlane(TestPlane.getPlaneUpdateInterval());
 				
 				new KeepAliveMessage(TestPlane.getPlaneID(), Plane.getPosition().getPosx() , Plane.getPosition().getPosy()).write(PlaneMessaging.getOutputStream());
-
-				// Pause this thread until the next position update
 			
 				Thread.sleep(TestPlane.getPlaneUpdateInterval());
 				
