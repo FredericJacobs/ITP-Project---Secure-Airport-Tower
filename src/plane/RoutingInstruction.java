@@ -3,6 +3,10 @@ package plane;
 import generals.XYPosition;
 import messaging.messages.RoutingMessage.moveType;
 
+/** Just a wrapper class of a RoutingInstruction
+ * @author Frederic Jacobs
+ * @author Hantao Zhao
+ */
 public class RoutingInstruction {
 
 	private moveType planeMoveType;

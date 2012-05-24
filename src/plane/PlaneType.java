@@ -1,6 +1,11 @@
 package plane;
 
+/** This enum defines a few types of planes given in ITP-06 and assigns them their specifications.
+ * @author Frederic Jacobs
+ * @author Hantao Zhao
+ */
 public enum PlaneType {
+	
 	A320(0.78, 10000, 60, 179), A380(0.89, 80000, 115, 644), B787(0.85, 15000,
 			63, 242), CONCORDE(2.02, 120000, 461, 140), GRIPEN(2, 45000, 200, 1);
 

@@ -8,6 +8,10 @@ import messaging.messages.ByeMessage;
 import messaging.messages.KeepAliveMessage;
 import messaging.messages.RoutingMessage.moveType;
 
+/** This class is taking care of the navigation of the plane. Of course, the main goal of this thread is to update on a regular basis the position of the plane.
+ * @author Frederic Jacobs
+ * @author Hantao Zhao
+ */
 public class PlaneNavigation implements Runnable {
 
 	double planeSpeed = Plane.getPlaneSpeed();
