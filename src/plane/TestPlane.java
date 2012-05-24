@@ -8,11 +8,7 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.Comparator;
-import java.util.PriorityQueue;
 import java.util.Random;
-
-import messaging.messages.Message;
 import encryption.KeyGenerator;
 import encryption.KeyPair;
 
@@ -33,7 +29,6 @@ public class TestPlane {
 	private static String towerHost = "LOCALHOST";
 	private static String towerPort = "6969";
 	private static Plane plane = new Plane();
-	private static PriorityQueue<Message> inQueue;
 	private static KeyPair towerKey;
 
 	public static String generateString(String characters, int length) {
@@ -45,27 +40,11 @@ public class TestPlane {
 		return new String(text).toUpperCase();
 	}
 
-	public static void addMessageToIncomingQueue(Message message) {
-		inQueue.offer(message);
-	}
-
-	public static Message getNextMessageIncomingQueue() {
-		return inQueue.poll();
-	}
-
 	public static String getFileToSend() {
 		return fileToSend;
 	}
 
 	public static void main(String[] args) throws IOException {
-
-		inQueue = new PriorityQueue<Message>(6, new Comparator<Message>() {
-			@Override
-			public int compare(Message a, Message b) {
-				return a.compareTo(b);
-			}
-		});
-
 		init(args);
 
 		try {

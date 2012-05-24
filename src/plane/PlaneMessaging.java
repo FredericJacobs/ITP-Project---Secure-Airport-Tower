@@ -33,12 +33,8 @@ public class PlaneMessaging implements Runnable {
 		while (true) {
 			try {
 				mes = ReadMessages.readMessage(in);
-				TestPlane.addMessageToIncomingQueue(mes);
-				messageHandler.respond(TestPlane.getNextMessageIncomingQueue(),
-						out);
-
 				if (mes.getType() == 0) {
-					navigationThread.run();
+					new Thread(navigationThread).start();
 					HelloMessage message = (HelloMessage) mes;
 					if (message.isCrypted()) {
 						out = new DataOutputStream(new RsaOutputStream(out,
