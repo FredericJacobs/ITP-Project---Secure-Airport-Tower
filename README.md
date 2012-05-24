@@ -17,7 +17,7 @@ For use of encryption with our Tower, it generates at runtime a file called 'MyK
 ## You are ready to go
 
 Everything should run smoothly. If you're feeling lost, check out our report, development journal and JavaDoc.
-
+The description of the GUI enhancements is available in the Q&A section of the report.
 
 If you have any questions feel free to contact us at frederic.jacobs@epfl.ch and hantao.zhao@epfl.ch
 
