@@ -8,7 +8,7 @@ All the code is inside /src/
 
 ## What should I set up ?
 
-The first thing to point out is the fact that we used the JRE 1.7 because we use switches on Strings and other features of the JRE 1.7. It runs smoothy on Windows, Mac and Linux (the OpenJDK is advised to avoid compilation issues).  Once you created the project in Eclipse, don't forget to add the libraries that are in /src/libs  to the build path. Once that's done, you're ready to go. 
+The first thing to point out is the fact that we used the JRE 1.7 because we use switches on Strings and other features of the JRE 1.7. It runs smoothy on Windows, Mac and Linux (avoid compiling with the OpenJDK).  Once you created the project in Eclipse, don't forget to add the libraries that are in /src/libs  to the build path. Once that's done, you're ready to go. 
 
 Java 1.7 SDK has some flaws on Unix-Platforms though. Written once, runs everywhere might not be true depending on the runtime. It turned out that JRE 1.7 was the most stable on Windows. 
 
