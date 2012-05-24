@@ -39,6 +39,7 @@ public class ModesGUI extends JFrame implements ActionListener, Observer {
 	static String FUEL = "FUEL";
 	static String TIME = "TIME";
 	public Modes modes;
+	public Choker choker = new Choker();
 	JTextField textP = new JTextField("0");
 	JTextField textC = new JTextField("0");
 	JTextField textT = new JTextField("0");
@@ -53,6 +54,7 @@ public class ModesGUI extends JFrame implements ActionListener, Observer {
 		board.setLayout(new GridLayout(3, 2));
 		board.add(passageLabel);
 		textP.setSize(0, 80);
+		
 
 		// Add the information board
 		board.add(textP);
@@ -88,8 +90,10 @@ public class ModesGUI extends JFrame implements ActionListener, Observer {
 		radioPanel.add(chronosButton);
 		radioPanel.add(fuelButton);
 		radioPanel.add(timeButton);
-
-		mainPanel.add(radioPanel);
+		JPanel downPanel = new JPanel(new GridLayout(1, 1));
+		downPanel.add(radioPanel);
+		downPanel.add(choker);
+		mainPanel.add(downPanel);
 		mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 		this.setPreferredSize(new Dimension(500, 300));
 		this.pack();

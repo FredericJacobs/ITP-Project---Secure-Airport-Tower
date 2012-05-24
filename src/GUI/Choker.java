@@ -33,7 +33,7 @@ import messaging.messages.UnchokeMessage;
  * @version 1.0
  */
 
-public class Choker extends JFrame implements MouseListener {
+public class Choker extends JPanel implements MouseListener {
 	private static final long serialVersionUID = 1L;
 	private JLabel imageLabel;
 	private JPanel panel;
@@ -58,9 +58,7 @@ public class Choker extends JFrame implements MouseListener {
 		imageLabel.setIcon(chokeButton);
 		imageLabel.addMouseListener(this);
 		panel.add(imageLabel);
-		this.getContentPane().add(panel);
-		this.pack();
-		this.setResizable(false);
+		this.add(panel);
 		chokeEnabled(status);
 	}
 
