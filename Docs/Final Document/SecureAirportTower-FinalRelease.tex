@@ -115,7 +115,7 @@ All our unit tests. No need for further explanation. They all run.
 Simple static class to send a tweet with only a line of code using the \verb twitter4j  library. Neat !
 
 \section{Q\&A}
-
+\subsection {ITP-02}
 In ITP-02, we were asked two questions. 
 \begin{enumerate}
 \item Is it a good idea to use a superclass to define Messages ?
@@ -136,7 +136,10 @@ The reason why we want this to be an abstract class is really straightforward. W
 
 \subsection {GUI Critics}
 
-TO BE COMPLETED
+The GUI is composed of several panels. This Photoshop like design is modulable and great on multi-displays setups because you can split the interface between two screens which is pretty cool for a control center. On the other side, there is no Unity mode to join the panel together and at launch they look very messy by superposing other panels. We focused more on the back end like the syncing with the database. So our application doesn't have a neat UX which is pretty difficult to implement using AWT/Swing, Ideally we should for each platform provide a better user-experience by sticking to the User Interface Guidelines but since Java is cross-platform we can't really optimize that.
+For instance, you could badge the dock on the Mac with the number of planes in the air. While on Windows the separate panels could be displayed using a Metro-style layout. A lot of enhancements are possible but our time too limited to implement it.
 
+Being able to click the plane and having some advanced information like the fuel level would be really great. We would also greatly benefit from having a GUI for the planes allowing to launch them easier with custom settings.
+ 
 \end{document}
 
