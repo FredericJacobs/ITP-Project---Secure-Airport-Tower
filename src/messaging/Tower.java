@@ -18,8 +18,12 @@ import encryption.*;
 import messaging.messages.*;
 
 /**
- * Tower.java represents the tower of airport, which have the
- * function of receiving and sending Message with the planes.
+ * Description of Tour Tour.java represents the tour of airport, which have the
+ * function of receiving and sending Message with the planes By using the class
+ * of Message, Tour can receive the Message in the way that Print all the
+ * information to the file "Outfile.txt". And the information which is transfer
+ * can be shown as "Journal" in the Console In this first version we haven't
+ * finished coding the RSA implementation
  * 
  * @author Hantao Zhao
  * @author Frederic Jacobs
@@ -180,7 +184,6 @@ public class Tower implements Runnable {
 			publicKey.write(decryptKeypair.getModulus());
 			publicKey.writeInt(decryptKeypair.getPublicKey().length);
 			publicKey.write(decryptKeypair.getPublicKey());
-			publicKey.close();
 			creatPriorityQueue();
 			TourNetwork();
 
@@ -197,7 +200,6 @@ public class Tower implements Runnable {
 	 * @throws IOException
 	 * @throws CloneNotSupportedException
 	 */
-	@SuppressWarnings("resource")
 	public static void TourNetwork()
 	{
 		ServerSocket serverSocket = null;

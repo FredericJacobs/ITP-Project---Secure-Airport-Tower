@@ -64,10 +64,12 @@ public class RsaInputStream extends InputStream
 			block[i] = (byte) (input.read());
 		}
 
-
+		
 
 		block = key.decrypt(new BigInteger(block)).toByteArray();
-
+		
+		//Removing padding according to ITP-Guidelines
+		
 		int drop = block[0] == 0 ? 1 : 0;
 		int bufferOffset = -1;
 
@@ -81,7 +83,6 @@ public class RsaInputStream extends InputStream
 		if(bufferOffset < 0)
 			throw new IOException("Invalid RSA block");
 
-		// Buffer-reset
 		bufferLength = block.length - bufferOffset;
 		bufferPosition = 0;
 

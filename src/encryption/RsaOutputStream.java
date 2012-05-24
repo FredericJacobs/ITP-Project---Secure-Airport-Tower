@@ -67,12 +67,11 @@ public class RsaOutputStream extends OutputStream
 		if(bufferLength == 0)
 			return;
 
-		// Front zero
+		// Padding according to the ITP guidelines
 		// BigInt(block) < (key-modulo - 1)
 		block[0] = 0;
 		block[1] = 0;
 
-		// Padding
 		int padding = (blockSize - 3) - bufferLength;
 
 		byte[] padding_bytes = new byte[padding];
